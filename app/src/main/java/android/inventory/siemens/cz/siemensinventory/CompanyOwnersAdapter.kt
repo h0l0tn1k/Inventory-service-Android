@@ -25,8 +25,11 @@ class CompanyOwnersAdapter(
             view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
-        view?.findViewById<TextView>(R.id.list_item_id)?.text = companyOwner.id.toString()
-        view?.findViewById<TextView>(R.id.list_item_name)?.text = companyOwner.name
+        val idTextView = view?.findViewById(R.id.list_item_id) as TextView
+        idTextView.text = companyOwner.id.toString()
+
+        val nameTextView = view.findViewById(R.id.list_item_name) as TextView
+        nameTextView.text = companyOwner.name
 
         return view
     }

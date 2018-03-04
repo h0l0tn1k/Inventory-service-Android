@@ -25,8 +25,10 @@ class ProjectsAdapter(
             view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
-        view?.findViewById<TextView>(R.id.list_item_id)?.text = item.id.toString()
-        view?.findViewById<TextView>(R.id.list_item_name)?.text = item.name
+        val idTextView = view?.findViewById(R.id.list_item_id) as TextView
+        idTextView.text = item.id.toString()
+        val nameTextView = view.findViewById(R.id.list_item_name) as TextView
+        nameTextView.text = item.name
 
         return view
     }
