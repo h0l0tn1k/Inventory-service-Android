@@ -5,6 +5,7 @@ package android.inventory.siemens.cz.siemensinventory
  */
 
 import android.content.Context
+import android.inventory.siemens.cz.siemensinventory.api.entity.CompanyOwner
 import android.inventory.siemens.cz.siemensinventory.entity.GenericEntity
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +15,7 @@ import android.widget.TextView
 
 class CompanyOwnersAdapter(
         private val context: Context,
-        private val companyOwners: List<GenericEntity>
+        private val companyOwners: List<CompanyOwner>
 ) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val companyOwner = getItem(position)
@@ -25,16 +26,16 @@ class CompanyOwnersAdapter(
             view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
-        val idTextView = view?.findViewById(R.id.list_item_id) as TextView
-        idTextView.text = companyOwner.id.toString()
+//        val idTextView = view?.findViewById(R.id.list_item_id) as TextView
+//        idTextView.text = companyOwner.id.toString()
 
-        val nameTextView = view.findViewById(R.id.list_item_name) as TextView
+        val nameTextView = view?.findViewById(R.id.list_item_name) as TextView
         nameTextView.text = companyOwner.name
 
         return view
     }
 
-    override fun getItem(position: Int): GenericEntity = companyOwners[position]
+    override fun getItem(position: Int): CompanyOwner = companyOwners[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
 

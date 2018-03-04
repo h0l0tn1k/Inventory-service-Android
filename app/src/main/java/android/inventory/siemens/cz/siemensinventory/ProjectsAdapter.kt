@@ -5,7 +5,7 @@ package android.inventory.siemens.cz.siemensinventory
  */
 
 import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.entity.GenericEntity
+import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +14,7 @@ import android.widget.TextView
 
 class ProjectsAdapter(
         private val context: Context,
-        private val items: List<GenericEntity>
+        private val items: List<Project>
 ) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val item = getItem(position)
@@ -25,15 +25,15 @@ class ProjectsAdapter(
             view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
-        val idTextView = view?.findViewById(R.id.list_item_id) as TextView
-        idTextView.text = item.id.toString()
-        val nameTextView = view.findViewById(R.id.list_item_name) as TextView
+        //val idTextView = view?.findViewById(R.id.list_item_id) as TextView
+        //idTextView.text = item.id.toString()
+        val nameTextView = view?.findViewById(R.id.list_item_name) as TextView
         nameTextView.text = item.name
 
         return view
     }
 
-    override fun getItem(position: Int): GenericEntity = items[position]
+    override fun getItem(position: Int): Project = items[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
 

@@ -59,16 +59,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUserDetails() {
-        val nav_email = findViewById(R.id.nav_signed_in_email) as TextView
-        nav_email.text = this.user?.email
-        val nav_name = findViewById(R.id.nav_signed_in_name) as TextView
-        nav_name.text = this.user?.getFullName()
+        val navEmail = findViewById(R.id.nav_signed_in_email) as TextView
+        navEmail.text = this.user?.email
+        val navName = findViewById(R.id.nav_signed_in_name) as TextView
+        navName.text = this.user?.getFullName()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         when (item.itemId) {
             R.id.action_settings -> return true
             else -> return super.onOptionsItemSelected(item)
