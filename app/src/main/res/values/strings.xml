@@ -1,8 +1,10 @@
 <resources>
-    <string name="app_name">SiemensInventory</string>
+    <string name="app_name">Siemens Inventory</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
+    <string name="invalid_credentials">You have entered invalid credentials.</string>
+    <string name="unknown_error">"Unknown error occurred."</string>
 </resources>

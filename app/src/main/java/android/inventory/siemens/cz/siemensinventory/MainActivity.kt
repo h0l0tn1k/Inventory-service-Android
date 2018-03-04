@@ -59,16 +59,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUserDetails() {
-        val navEmail = findViewById(R.id.nav_signed_in_email) as TextView
+        val navEmail = findViewById<TextView>(R.id.nav_signed_in_email)
         navEmail.text = this.user?.email
-        val navName = findViewById(R.id.nav_signed_in_name) as TextView
+        val navName = findViewById<TextView>(R.id.nav_signed_in_name)
         navName.text = this.user?.getFullName()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_settings -> return true
-            else -> return super.onOptionsItemSelected(item)
+        return when (item.itemId) {
+            R.id.action_settings -> true
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
@@ -78,6 +78,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         var intent = when (item.itemId) {
             R.id.nav_company_owners -> Intent(this, CompanyOwnersActivity::class.java)
             R.id.nav_project -> Intent(this, ProjectsActivity::class.java)
+            R.id.nav_logout -> {
+                user = null
+                Intent(this, LoginActivity::class.java)
+            }
             else -> null
         }
         if(intent != null) startActivity(intent)

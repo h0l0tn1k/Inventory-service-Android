@@ -13,10 +13,6 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import org.json.JSONObject
-
-
-
 
 class LoginActivity : AppCompatActivity() {
 
@@ -48,13 +44,13 @@ class LoginActivity : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
+
                     val message = when(response.code()) {
-                        401 -> "You entered invalid credentials."
-                        else -> "Unknown error occurred."
+                        401 -> getString(R.string.invalid_credentials)
+                        else -> getString(R.string.unknown_error)
                     }
                     Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
                 }
-
             }
         })
     }
