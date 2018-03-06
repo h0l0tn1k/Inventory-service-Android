@@ -1,23 +1,24 @@
-package android.inventory.siemens.cz.siemensinventory
+package android.inventory.siemens.cz.siemensinventory.adapters
 
 /**
  * Created by Stefan on 03-Mar-18.
  */
 
 import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.api.entity.Project
+import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.entity.Department
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class ProjectsAdapter(
+class DepartmentAdapter(
         private val context: Context,
-        private val items: List<Project>
+        private val departments: List<Department>
 ) : BaseAdapter() {
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
-        val item = getItem(position)
+        val department = getItem(position)
 
         var view = convertView
 
@@ -25,18 +26,16 @@ class ProjectsAdapter(
             view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
         }
 
-        //val idTextView = view?.findViewById(R.id.list_item_id) as TextView
-        //idTextView.text = item.id.toString()
         val nameTextView = view?.findViewById(R.id.list_item_name) as TextView
-        nameTextView.text = item.name
+        nameTextView.text = department.name
 
         return view
     }
 
-    override fun getItem(position: Int): Project = items[position]
+    override fun getItem(position: Int): Department = departments[position]
 
     override fun getItemId(position: Int): Long = position.toLong()
 
-    override fun getCount(): Int = items.size
+    override fun getCount(): Int = departments.size
 
 }

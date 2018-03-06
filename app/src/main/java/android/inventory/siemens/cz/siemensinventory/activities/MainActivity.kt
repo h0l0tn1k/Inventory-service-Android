@@ -1,8 +1,11 @@
-package android.inventory.siemens.cz.siemensinventory
+package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
+import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -13,6 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.widget.TextView
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.content_main.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -63,21 +67,34 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         navEmail.text = this.user?.email
         val navName = findViewById<TextView>(R.id.nav_signed_in_name)
         navName.text = this.user?.getFullName()
+
+        val permissions = listOf(
+                Permission("Read-only", user?.flagRead),
+                Permission("Edit", user?.flagWrite),
+                Permission("Borrowing", user?.flagBorrow),
+                Permission("Inventory-making", user?.flagInventory),
+                Permission("Revision-making", user?.flagRevision),
+                Permission("Admin", user?.flagAdmin)
+        )
+
+        permissionsView.adapter = PermissionsAdapter(this, permissions)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.nav_settings_1 -> true
             else -> super.onOptionsItemSelected(item)
         }
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        // Handle navigation view item clicks here.
 
         var intent = when (item.itemId) {
             R.id.nav_company_owners -> Intent(this, CompanyOwnersActivity::class.java)
             R.id.nav_project -> Intent(this, ProjectsActivity::class.java)
+            R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
+            R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
+            R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
             R.id.nav_logout -> {
                 user = null
                 Intent(this, LoginActivity::class.java)

@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://C:\Users\I333206\Desktop\diplomka\implementation\implementation\SiemensInventoryAndroid\SiemensInventory.iml" filepath="C:\Users\I333206\Desktop\diplomka\implementation\implementation\SiemensInventoryAndroid\SiemensInventory.iml" />
-      <module fileurl="file://$PROJECT_DIR$/SiemensInventoryAndroid.iml" filepath="$PROJECT_DIR$/SiemensInventoryAndroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SiemensInventory.iml" filepath="$PROJECT_DIR$/SiemensInventory.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

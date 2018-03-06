@@ -1,7 +1,8 @@
-package android.inventory.siemens.cz.siemensinventory
+package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.LoginServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.support.v7.app.AppCompatActivity

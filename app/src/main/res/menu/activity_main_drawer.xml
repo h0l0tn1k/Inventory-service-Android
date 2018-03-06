@@ -5,46 +5,46 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_camera"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Import" />
-        <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Gallery" />
-        <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
-            android:title="Slideshow" />
-        <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_home"
+            android:icon="@drawable/ic_home_black_24dp"
+            android:title="@string/home" />
     </group>
 
-    <item android:title="Views">
+    <item android:title="@string/views">
         <menu>
+            <item
+                android:id="@+id/nav_suppliers"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/suppliers" />
+            <item
+                android:id="@+id/nav_departments"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/departments" />
             <item
                 android:id="@+id/nav_company_owners"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Company Owners" />
+                android:title="@string/company_owners" />
             <item
                 android:id="@+id/nav_project"
                 android:icon="@drawable/ic_menu_share"
-                android:title="Projects" />
+                android:title="@string/projects" />
         </menu>
     </item>
 
     <item android:title="">
         <menu>
             <item
+                android:id="@+id/nav_settings"
+                android:icon="@drawable/ic_settings_black_24dp"
+                android:title="@string/settings" />
+            <item
                 android:id="@+id/nav_logout"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Logout" />
+                android:icon="@drawable/ic_power_settings_new_black_24dp"
+                android:title="@string/logout" />
             <item
                 android:id="@+id/nav_about"
                 android:icon="@drawable/ic_menu_share"
-                android:title="About" />
+                android:title="@string/about" />
         </menu>
     </item>
 

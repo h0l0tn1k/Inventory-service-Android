@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.inventory.siemens.cz.siemensinventory.CompanyOwnersActivity">
+    tools:context="android.inventory.siemens.cz.siemensinventory.activities.CompanyOwnersActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,11 +18,11 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="New"/>
+                android:text="@string/new_text"/>
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Edit"
+                android:text="@string/edit"
                 android:enabled="false"/>
             <Button
                 android:layout_width="wrap_content"
