@@ -1,11 +1,50 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <EditTextPreference
-        android:defaultValue="http://192.168.130.1:8080/rest/"
-        android:inputType="textUri"
-        android:maxLines="1"
-        android:selectAllOnFocus="true"
-        android:singleLine="true"
-        android:title="Service URL" />
+    <PreferenceCategory
+        android:title="@string/serviceSettings">
+
+        <ListPreference
+            android:key="httpMethodPreference"
+            android:defaultValue="http"
+            android:entries="@array/httpMethods"
+            android:entryValues="@array/httpMethods"
+            android:summary="http"
+            android:title="@string/httpMethod"/>
+
+        <EditTextPreference
+            android:key="ipAddressPreference"
+            android:defaultValue="192.168.130.1"
+            android:inputType="textUri"
+            android:summary="192.168.130.1"
+            android:title="@string/ipAddress"/>
+
+        <EditTextPreference
+            android:key="portPreference"
+            android:defaultValue="8080"
+            android:inputType="numberDecimal"
+            android:summary="8080"
+            android:title="@string/port"/>
+
+        <EditTextPreference
+            android:key="pathPreference"
+            android:defaultValue="/rest"
+            android:inputType="text"
+            android:summary="/rest"
+            android:title="@string/path"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/testConnection">
+        
+        <Preference
+            android:id="@+id/resultServiceUrlTextView"
+            android:selectable="false"
+            android:title="@string/serviceUrl"
+            android:summary="http://192.168.130.1:8080/rest/"/>
+
+        <Preference android:title="@string/testConnectionToService"
+            android:key="testConnectionToService"/>
+    </PreferenceCategory>
 
 </PreferenceScreen>

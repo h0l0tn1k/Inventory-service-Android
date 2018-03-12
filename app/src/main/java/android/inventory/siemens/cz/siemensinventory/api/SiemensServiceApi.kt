@@ -4,6 +4,7 @@ class SiemensServiceApi {
 
     //http://10.182.36.56:8080/rest/ - work
     companion object {
-        fun getBaseUrl(): String = "http://192.168.137.1:8080/rest/" //"http://192.168.137.1:8080/rest/"
+        //configurable from App Settings
+        fun getBaseUrl(): String = "http://10.182.36.38:8080/rest/" //"http://192.168.137.1:8080/rest/"
     }
 }

@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
             R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
+            R.id.nav_scan -> Intent(this, ScanActivity::class.java)
             R.id.nav_logout -> {
                 user = null
                 Intent(this, LoginActivity::class.java)
