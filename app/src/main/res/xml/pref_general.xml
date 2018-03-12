@@ -36,8 +36,7 @@
 
     <PreferenceCategory
         android:title="@string/testConnection">
-        
-        <Preference
+                <Preference
             android:id="@+id/resultServiceUrlTextView"
             android:selectable="false"
             android:title="@string/serviceUrl"
