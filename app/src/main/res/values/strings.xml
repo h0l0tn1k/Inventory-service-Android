@@ -42,4 +42,6 @@
     <string name="ipAddress">IP Address</string>
     <string name="testConnectionToService">Test Connection to Service</string>
     <string name="testConnection">Test Connection</string>
+    <string name="others">Others</string>
+    <string name="connection_parameters">Connection parameters</string>
 </resources>

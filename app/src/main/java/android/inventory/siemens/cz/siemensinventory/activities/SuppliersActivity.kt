@@ -18,7 +18,7 @@ class SuppliersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_suppliers)
 
 
-        val suppliers = SupplierServiceApi.Factory.create().getSuppliers()
+        val suppliers = SupplierServiceApi.Factory.create(this).getSuppliers()
 
         suppliers.enqueue(object : Callback<List<Supplier>> {
             override fun onResponse(call: Call<List<Supplier>>?, response: Response<List<Supplier>>?) {

@@ -1,5 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
+import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -13,10 +14,10 @@ interface LoginServiceApi {
     fun login(@Path("email") email: String,@Path("password") password: String) : Call<LoginUserScd>
 
     object Factory {
-        fun create(): LoginServiceApi {
+        fun create(context : Context): LoginServiceApi {
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl())
+                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
                     .create<LoginServiceApi>(LoginServiceApi::class.java)
         }

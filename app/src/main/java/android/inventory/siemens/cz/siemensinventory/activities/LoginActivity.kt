@@ -21,12 +21,18 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        btn_login?.setOnClickListener {loginUser()}
+        btn_login?.setOnClickListener{loginUser()}
+        btn_setting?.setOnClickListener{launchSettings()}
+    }
+
+    private fun launchSettings() {
+        Intent(this, SettingsActivity::class.java)
+        startActivity(Intent(this, SettingsActivity::class.java))
     }
 
     private fun loginUser() {
 
-        val user = LoginServiceApi.Factory.create().login(login_email?.text.toString(), login_password?.text.toString())
+        val user = LoginServiceApi.Factory.create(this).login(login_email?.text.toString(), login_password?.text.toString())
 
         user.enqueue(object: Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {

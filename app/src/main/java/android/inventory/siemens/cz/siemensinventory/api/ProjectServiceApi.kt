@@ -1,5 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
+import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -16,10 +17,10 @@ interface ProjectServiceApi {
     fun getProject(@Path("project") projectId: Long) : Call<Project>
 
     object Factory {
-        fun create(): ProjectServiceApi {
+        fun create(context : Context): ProjectServiceApi {
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl())
+                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
                     .create<ProjectServiceApi>(ProjectServiceApi::class.java)
         }

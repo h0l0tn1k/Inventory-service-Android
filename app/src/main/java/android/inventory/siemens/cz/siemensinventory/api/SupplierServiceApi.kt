@@ -1,5 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
+import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.inventory.siemens.cz.siemensinventory.api.entity.User
 import retrofit2.Call
@@ -17,10 +18,10 @@ interface SupplierServiceApi {
     fun getSupplier(@Path("supplier") supplierId: Long) : Call<Supplier>
 
     object Factory {
-        fun create(): SupplierServiceApi {
+        fun create(context : Context): SupplierServiceApi {
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl())
+                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
                     .create<SupplierServiceApi>(SupplierServiceApi::class.java)
         }

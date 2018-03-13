@@ -24,7 +24,6 @@ class SettingsActivity : Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         fragmentManager.beginTransaction().replace(android.R.id.content, GeneralPreferenceFragment()).commit()
-
     }
 
     /**

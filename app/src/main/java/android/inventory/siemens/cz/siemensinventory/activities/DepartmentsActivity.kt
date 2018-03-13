@@ -17,7 +17,7 @@ class DepartmentsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_departments)
 
-        val departments = DepartmentsServiceApi.Factory.create().getDepartments()
+        val departments = DepartmentsServiceApi.Factory.create(this).getDepartments()
 
         departments.enqueue(object : Callback<List<Department>> {
             override fun onResponse(call: Call<List<Department>>?, response: Response<List<Department>>?) {

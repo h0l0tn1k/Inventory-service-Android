@@ -16,7 +16,7 @@ class CompanyOwnersActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_company_owners)
-        val companyOwnersCall = CompanyOwnerServiceApi.Factory.create().getCompanyOwners()
+        val companyOwnersCall = CompanyOwnerServiceApi.Factory.create(this).getCompanyOwners()
 
         companyOwnersCall.enqueue(object : Callback<List<CompanyOwner>> {
             override fun onResponse(call: Call<List<CompanyOwner>>?, response: Response<List<CompanyOwner>>?) {

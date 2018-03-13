@@ -42,20 +42,19 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == MY_CAMERA_REQUEST_CODE) {
             if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(this, "camera permission granted", Toast.LENGTH_LONG).show()
                 initScanner()
             } else {
-                Toast.makeText(this, "camera permission denied", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Camera permission denied", Toast.LENGTH_LONG).show()
             }
         }
     }
 
     override fun handleResult(rawResult: Result) {
         Log.d("handler", rawResult.text) // Prints scan results
-        Log.d("handler", rawResult.barcodeFormat.toString()) // Prints the scan format (qrcode)
+        Log.d("handler", rawResult.barcodeFormat.toString())
 
         val builder = AlertDialog.Builder(this)
 
-        builder.setTitle("VALUE "+ rawResult.text + "?").create().show()
+        builder.setTitle("VALUE "+ rawResult.text).create().show()
     }
 }

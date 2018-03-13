@@ -1,5 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
+import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.CompanyOwner
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -16,10 +17,10 @@ interface CompanyOwnerServiceApi {
     fun getCompanyOwner(@Path("companyowner") companyOwnerId: Long) : Call<CompanyOwner>
 
     object Factory {
-        fun create(): CompanyOwnerServiceApi {
+        fun create(context : Context): CompanyOwnerServiceApi {
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl())
+                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
                     .create<CompanyOwnerServiceApi>(CompanyOwnerServiceApi::class.java)
         }

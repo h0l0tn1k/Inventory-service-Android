@@ -17,7 +17,7 @@ class ProjectsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_projects)
 
-        val projects = ProjectServiceApi.Factory.create().getProjects()
+        val projects = ProjectServiceApi.Factory.create(this).getProjects()
 
         projects.enqueue(object : Callback<List<Project>> {
             override fun onResponse(call: Call<List<Project>>?, response: Response<List<Project>>?) {
