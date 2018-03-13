@@ -4,32 +4,24 @@
         android:title="@string/serviceSettings">
 
         <ListPreference
-            android:key="httpMethodPreference"
-            android:defaultValue="http"
+            android:key="httpMethod"
             android:entries="@array/httpMethods"
             android:entryValues="@array/httpMethods"
-            android:summary="http"
             android:title="@string/httpMethod"/>
 
         <EditTextPreference
-            android:key="ipAddressPreference"
-            android:defaultValue="192.168.130.1"
+            android:key="baseUrl"
             android:inputType="textUri"
-            android:summary="192.168.130.1"
             android:title="@string/ipAddress"/>
 
         <EditTextPreference
-            android:key="portPreference"
-            android:defaultValue="8080"
-            android:inputType="numberDecimal"
-            android:summary="8080"
+            android:key="port"
+            android:inputType="number"
             android:title="@string/port"/>
 
         <EditTextPreference
-            android:key="pathPreference"
-            android:defaultValue="/rest"
+            android:key="path"
             android:inputType="text"
-            android:summary="/rest"
             android:title="@string/path"/>
 
     </PreferenceCategory>
@@ -37,6 +29,7 @@
     <PreferenceCategory
         android:title="@string/testConnection">
                 <Preference
+                    android:key="serviceUrl"
             android:id="@+id/resultServiceUrlTextView"
             android:selectable="false"
             android:title="@string/serviceUrl"
