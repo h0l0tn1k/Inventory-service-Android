@@ -36,7 +36,7 @@ class LoginActivity : AppCompatActivity() {
         user.enqueue(object: Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
                 Toast.makeText(
-                        this@LoginActivity, "ERROR", Toast.LENGTH_LONG
+                        this@LoginActivity, getString(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG
                 ).show()
                 setResult(Activity.RESULT_CANCELED, intent)
             }

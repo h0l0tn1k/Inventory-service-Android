@@ -44,4 +44,5 @@
     <string name="testConnection">Test Connection</string>
     <string name="others">Others</string>
     <string name="connection_parameters">Connection parameters</string>
+    <string name="error_cannot_connect_to_service">ERROR: Cannot connect to service. Please check connection parameters.</string>
 </resources>
