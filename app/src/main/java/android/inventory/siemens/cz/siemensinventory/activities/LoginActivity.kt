@@ -26,7 +26,6 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun launchSettings() {
-        Intent(this, SettingsActivity::class.java)
         startActivity(Intent(this, SettingsActivity::class.java))
     }
 
