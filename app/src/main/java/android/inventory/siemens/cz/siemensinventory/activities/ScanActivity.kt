@@ -13,12 +13,14 @@ import android.content.pm.PackageManager
 import android.support.annotation.NonNull
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import com.google.gson.Gson
 
 
 class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     private var mScannerView: ZXingScannerView? = null
     private val MY_CAMERA_REQUEST_CODE = 100
+    private var parameterName : String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,6 +28,11 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), MY_CAMERA_REQUEST_CODE)
+        }
+
+        parameterName = intent.getStringExtra("parameterName")
+        if(parameterName.isNullOrEmpty()) {
+            throw IllegalArgumentException("Variable 'parameterName' is not specified.")
         }
 
         initScanner()
@@ -50,11 +57,8 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     }
 
     override fun handleResult(rawResult: Result) {
-        Log.d("handler", rawResult.text) // Prints scan results
-        Log.d("handler", rawResult.barcodeFormat.toString())
-
-        val builder = AlertDialog.Builder(this)
-
-        builder.setTitle("VALUE "+ rawResult.text).create().show()
+        intent.putExtra(parameterName, rawResult.text)
+        setResult(RESULT_OK, intent)
+        finish()
     }
 }

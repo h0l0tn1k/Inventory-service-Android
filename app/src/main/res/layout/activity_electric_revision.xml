@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context="android.inventory.siemens.cz.siemensinventory.activities.ElectricRevisionActivity">
+
+    <Button
+        android:id="@+id/scanBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/scan"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        />
+
+    <RelativeLayout android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/scanBtn"
+        android:layout_centerInParent="true">
+
+        <EditText android:id="@+id/serialNoEditTxt"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:singleLine="true"
+            android:paddingEnd="40dp"
+            android:paddingStart="40dp"
+            android:hint="@string/enter_serial_number" />
+
+        <Button android:id="@+id/manualEntryBtn"
+            android:text="@string/find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/serialNoEditTxt"
+            android:layout_alignBottom="@+id/serialNoEditTxt"
+            android:layout_alignEnd="@+id/serialNoEditTxt"/>
+
+    </RelativeLayout>
+
+</RelativeLayout>

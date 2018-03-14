@@ -89,13 +89,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
-        var intent = when (item.itemId) {
+        val intent = when (item.itemId) {
             R.id.nav_company_owners -> Intent(this, CompanyOwnersActivity::class.java)
             R.id.nav_project -> Intent(this, ProjectsActivity::class.java)
             R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
             R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
             R.id.nav_scan -> Intent(this, ScanActivity::class.java)
+            R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_logout -> {
                 user = null
                 Intent(this, LoginActivity::class.java)

@@ -8,11 +8,28 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_black_24dp"
             android:title="@string/home" />
+        <!--
         <item
             android:id="@+id/nav_scan"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/scan" />
+        -->
     </group>
+
+    <item android:title="@string/activities">
+        <menu>
+            <item android:id="@+id/nav_inventory"
+                android:icon="@drawable/ic_visibility_black_24dp"
+                android:title="@string/inventory"/>
+
+            <item android:id="@+id/nav_electric_revision"
+                android:icon="@drawable/ic_flash_on_black_24dp"
+                android:title="@string/electric_revision"/>
+
+            <item android:id="@+id/nav_calibration"
+                android:title="@string/calibration"/>
+        </menu>
+    </item>
 
     <item android:title="@string/views">
         <menu>
