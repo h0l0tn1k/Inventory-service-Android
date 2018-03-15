@@ -6,13 +6,30 @@
     <group android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
-            android:icon="@drawable/ic_home_black_24dp"
-            android:title="@string/home" />
+            android:icon="@drawable/ic_person_black_24dp"
+            android:title="@string/profile" />
+        <!--
         <item
             android:id="@+id/nav_scan"
             android:icon="@drawable/ic_menu_camera"
             android:title="@string/scan" />
+        -->
     </group>
+
+    <item android:title="@string/activities">
+        <menu>
+            <item android:id="@+id/nav_inventory"
+                android:icon="@drawable/ic_visibility_black_24dp"
+                android:title="@string/inventory"/>
+
+            <item android:id="@+id/nav_electric_revision"
+                android:icon="@drawable/ic_flash_on_black_24dp"
+                android:title="@string/electric_revision"/>
+
+            <item android:id="@+id/nav_calibration"
+                android:title="@string/calibration"/>
+        </menu>
+    </item>
 
     <item android:title="@string/views">
         <menu>
@@ -47,7 +64,7 @@
                 android:title="@string/logout" />
             <item
                 android:id="@+id/nav_about"
-                android:icon="@drawable/ic_menu_share"
+                android:icon="@drawable/ic_info_black_24dp"
                 android:title="@string/about" />
         </menu>
     </item>

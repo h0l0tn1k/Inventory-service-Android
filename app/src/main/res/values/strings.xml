@@ -45,4 +45,13 @@
     <string name="others">Others</string>
     <string name="connection_parameters">Connection parameters</string>
     <string name="error_cannot_connect_to_service">ERROR: Cannot connect to service. Please check connection parameters.</string>
+    <string name="activities">Activities</string>
+    <string name="electric_revision">Electric Revision</string>
+    <string name="inventory">Inventory</string>
+    <string name="calibration">Calibration</string>
+    <string name="enter_manually">Enter manually</string>
+    <string name="enter_serial_number">Enter serial number</string>
+    <string name="find">Find</string>
+    <string name="device">Device</string>
+    <string name="profile">Profile</string>
 </resources>

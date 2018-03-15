@@ -4,4 +4,9 @@
         <item>http</item>
         <item>https</item>
     </string-array>
+
+    <array name="dotColors">
+        <item>@color/white</item>
+        <item>@color/black</item>
+    </array>
 </resources>

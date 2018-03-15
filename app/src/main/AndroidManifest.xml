@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="android.inventory.siemens.cz.siemensinventory">
 
-    <uses-feature android:name="android.hardware.camera" android:required="true"/>
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="true" />
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -39,6 +41,10 @@
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".activities.ScanActivity" />
+        <activity android:name=".activities.ElectricRevisionActivity"
+            android:label="@string/electric_revision"/>
+        <activity android:name=".activities.DeviceActivity"
+            android:label="@string/device"/>
     </application>
 
 </manifest>

@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.ImageView
 import android.widget.TextView
 
 /**
@@ -29,8 +30,14 @@ class PermissionsAdapter(
         val permissionNameView = view?.findViewById(R.id.permissionName) as TextView
         permissionNameView.text = permission.name
 
-        val permissionValueView = view?.findViewById(R.id.permissionValue) as TextView
-        permissionValueView.text = permission.value.toString()
+        val permissionValueView = view?.findViewById(R.id.permissionValue) as ImageView
+
+        var imageResource = if (permission?.value == null
+                                || permission.value == false)
+                                    R.drawable.ic_close_red_800_24dp
+                                    else R.drawable.ic_check_green_a700_24dp
+
+        permissionValueView.setImageResource(imageResource)
 
         return view
     }

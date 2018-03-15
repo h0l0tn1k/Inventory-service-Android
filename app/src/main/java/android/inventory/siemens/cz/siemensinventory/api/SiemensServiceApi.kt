@@ -14,14 +14,12 @@ interface SiemensServiceApi {
 
         private var settings : ServiceSettings? = null
 
-        //configurable from App Settings
         fun getBaseUrl(context: Context): String  {
             if(settings == null) {
                 settings = ServiceSettings(context)
             }
 
             return settings?.getServiceUrlFormatted().toString()
-            //return "http://10.182.36.38:8080/rest/"
         }
     }
 }
