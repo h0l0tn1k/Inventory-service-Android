@@ -52,4 +52,5 @@
     <string name="enter_serial_number">Enter serial number</string>
     <string name="find">Find</string>
     <string name="device">Device</string>
+    <string name="profile">Profile</string>
 </resources>

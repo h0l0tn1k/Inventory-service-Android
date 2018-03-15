@@ -57,11 +57,11 @@ class ElectricRevisionActivity : AppCompatActivity() {
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == SCAN_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
                 val deviceBarcodeId = data.getStringExtra(parameterName)
                 if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
                     //Toast.makeText(this, "Barcode is : '$deviceBarcodeId'", Toast.LENGTH_LONG).show()

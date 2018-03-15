@@ -31,16 +31,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        val intent = Intent(this, LoginActivity::class.java)
-        startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE)
+        startLoginActivity()
     }
 
-    // This method is called when the second activity finishes
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == LOGIN_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
                 this.user = Gson().fromJson(data.getStringExtra("user"), LoginUserScd::class.java)
             }
         }
@@ -60,6 +58,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         setUserDetails()
 
         return true
+    }
+
+    private fun startLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE)
     }
 
     private fun setUserDetails() {
@@ -95,7 +98,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
             R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
-            R.id.nav_scan -> Intent(this, ScanActivity::class.java)
+            //R.id.nav_scan -> Intent(this, ScanActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_logout -> {
                 user = null
