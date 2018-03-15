@@ -30,7 +30,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-
+        //do nothing
     }
 
     private fun launchSettings() {
@@ -41,16 +41,12 @@ class LoginActivity : AppCompatActivity() {
 
         val user = LoginServiceApi.Factory.create(this).login(login_email?.text.toString(), login_password?.text.toString())
 
-        val progress = findViewById<DotsProgressIndicator>(R.layout.dots_progress)
-        progress.visibility = View.VISIBLE
-
         user.enqueue(object: Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
                 Toast.makeText(
                         this@LoginActivity, getString(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG
                 ).show()
                 setResult(Activity.RESULT_CANCELED, intent)
-                progress.visibility = View.GONE
             }
 
             override fun onResponse(call: Call<LoginUserScd>?, response: Response<LoginUserScd>) {
@@ -60,7 +56,6 @@ class LoginActivity : AppCompatActivity() {
                     val intent = Intent()
                     intent.putExtra("user", Gson().toJson(receivedUser))
                     setResult(RESULT_OK, intent)
-                    progress.visibility = View.GONE
                     finish()
                 } else {
 
@@ -70,7 +65,6 @@ class LoginActivity : AppCompatActivity() {
                     }
                     Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
                 }
-                progress.visibility = View.GONE
             }
         })
     }

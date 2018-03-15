@@ -3,39 +3,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context="android.inventory.siemens.cz.siemensinventory.activities.ElectricRevisionActivity">
 
-    <Button
-        android:id="@+id/scanBtn"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/scan"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="20dp"
-        />
-
-    <RelativeLayout android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/scanBtn"
+        android:layout_above="@id/scanBtn"
         android:layout_centerInParent="true">
 
-        <EditText android:id="@+id/serialNoEditTxt"
+        <EditText
+            android:id="@+id/serialNoEditTxt"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:singleLine="true"
-            android:paddingEnd="40dp"
-            android:paddingStart="40dp"
+            android:layout_marginEnd="50dp"
+            android:layout_marginStart="40dp"
             android:hint="@string/enter_serial_number" />
 
-        <Button android:id="@+id/manualEntryBtn"
+        <android.support.design.widget.FloatingActionButton
+            android:id="@+id/manualEntryBtn"
             android:text="@string/find"
+            android:src="@drawable/ic_search_black_24dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/serialNoEditTxt"
             android:layout_alignBottom="@+id/serialNoEditTxt"
-            android:layout_alignEnd="@+id/serialNoEditTxt"/>
+            android:layout_alignEnd="@+id/serialNoEditTxt"
+            android:scaleType="center"/>
 
     </RelativeLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/scanBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@drawable/ic_menu_camera"
+        android:layout_marginTop="40dp"
+        android:scaleType="centerInside"/>
 
 </RelativeLayout>

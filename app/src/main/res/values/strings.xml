@@ -29,10 +29,6 @@
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
-
-    <!-- Example settings for Data & Sync -->
-    <string name="pref_header_data_sync">Data &amp; sync</string>
-
     <string name="scan">Scan</string>
     <string name="port">Port</string>
     <string name="serviceUrl">Service URL</string>
@@ -54,4 +50,5 @@
     <string name="find">Find</string>
     <string name="device">Device</string>
     <string name="profile">Profile</string>
+    <string name="change_password">Change password</string>
 </resources>
