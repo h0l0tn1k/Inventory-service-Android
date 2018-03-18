@@ -35,7 +35,9 @@ class ElectricRevisionActivity : AppCompatActivity() {
     }
 
     private fun startManualScan() {
-        //TODO: validations
+        //TODO: add validations
+
+        //TODO: CHANGE -> NOT SERIAL NUMBER BUT EVIDENCE NUMBER !!!!!!!!!!!!!!
         val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
         queue?.enqueue(object : Callback<Device> {
             override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
@@ -45,7 +47,7 @@ class ElectricRevisionActivity : AppCompatActivity() {
                 }
             }
             override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(this@ElectricRevisionActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }
         })
     }
@@ -64,7 +66,6 @@ class ElectricRevisionActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 val deviceBarcodeId = data.getStringExtra(parameterName)
                 if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
-                    //Toast.makeText(this, "Barcode is : '$deviceBarcodeId'", Toast.LENGTH_LONG).show()
 
                     val queue = deviceApi?.getDeviceByBarcodeId(deviceBarcodeId)
                     queue?.enqueue(object : Callback<Device> {
@@ -75,22 +76,19 @@ class ElectricRevisionActivity : AppCompatActivity() {
                             }
                         }
                         override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                            Toast.makeText(this@ElectricRevisionActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
                         }
                     })
                 } else {
-                    //TODO: ERROR
+                    Toast.makeText(this, getString(R.string.unable_to_scan), Toast.LENGTH_LONG).show()
                 }
             } else {
-                //TODO: error try manually
+                Toast.makeText(this, getString(R.string.unable_to_scan), Toast.LENGTH_LONG).show()
             }
         }
     }
 
     private fun startDeviceActivity(device : Device) {
-//        Toast.makeText(this@ElectricRevisionActivity,
-//                "Device by barcode ID : '" + device.objectTypeName + " " + device.objectTypeVersion,
-//                Toast.LENGTH_LONG).show()
         val deviceIntent = Intent(this@ElectricRevisionActivity, DeviceActivity::class.java)
         deviceIntent.putExtra("device", Gson().toJson(device))
         startActivity(deviceIntent)

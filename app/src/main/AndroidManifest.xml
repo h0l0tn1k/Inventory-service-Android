@@ -28,23 +28,35 @@
         </activity>
         <activity
             android:name=".activities.CompanyOwnersActivity"
-            android:label="Company Owners" />
+            android:label="@string/company_owners" />
         <activity
             android:name=".activities.ProjectsActivity"
-            android:label="Projects" />
-        <activity android:name=".activities.LoginActivity" />
+            android:label="@string/projects" />
+        <activity
+            android:name=".activities.LoginActivity"
+            android:label="@string/please_login" />
         <activity
             android:name=".activities.DepartmentsActivity"
-            android:label="Departments" />
+            android:label="@string/departments" />
         <activity android:name=".activities.SuppliersActivity" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".activities.ScanActivity" />
-        <activity android:name=".activities.ElectricRevisionActivity"
-            android:label="@string/electric_revision"/>
-        <activity android:name=".activities.DeviceActivity"
-            android:label="@string/device"/>
+        <activity
+            android:name=".activities.ElectricRevisionActivity"
+            android:label="@string/electric_revision" />
+        <activity
+            android:name=".activities.DeviceActivity"
+            android:label="@string/device" />
+        <activity
+            android:name=".activities.ChangePasswordActivity"
+            android:label="@string/change_password" />
+        <activity
+            android:name=".activities.CalibrationActivity" />
+        <activity
+            android:name=".activities.EditUserPermissionsActivity"
+            android:label="@string/user_permissions"/>
     </application>
 
 </manifest>

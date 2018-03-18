@@ -88,19 +88,18 @@ class SettingsActivity : Activity() {
             findPreference("testConnectionToService").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 //TODO:
 
-
                 serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
                     override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                         if(response?.isSuccessful != null && response.isSuccessful) {
                             Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
                         } else {
-                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is unsuccessful!", Toast.LENGTH_LONG ).show()
+                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                         }
 
                     }
 
                     override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                        Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is unsuccessful!", Toast.LENGTH_LONG ).show()
+                        Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                     }
                 })
 

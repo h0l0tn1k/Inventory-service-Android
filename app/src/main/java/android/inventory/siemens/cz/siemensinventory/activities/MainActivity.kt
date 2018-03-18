@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.widget.TextView
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.profile.*
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -32,8 +32,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if(user == null) {
-            startLoginActivity()
+            //TODO: no connection so removing login screen
+            //startLoginActivity()
         }
+
+        changePasswordBtn.setOnClickListener { startChangePasswordActivity() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,13 +60,35 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         setUserDetails()
+        setMenuItemsVisibility(menu)
 
         return true
+    }
+
+    private fun startChangePasswordActivity() {
+        startActivity(Intent(this, ChangePasswordActivity::class.java))
     }
 
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE)
+    }
+
+    private fun setMenuItemsVisibility(menu : Menu) {
+        //TODO finish Menu Items visibility
+        menuInflater.inflate(R.menu.activity_main_drawer, menu)
+
+        //TODO use some ID's instead of numbers, reordering of menu items will change these numbers
+        val activitiesSubMenu = menu.getItem(1).subMenu
+
+        //BORROW
+//        activitiesSubMenu.getItem(0).isVisible = false
+        //Inventory
+//        activitiesSubMenu.getItem(1).isVisible = (this.user?.flagBorrow == true)
+//        menu.getItem(R.id.nav_edit_user_permissions).isVisible = (this.user?.flagAdmin == true)
+//        menu.getItem(R.id.nav_electric_revision).isVisible = (this.user?.flagRevision == true)
+//        menu.getItem(R.id.nav_calibration).isVisible = (this.user?.flagCalibration)
+
     }
 
     private fun setUserDetails() {
@@ -84,27 +109,30 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         permissionsView.adapter = PermissionsAdapter(this, permissions)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.nav_settings_1 -> true
-            else -> super.onOptionsItemSelected(item)
-        }
-    }
-
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
 
         val intent = when (item.itemId) {
+
+            //Activities
+            //R.id.nav_borrow -> Intent(this, BorrowDeviceActivity::class.java)
+            //TODO add inventory
+            R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
+            R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
+            R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
+
+            //Views
+            R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
+            R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
             R.id.nav_company_owners -> Intent(this, CompanyOwnersActivity::class.java)
             R.id.nav_project -> Intent(this, ProjectsActivity::class.java)
-            R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
-            R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
+
+            //Others
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
-            //R.id.nav_scan -> Intent(this, ScanActivity::class.java)
-            R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_logout -> {
                 user = null
                 Intent(this, LoginActivity::class.java)
             }
+            //TODO add About
             else -> null
         }
         if(intent != null) startActivity(intent)

@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.api.DepartmentsServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Department
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_departments.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +29,7 @@ class DepartmentsActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<Department>>?, t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(this@DepartmentsActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }
         })
 

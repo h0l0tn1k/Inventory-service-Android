@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.api.CompanyOwnerServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.CompanyOwner
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_company_owners.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,7 +28,7 @@ class CompanyOwnersActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<CompanyOwner>>?, t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(this@CompanyOwnersActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }
         })
 

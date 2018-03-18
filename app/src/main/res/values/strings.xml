@@ -51,4 +51,10 @@
     <string name="device">Device</string>
     <string name="profile">Profile</string>
     <string name="change_password">Change password</string>
+    <string name="please_login">Please login</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="user_permissions">User Permissions</string>
+    <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
+    <string name="borrow_device">Borrow Device</string>
 </resources>

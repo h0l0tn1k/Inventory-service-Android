@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.api.ProjectServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_projects.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,7 +29,7 @@ class ProjectsActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<Project>>?, t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(this@ProjectsActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }
         })
 

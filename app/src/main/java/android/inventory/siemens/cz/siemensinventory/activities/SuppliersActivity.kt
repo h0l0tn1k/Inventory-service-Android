@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_suppliers.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +30,7 @@ class SuppliersActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<List<Supplier>>?, t: Throwable?) {
-                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+                Toast.makeText(this@SuppliersActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }
         })
     }

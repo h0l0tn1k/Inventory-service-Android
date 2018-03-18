@@ -8,26 +8,33 @@
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_person_black_24dp"
             android:title="@string/profile" />
-        <!--
-        <item
-            android:id="@+id/nav_scan"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="@string/scan" />
-        -->
     </group>
 
-    <item android:title="@string/activities">
+    <item
+        android:title="@string/activities">
         <menu>
+            <!-- TODO add visibility true if flagBorrow -->
+            <item android:id="@+id/nav_borrow"
+                android:icon="@drawable/ic_devices_black_24dp"
+                android:title="@string/borrow_device"/>
+
+            <!-- TODO add visibility true if flagInventory -->
             <item android:id="@+id/nav_inventory"
                 android:icon="@drawable/ic_visibility_black_24dp"
                 android:title="@string/inventory"/>
 
+            <!-- TODO add visibility true if flagRevision -->
             <item android:id="@+id/nav_electric_revision"
                 android:icon="@drawable/ic_flash_on_black_24dp"
                 android:title="@string/electric_revision"/>
 
+            <!-- TODO add visibility true if flagCalibration? / Revision -->
             <item android:id="@+id/nav_calibration"
                 android:title="@string/calibration"/>
+
+            <!-- TODO add visibility true if flagAdmin -->
+            <item android:id="@+id/nav_user_permissions"
+                android:title="@string/user_permissions"/>
         </menu>
     </item>
 
