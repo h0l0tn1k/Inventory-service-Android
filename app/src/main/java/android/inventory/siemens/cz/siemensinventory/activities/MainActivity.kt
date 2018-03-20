@@ -32,8 +32,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         nav_view.setNavigationItemSelectedListener(this)
 
         if(user == null) {
-            //TODO: no connection so removing login screen
-            //startLoginActivity()
+            startLoginActivity()
         }
 
         changePasswordBtn.setOnClickListener { startChangePasswordActivity() }
