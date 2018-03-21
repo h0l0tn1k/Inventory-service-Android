@@ -11,7 +11,6 @@ import android.support.v4.view.GravityCompat
 import android.view.View
 
 import android.widget.Toast
-import com.bcgdv.asia.lib.dots.DotsProgressIndicator
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import kotlinx.android.synthetic.main.activity_main.*

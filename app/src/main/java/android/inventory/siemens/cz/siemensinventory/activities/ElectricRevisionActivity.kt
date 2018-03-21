@@ -87,7 +87,6 @@ class ElectricRevisionActivity : AppCompatActivity() {
                 if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
 
                     val queue = deviceApi?.getDeviceByBarcodeId(deviceBarcodeId)
-
                     getProgressIndicator().showProgress()
                     queue?.enqueue(object : Callback<Device> {
                         override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
