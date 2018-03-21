@@ -36,7 +36,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.3.0'
     implementation 'me.dm7.barcodescanner:zxing:1.8.4'
     implementation 'com.orhanobut:hawk:2.0.1'
-    implementation 'com.bcgdv.asia.lib:dots:1.0.1'
+    implementation 'com.github.mmoamenn:ProgressWindow_Android:0.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
