@@ -7,6 +7,7 @@ import android.content.SharedPreferences
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Build
 import android.os.Bundle
 import android.os.Parcel
@@ -21,8 +22,11 @@ import retrofit2.Response
 
 class SettingsActivity : Activity() {
 
+    private var snackbarNotifier : SnackbarNotifier? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         fragmentManager.beginTransaction().replace(android.R.id.content, GeneralPreferenceFragment()).commit()
     }
 
@@ -88,22 +92,23 @@ class SettingsActivity : Activity() {
             findPreference("testConnectionToService").onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 //TODO:
 
-                serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                        if(response?.isSuccessful != null && response.isSuccessful) {
-                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
-                        } else {
-                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
+                if(serviceSettings?.isUrlWellFormated() == true) {
+                    serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
+                        override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                            if(response?.isSuccessful != null && response.isSuccessful) {
+                                Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
+                            } else {
+                                Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
+                            }
                         }
 
-                    }
-
-                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                        Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
-                    }
-                })
-
-
+                        override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
+                        }
+                    })
+                } else {
+                    Toast.makeText(this.context, R.string.service_url_not_valid, Toast.LENGTH_LONG).show()
+                }
                 true
             }
         }

@@ -5,27 +5,46 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.LoginServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.view.GravityCompat
-import android.view.View
 
-import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
+    private var snackbarNotifier: SnackbarNotifier? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
+        snackbarNotifier = SnackbarNotifier(login_activity_layout, this)
+
         btn_login?.setOnClickListener{loginUser()}
         btn_setting?.setOnClickListener{launchSettings()}
+
+        if(ServiceSettings(this).isUrlWellFormated()) {
+            ServiceSettings(this).checkConnection().enqueue(object : Callback<Void> {
+                override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                    if(response?.isSuccessful == null || !response.isSuccessful) {
+                        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+                    }
+                }
+
+                override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                    snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+                }
+            })
+        } else {
+            snackbarNotifier?.show(getString(R.string.service_url_not_valid))
+        }
     }
 
     override fun onBackPressed() {
@@ -37,19 +56,21 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
+        if(isUserInputValid()) {
+            fireLoginUserRequest()
+        }
+    }
 
+    private fun fireLoginUserRequest() {
         val user = LoginServiceApi.Factory.create(this).login(login_email?.text.toString(), login_password?.text.toString())
 
         user.enqueue(object: Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
-                Toast.makeText(
-                        this@LoginActivity, getString(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG
-                ).show()
+                snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
                 setResult(Activity.RESULT_CANCELED, intent)
             }
 
             override fun onResponse(call: Call<LoginUserScd>?, response: Response<LoginUserScd>) {
-
                 if(response.isSuccessful) {
                     val receivedUser = response.body() as LoginUserScd
                     val intent = Intent()
@@ -57,14 +78,17 @@ class LoginActivity : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
-
                     val message = when(response.code()) {
                         401 -> getString(R.string.invalid_credentials)
                         else -> getString(R.string.unknown_error)
                     }
-                    Toast.makeText(this@LoginActivity, message, Toast.LENGTH_LONG).show()
+                    snackbarNotifier?.show(message)
                 }
             }
         })
+    }
+
+    private fun isUserInputValid() : Boolean {
+        return TextViewHelper().withContext(this).isEmailValid(login_email).and.isNotEmpty(login_password, getString(R.string.password_empty)).isValid
     }
 }

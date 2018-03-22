@@ -1,26 +1,18 @@
 package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.adapters.ProjectsAdapter
 import android.inventory.siemens.cz.siemensinventory.api.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
-import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import android.inventory.siemens.cz.siemensinventory.tools.ProgressIndicator
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.design.widget.Snackbar
-import android.support.v4.content.res.TypedArrayUtils
-import android.support.v4.content.res.TypedArrayUtils.getText
-import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import com.bluehomestudio.progresswindow.ProgressWindow
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_electric_revision.*
-import kotlinx.android.synthetic.main.activity_projects.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -31,36 +23,35 @@ class ElectricRevisionActivity : AppCompatActivity() {
     private val parameterName = "device_barcode_id"
     private var deviceApi : DeviceServiceApi? = null
     private var progressIndicator : ProgressWindow? = null
+    private var snackbarNotifier: SnackbarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_electric_revision)
 
+        snackbarNotifier = SnackbarNotifier(electric_revision_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
 
         scanBtn.setOnClickListener { startScan() }
         manualEntryBtn.setOnClickListener { startManualScan() }
     }
 
-    private fun hideKeyboard() {
-        val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm!!.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
-    }
-
     private fun startManualScan() {
-        getProgressIndicator().showProgress()
-        //TODO: add validations
 
-        //TODO: CHANGE -> NOT SERIAL NUMBER BUT EVIDENCE NUMBER !!!!!!!!!!!!!!
-        val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
-        queue?.enqueue( object : Callback<Device> {
-            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                this@ElectricRevisionActivity.onResponse(response)
-            }
-            override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                this@ElectricRevisionActivity.onFailure()
-            }
-        } )
+        if(isSerialNumberValid()) {
+            getProgressIndicator().showProgress()
+
+            //TODO: CHANGE -> NOT SERIAL NUMBER BUT EVIDENCE NUMBER !!!!!!!!!!!!!!
+            val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
+            queue?.enqueue( object : Callback<Device> {
+                override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                    this@ElectricRevisionActivity.onResponse(response)
+                }
+                override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                    this@ElectricRevisionActivity.onFailure()
+                }
+            } )
+        }
     }
 
     private fun getProgressIndicator() : ProgressWindow {
@@ -97,10 +88,10 @@ class ElectricRevisionActivity : AppCompatActivity() {
                         }
                     })
                 } else {
-                    showSnackbar(getString(R.string.unable_to_scan))
+                    snackbarNotifier?.show(getString(R.string.unable_to_scan))
                 }
             } else {
-                showSnackbar(getString(R.string.unable_to_scan))
+                snackbarNotifier?.show(getString(R.string.unable_to_scan))
             }
         }
     }
@@ -112,7 +103,7 @@ class ElectricRevisionActivity : AppCompatActivity() {
     }
 
     private fun onFailure() {
-        showSnackbar(getString(R.string.error_cannot_connect_to_service))
+        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
         getProgressIndicator().hideProgress()
     }
 
@@ -129,13 +120,12 @@ class ElectricRevisionActivity : AppCompatActivity() {
                         } else {
                             response.toString()
                         }
-            showSnackbar(responseMessage)
+            snackbarNotifier?.show(responseMessage)
         }
     }
 
-    private fun showSnackbar(text : String) {
-        hideKeyboard()
-        Snackbar.make(electric_revision_layout, text, Snackbar.LENGTH_LONG).show()
+    private fun isSerialNumberValid() : Boolean {
+        return TextViewHelper().withContext(this).isNotEmpty(serialNoEditTxt, getString(R.string.serial_number_empty)).isValid
     }
 }
 

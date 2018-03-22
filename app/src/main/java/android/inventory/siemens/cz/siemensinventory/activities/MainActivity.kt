@@ -35,7 +35,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             startLoginActivity()
         }
 
-        changePasswordBtn.setOnClickListener { startChangePasswordActivity() }
+        profileChangePasswordBtn.setOnClickListener { startChangePasswordActivity() }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

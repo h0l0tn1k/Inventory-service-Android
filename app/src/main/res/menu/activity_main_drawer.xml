@@ -30,10 +30,12 @@
 
             <!-- TODO add visibility true if flagCalibration? / Revision -->
             <item android:id="@+id/nav_calibration"
+                android:icon="@drawable/ic_phonelink_setup_black_24dp"
                 android:title="@string/calibration"/>
 
             <!-- TODO add visibility true if flagAdmin -->
             <item android:id="@+id/nav_user_permissions"
+                android:icon="@drawable/ic_vpn_key_black_24dp"
                 android:title="@string/user_permissions"/>
         </menu>
     </item>

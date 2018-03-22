@@ -1,12 +1,15 @@
 package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.adapters.DeviceParametersAdapter
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.entity.KeyValueParameters
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_device.*
-import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
+import java.util.*
 
 class DeviceActivity : AppCompatActivity() {
 
@@ -14,16 +17,23 @@ class DeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
 
-        var device = Gson().fromJson(intent.getStringExtra("device"), Device::class.java)
-        fillData(device)
-    }
+        val device = Gson().fromJson(intent.getStringExtra("device"), Device::class.java)
 
-    private fun fillData(device : Device) {
-        //TODO: deviceInventoryStateTxtView
-        deviceOwnerTxtView.text = device.ownerName
-        deviceTypeTxtView.text = device.objectTypeName
-        deviceVersionTxtView.text = device.objectTypeVersion
-        deviceBarcodeTxtView.text = device.barcodeNumber
-        deviceSerialNoTxtView.text = device.serialNumber
+        val addDateString = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(device.addDate)
+
+        val parameters = listOf(
+                KeyValueParameters("Barcode Number", device.barcodeNumber),
+                KeyValueParameters("Device Type", device.objectTypeName),
+                KeyValueParameters("Serial Number", device.serialNumber),
+                KeyValueParameters("Owner", device.ownerName),
+                KeyValueParameters("Department", device.departmentName),
+                KeyValueParameters("Current Holder", device.holderName),
+                KeyValueParameters("Project", device.projectName),
+                KeyValueParameters("Company Owner", device.companyOwnerName),
+                KeyValueParameters("Add Date", addDateString),
+                KeyValueParameters("Status", device.deviceStateName)
+        )
+
+        deviceParameters.adapter = DeviceParametersAdapter(this, parameters)
     }
 }

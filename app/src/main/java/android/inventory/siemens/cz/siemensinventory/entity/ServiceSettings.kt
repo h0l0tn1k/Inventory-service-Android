@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.adapters.SupplierAdapter
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.preference.PreferenceManager
+import android.webkit.URLUtil
 import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.activity_suppliers.*
 import retrofit2.Call
@@ -56,5 +57,9 @@ class ServiceSettings(context: Context) {
 
     fun checkConnection(): Call<Void> {
         return Retrofit.Builder().baseUrl(getServiceUrlFormatted()).build().create(SiemensServiceApi::class.java).getService()
+    }
+
+    fun isUrlWellFormated(): Boolean {
+        return URLUtil.isValidUrl(this.getServiceUrlFormatted())
     }
 }

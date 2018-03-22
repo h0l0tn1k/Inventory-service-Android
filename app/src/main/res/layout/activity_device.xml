@@ -5,50 +5,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="android.inventory.siemens.cz.siemensinventory.activities.DeviceActivity">
+    tools:context="android.inventory.siemens.cz.siemensinventory.activities.DeviceActivity"
+    >
 
-    <TextView
-        android:id="@+id/deviceTypeTxtView"
+    <ListView
+        android:id="@+id/deviceParameters"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
-    <TextView
-        android:id="@+id/deviceVersionTxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
-    <TextView
-        android:id="@+id/deviceOwnerTxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
-    <TextView
-        android:id="@+id/deviceBarcodeTxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
-    <TextView
-        android:id="@+id/deviceSerialNoTxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="20sp"
-        />
-
-    <ImageView
-        android:id="@+id/deviceInventoryStateTxtView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:contentDescription="State icon"
-        android:gravity="center"
-        android:src="@drawable/ic_close_red_800_24dp"/>
-
+        android:layout_height="wrap_content"/>
 </LinearLayout>

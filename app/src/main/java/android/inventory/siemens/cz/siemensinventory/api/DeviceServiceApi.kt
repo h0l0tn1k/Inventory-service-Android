@@ -3,6 +3,8 @@ package android.inventory.siemens.cz.siemensinventory.api
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.Project
+import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -25,8 +27,10 @@ interface DeviceServiceApi {
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {
+            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create()
+
             return Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create(gson))
                     .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
                     .create<DeviceServiceApi>(DeviceServiceApi::class.java)
