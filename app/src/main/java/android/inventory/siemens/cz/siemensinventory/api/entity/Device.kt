@@ -17,5 +17,6 @@ class Device(
         var projectName: String,
         var companyOwnerName: String,
         var addDate: Date,
-        var deviceStateName: String) {
+        var deviceStateName: String,
+        var lastRevisionDateString: Date) {
 }

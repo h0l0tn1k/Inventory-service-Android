@@ -27,7 +27,8 @@ interface DeviceServiceApi {
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {
-            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create()
+            //val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create()
+            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
 
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))

@@ -64,4 +64,9 @@
     <string name="user_permissions">User Permissions</string>
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
     <string name="borrow_device">Borrow Device</string>
+
+
+    <!-- Number Picker -->
+    <string name="number_picker_formatter">%d</string>
+    <string name="roboto_light">sans-serif-light</string>
 </resources>
