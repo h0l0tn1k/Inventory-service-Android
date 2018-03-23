@@ -14,13 +14,14 @@ import android.os.Parcel
 import android.os.Parcelable
 import android.preference.Preference
 import android.preference.PreferenceFragment
+import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
 import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class SettingsActivity : Activity() {
+class SettingsActivity : AppCompatActivity() {
 
     private var snackbarNotifier : SnackbarNotifier? = null
 
@@ -38,6 +39,7 @@ class SettingsActivity : Activity() {
     class GeneralPreferenceFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
         private var serviceSettings : ServiceSettings? = null
+        private var snackbarNotifier : SnackbarNotifier? = null
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -45,6 +47,7 @@ class SettingsActivity : Activity() {
             setHasOptionsMenu(true)
 
             serviceSettings = ServiceSettings(this.context)
+            snackbarNotifier = SnackbarNotifier(activity.findViewById(android.R.id.content), this.activity)
 
             initPreferences()
             setListeners()
@@ -96,18 +99,22 @@ class SettingsActivity : Activity() {
                     serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                             if(response?.isSuccessful != null && response.isSuccessful) {
-                                Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
+                                snackbarNotifier?.show("Connection is successful!")
+                                //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
                             } else {
-                                Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
+                                snackbarNotifier?.show("Connection is not successful!")
+                                //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                             }
                         }
 
                         override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                            Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
+                            snackbarNotifier?.show("Connection is not successful!")
+                            //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                         }
                     })
                 } else {
-                    Toast.makeText(this.context, R.string.service_url_not_valid, Toast.LENGTH_LONG).show()
+                    snackbarNotifier?.show(getString(R.string.service_url_not_valid))
+                    //Toast.makeText(this.context, R.string.service_url_not_valid, Toast.LENGTH_LONG).show()
                 }
                 true
             }

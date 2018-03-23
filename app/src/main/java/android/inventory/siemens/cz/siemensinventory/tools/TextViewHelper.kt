@@ -10,7 +10,7 @@ import android.widget.TextView
  */
 class TextViewHelper {
 
-    private var context : Context? = null
+    var context : Context? = null
     var and : TextViewHelper = this
     var isValid : Boolean = true
 
