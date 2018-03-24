@@ -1,6 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.helpers;
 
 import android.inventory.siemens.cz.siemensinventory.R;
+import android.support.test.espresso.NoMatchingViewException;
 import android.support.test.espresso.matcher.BoundedMatcher;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +35,15 @@ public class Then {
 
     public static void iShouldSeeSnackbarWithMessage(String message) {
         onView(allOf(withId(R.id.snackbar_text), withText(message))).check(matches(isDisplayed()));
+    }
+
+    public static boolean isSnackbarDisplayed() {
+        try {
+            onView(withId(R.id.snackbar_text)).check(matches(isDisplayed()));
+            return true;
+        }catch(NoMatchingViewException e) {
+            return false;
+        }
     }
 
     public static void iShouldSeeElement(Matcher<View> element) {

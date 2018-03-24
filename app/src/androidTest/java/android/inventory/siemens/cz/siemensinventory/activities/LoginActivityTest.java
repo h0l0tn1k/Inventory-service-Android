@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.inventory.siemens.cz.siemensinventory.R;
 import android.inventory.siemens.cz.siemensinventory.helpers.Then;
 import android.inventory.siemens.cz.siemensinventory.helpers.When;
+import android.inventory.siemens.cz.siemensinventory.scenarios.Login;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
@@ -57,13 +58,7 @@ public class LoginActivityTest {
 
     @Test
     public void loginWithCorrectPassword() {
-        When.iEnterTextIntoElement(withId(R.id.login_email), "josef.novak@siemens.com");
-        When.iEnterTextIntoElement(withId(R.id.login_password), "ASDF001");
-
-        When.iClickOnElement(withId(R.id.btn_login));
-
-        //assert
-        Then.iShouldSeeElement(withId(R.id.permissionsView));
+        Login.loginWithCorrectCredentials();
     }
 
     private String getString(int stringId) {

@@ -9,9 +9,11 @@ import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
+import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.widget.TextView
@@ -48,7 +50,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
+    fun getDrawer() : DrawerLayout {
+        return drawer_layout
+    }
+
     override fun onBackPressed() {
+        drawer_layout.openDrawer(GravityCompat.END)
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
