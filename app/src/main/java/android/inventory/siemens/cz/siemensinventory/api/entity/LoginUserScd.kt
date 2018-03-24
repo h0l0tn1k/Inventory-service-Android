@@ -5,6 +5,7 @@ class LoginUserScd (
         var firstName: String,
         var lastName: String,
         var email: String,
+        var superiorName: String,
         var flagRead: Boolean,
         var flagWrite: Boolean,
         var flagBorrow: Boolean,

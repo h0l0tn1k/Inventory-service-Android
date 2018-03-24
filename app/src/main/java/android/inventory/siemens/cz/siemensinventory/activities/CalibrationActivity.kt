@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import com.google.gson.Gson
+import kotlinx.android.synthetic.main.activity_calibration.*
 import kotlinx.android.synthetic.main.activity_electric_revision.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -25,8 +26,7 @@ class CalibrationActivity : AppCompatActivity() {
 
         deviceApi = DeviceServiceApi.Factory.create(this)
 
-        scanBtn.setOnClickListener { startScan() }
-        manualEntryBtn.setOnClickListener { startManualScan() }
+        calibration_scanBtn.setOnClickListener { startScan() }
     }
 
     private fun startDeviceActivity(device : Device) {
@@ -35,22 +35,22 @@ class CalibrationActivity : AppCompatActivity() {
         startActivity(deviceIntent)
     }
 
-    private fun startManualScan() {
-        //TODO: add validations
-
-        val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
-        queue?.enqueue(object : Callback<Device> {
-            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                val device = response?.body()
-                if(device != null) {
-                    startDeviceActivity(device)
-                }
-            }
-            override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                Toast.makeText(this@CalibrationActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
-            }
-        })
-    }
+//    private fun startManualScan() {
+//        //TODO: add validations
+//
+//        val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
+//        queue?.enqueue(object : Callback<Device> {
+//            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+//                val device = response?.body()
+//                if(device != null) {
+//                    startDeviceActivity(device)
+//                }
+//            }
+//            override fun onFailure(call: Call<Device>?, t: Throwable?) {
+//                Toast.makeText(this@CalibrationActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
+//            }
+//        })
+//    }
 
     private fun startScan() {
         val scanIntent = Intent(this, ScanActivity::class.java )

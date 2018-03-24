@@ -1,36 +1,60 @@
 <resources>
     <string name="app_name">Siemens Inventory</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <!-- Menu Items -->
 
-    <string name="action_settings">Settings</string>
-    <string name="invalid_credentials">You have entered invalid credentials.</string>
-    <string name="unknown_error">"Unknown error occurred."</string>
+    <!-- Activities -->
+    <string name="activities">Activities</string>
+    <string name="borrow_device">Borrow Device</string>
+    <string name="electric_revision">Electric Revision</string>
+    <string name="inventory">Inventory</string>
+    <string name="calibration">Calibration</string>
+    <string name="user_permissions">User Permissions</string>
+
+    <!-- Views -->
+    <string name="views">Views</string>
     <string name="suppliers">Suppliers</string>
     <string name="departments">Departments</string>
     <string name="company_owners">Company Owners</string>
     <string name="projects">Projects</string>
+
+    <!-- Others -->
+    <string name="action_settings">Settings</string>
     <string name="logout">Logout</string>
     <string name="about">About</string>
-    <string name="views">Views</string>
-    <string name="home">Home</string>
 
-    <string name="new_text">New</string>
-    <string name="edit">Edit</string>
-    <string name="delete">Delete</string>
-
+    <!-- Login Activity -->
+    <string name="login">Login</string>
+    <string name="please_login">Please Login</string>
     <string name="email">Email</string>
     <string name="email_empty">"Email is empty or has incorrect format."</string>
     <string name="password">Password</string>
     <string name="password_empty">Password cannot be empty.</string>
-    <string name="login">Login</string>
+    <string name="invalid_credentials">You have entered invalid credentials.</string>
+
+    <!-- Change Password Activity -->
+    <string name="change_password">Change password</string>
+    <string name="current_password">Current password</string>
+    <string name="new_password">New password</string>
+    <string name="field_empty">Field cannot be empty.</string>
+    <string name="new_pswd_not_equal">New passwords are not equal.</string>
+    <string name="curr_new_pswds_same">Current password and New password cannot be the same.</string>
+
+    <!-- Service Calling Messages -->
+    <string name="unknown_error">"Unknown error occurred."</string>
+    <string name="service_url_not_valid">"Service URL is not valid. Please specify service URL in settings."</string>
+    <string name="error_cannot_connect_to_service">ERROR: Cannot connect to service. Please check connection parameters.</string>
+
+    <string name="home">Home</string>
+    <string name="new_text">New</string>
+    <string name="edit">Edit</string>
+    <string name="delete">Delete</string>
+
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
 
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
-
     <string name="scan">Scan</string>
     <string name="port">Port</string>
     <string name="serviceUrl">Service URL</string>
@@ -42,31 +66,23 @@
     <string name="testConnection">Test Connection</string>
     <string name="others">Others</string>
     <string name="connection_parameters">Connection parameters</string>
-    <string name="service_url_not_valid">"Service URL is not valid. Please specify service URL in settings."</string>
-    <string name="error_cannot_connect_to_service">ERROR: Cannot connect to service. Please check connection parameters.</string>
-    <string name="activities">Activities</string>
-    <string name="electric_revision">Electric Revision</string>
-    <string name="inventory">Inventory</string>
-    <string name="calibration">Calibration</string>
+
     <string name="enter_manually">Enter manually</string>
     <string name="enter_serial_number">Enter serial number</string>
     <string name="serial_number_empty">Serial number cannot be empty.</string>
-    <string name="field_empty">Field cannot be empty.</string>
-    <string name="new_pswd_not_equal">New passwords are not equal.</string>
-    <string name="curr_new_pswds_same">Current password and New password cannot be the same.</string>
+    <string name="results">Results</string>
+    <string name="no_results_found">No Results Found</string>
+
     <string name="find">Find</string>
     <string name="device">Device</string>
     <string name="profile">Profile</string>
-    <string name="change_password">Change password</string>
-    <string name="please_login">Please login</string>
-    <string name="current_password">Current password</string>
-    <string name="new_password">New password</string>
-    <string name="user_permissions">User Permissions</string>
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
-    <string name="borrow_device">Borrow Device</string>
 
 
     <!-- Number Picker -->
     <string name="number_picker_formatter">%d</string>
     <string name="roboto_light">sans-serif-light</string>
+    <string name="permissions">Permissions</string>
+
+
 </resources>

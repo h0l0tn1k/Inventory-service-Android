@@ -1,6 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.Manifest
+import android.app.Activity
 import android.inventory.siemens.cz.siemensinventory.R
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -59,6 +60,12 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     override fun handleResult(rawResult: Result) {
         intent.putExtra(parameterName, rawResult.text)
         setResult(RESULT_OK, intent)
+        finish()
+    }
+
+
+    override fun onBackPressed() {
+        setResult(Activity.RESULT_CANCELED)
         finish()
     }
 }

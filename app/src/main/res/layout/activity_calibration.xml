@@ -1,47 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/calibration_layout"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="android.inventory.siemens.cz.siemensinventory.activities.CalibrationActivity">
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_above="@id/scanBtn"
-        android:layout_centerInParent="true">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/serialNoEditTxt"
-            android:layout_width="fill_parent"
+        <SearchView
+            android:id="@+id/calibration_search_box"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:layout_marginEnd="60dp"
-            android:layout_marginStart="40dp"
-            android:hint="@string/enter_serial_number" />
+            android:background="#FFF"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/enter_serial_number" />
 
-        <android.support.design.widget.FloatingActionButton
-            android:id="@+id/manualEntryBtn"
-            android:layout_width="wrap_content"
+        <ProgressBar
+            android:id="@+id/calibration_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginEnd="45dp"
-            android:scaleType="center"
-            android:src="@drawable/ic_search_black_24dp"
-            android:text="@string/find" />
+            android:indeterminate="true"
+            android:visibility="invisible"/>
 
-    </RelativeLayout>
+        <TextView
+            android:id="@+id/calibration_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:text="@string/results"
+            android:visibility="gone"/>
 
+        <TextView
+            android:id="@+id/calibration_no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/no_results_found"
+            android:visibility="gone"/>
+
+        <ListView
+            android:id="@+id/calibration_search_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:headerDividersEnabled="true"
+            android:orientation="vertical"
+            android:visibility="visible"/>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/scanBtn"
-        android:layout_width="wrap_content"
+        android:id="@+id/calibration_scanBtn"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_marginBottom="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
         android:src="@drawable/ic_menu_camera"
-        android:layout_marginTop="40dp"
-        android:scaleType="centerInside"/>
+        app:fabSize="normal" />
 
 </RelativeLayout>

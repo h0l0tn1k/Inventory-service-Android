@@ -6,5 +6,5 @@ package android.inventory.siemens.cz.siemensinventory.api.entity
 class User (
         var id: Long,
         var firstName: String,
-        var lastName: String ) {
+        var lastName: String) {
 }

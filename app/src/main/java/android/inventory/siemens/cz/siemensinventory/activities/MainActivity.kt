@@ -96,6 +96,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val navName = findViewById<TextView>(R.id.nav_signed_in_name)
         navName.text = this.user?.getFullName()
 
+        val superiorUser = findViewById<TextView>(R.id.profile_superior_user_value)
+        superiorUser.text = this.user?.superiorName
+
+        val loggedIUser = findViewById<TextView>(R.id.profile_loggedin_user_value)
+        loggedIUser.text = this.user?.getFullName()
+
         val permissions = listOf(
                 Permission("Read-only", user?.flagRead),
                 Permission("Edit", user?.flagWrite),

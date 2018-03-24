@@ -20,7 +20,7 @@
             android:layout_marginStart="10dp"/>
 
         <com.shawnlin.numberpicker.NumberPicker
-            android:id="@+id/revisionPeriodPicker"
+            android:id="@+id/el_revision_period"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
@@ -52,6 +52,7 @@
             android:layout_marginStart="10dp"/>
 
         <TextView
+            android:id="@+id/el_revision_date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2018-03-18"

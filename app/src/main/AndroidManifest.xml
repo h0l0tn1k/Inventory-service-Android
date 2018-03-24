@@ -45,6 +45,7 @@
         <activity android:name=".activities.ScanActivity" />
         <activity
             android:name=".activities.ElectricRevisionActivity"
+            android:windowSoftInputMode="adjustResize"
             android:label="@string/electric_revision" />
         <activity
             android:name=".activities.DeviceActivity"
@@ -53,7 +54,8 @@
             android:name=".activities.ChangePasswordActivity"
             android:label="@string/change_password" />
         <activity
-            android:name=".activities.CalibrationActivity" />
+            android:name=".activities.CalibrationActivity"
+            android:label="@string/calibration"/>
         <activity
             android:name=".activities.EditUserPermissionsActivity"
             android:label="@string/user_permissions"/>

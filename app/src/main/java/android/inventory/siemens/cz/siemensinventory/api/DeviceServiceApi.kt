@@ -5,11 +5,13 @@ import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.google.gson.JsonDeserializer
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
+import java.util.*
 
 interface DeviceServiceApi {
     
@@ -24,6 +26,9 @@ interface DeviceServiceApi {
 
     @GET("devices/serialno/{serialNo}")
     fun getDeviceBySerialNo(@Path("serialNo") serialNo: String) : Call<Device>
+
+    @GET("devices/serialno/like/{serialNo}")
+    fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {

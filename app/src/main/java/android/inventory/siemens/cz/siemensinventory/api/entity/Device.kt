@@ -1,7 +1,5 @@
 package android.inventory.siemens.cz.siemensinventory.api.entity
 
-import java.util.*
-
 /**
  * Created by I333206 on 04.03.2018.
  */
@@ -16,7 +14,7 @@ class Device(
         var holderName: String,
         var projectName: String,
         var companyOwnerName: String,
-        var addDate: Date,
+        //var addDate: Date,
         var deviceStateName: String,
-        var lastRevisionDateString: Date) {
+        var lastRevisionDateString: String) {
 }
