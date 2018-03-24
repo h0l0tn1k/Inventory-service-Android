@@ -3,11 +3,9 @@ package android.inventory.siemens.cz.siemensinventory.activities;
 
 import android.inventory.siemens.cz.siemensinventory.R;
 import android.inventory.siemens.cz.siemensinventory.helpers.When;
-import android.inventory.siemens.cz.siemensinventory.scenarios.Login;
 import android.inventory.siemens.cz.siemensinventory.scenarios.SetConnection;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
-import android.support.v4.view.GravityCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -21,14 +19,12 @@ import org.junit.runner.RunWith;
 
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.onView;
-import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static android.support.test.espresso.matcher.ViewMatchers.withClassName;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
-import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 import static org.hamcrest.Matchers.is;

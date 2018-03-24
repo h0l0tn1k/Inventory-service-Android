@@ -18,7 +18,7 @@ public class SetConnectionTest {
 
     @Test
     public void setConnectionTest() {
-        SetConnection.setConnection();
+        SetConnection.setConnectionFromLoginScreen();
     }
 
 }

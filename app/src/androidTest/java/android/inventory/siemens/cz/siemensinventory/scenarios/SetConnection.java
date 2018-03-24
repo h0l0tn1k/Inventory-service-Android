@@ -12,6 +12,7 @@ import org.hamcrest.Description;
 import org.hamcrest.Matcher;
 import org.hamcrest.TypeSafeMatcher;
 
+import static android.support.test.espresso.Espresso.closeSoftKeyboard;
 import static android.support.test.espresso.Espresso.onData;
 import static android.support.test.espresso.Espresso.pressBack;
 import static android.support.test.espresso.action.ViewActions.click;
@@ -33,44 +34,60 @@ public class SetConnection {
 
     public static void setConnectionIfIncorrect() {
         if(Then.isSnackbarDisplayed()) {
-            setConnection();
+            setConnectionFromLoginScreen();
         }
     }
 
-    public static void setConnection() {
-        When.iPressBack();
+    public static void setConnectionFromLoginScreen() {
+        closeSoftKeyboard();
 
         When.iClickOnElement(withId(R.id.btn_setting));
 
-        //set HTTP method
+        iSetHttpMethod();
+
+        iSetIpAddress();
+
+        iSetPort();
+
+        iSetPath();
+
+        iCheckConnectionIsSuccessFul();
+
+        pressBack();
+    }
+
+    public static void iSetHttpMethod() {
         onData(PreferenceMatchers.withTitle(R.string.httpMethod)).perform(click());
 
         onData(anything())
                 .inAdapterView(allOf(withClassName(is("com.android.internal.app.AlertController$RecycleListView")),
                         childAtPosition(withClassName(is("android.widget.FrameLayout")))))
                 .atPosition(0).perform(click());
+    }
 
-        //set ip address
+    public static void iCheckConnectionIsSuccessFul() {
+        onData(PreferenceMatchers.withTitle(R.string.testConnectionToService)).perform(click());
+
+        Then.iShouldSeeSnackbarWithMessage("Connection is successful!");
+    }
+
+    public static void iSetIpAddress() {
         onData(PreferenceMatchers.withTitle(R.string.ipAddress)).perform(click());
         When.iEnterTextIntoElement(withId(android.R.id.edit), ipAddress);
         When.iClickOnElement(allOf(withId(android.R.id.button1), withText("OK")));
+    }
 
-        //set port
+    public static void iSetPort() {
         onData(PreferenceMatchers.withTitle(R.string.port)).perform(click());
         When.iEnterTextIntoElement(withId(android.R.id.edit), port);
         When.iClickOnElement(allOf(withId(android.R.id.button1), withText("OK")));
+    }
 
+    public static void iSetPath() {
         //set path
         onData(PreferenceMatchers.withTitle(R.string.path)).perform(click());
         When.iEnterTextIntoElement(withId(android.R.id.edit), path);
         When.iClickOnElement(allOf(withId(android.R.id.button1), withText("OK")));
-
-        //test connection & assert
-        onData(PreferenceMatchers.withTitle(R.string.testConnectionToService)).perform(click());
-
-        Then.iShouldSeeSnackbarWithMessage("Connection is successful!");
-
-        pressBack();
     }
 
     private static Matcher<View> childAtPosition(

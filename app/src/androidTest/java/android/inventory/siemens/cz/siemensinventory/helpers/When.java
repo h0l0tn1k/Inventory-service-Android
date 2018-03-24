@@ -1,16 +1,13 @@
 package android.inventory.siemens.cz.siemensinventory.helpers;
 
-import android.content.Context;
 import android.inventory.siemens.cz.siemensinventory.R;
 import android.inventory.siemens.cz.siemensinventory.activities.MainActivity;
 import android.inventory.siemens.cz.siemensinventory.scenarios.Login;
-import android.support.test.espresso.matcher.BoundedMatcher;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.view.GravityCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
-import android.widget.EditText;
 
 import org.hamcrest.Description;
 import org.hamcrest.Matcher;
