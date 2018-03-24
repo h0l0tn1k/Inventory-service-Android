@@ -44,11 +44,9 @@ public class ElectricRevisionTest {
 
         SetConnection.setConnectionIfIncorrect();
 
-        Login.loginWithCorrectCredentials();
+        When.iLogin();
 
-        openNavigationDrawer();
-
-        When.iSleepFor(1000);
+        When.iOpenNavigationDrawer(mActivityTestRule);
 
         When.iClickOnElectricRevision();
 
@@ -89,19 +87,6 @@ public class ElectricRevisionTest {
         When.iPressBack();
 
         onView(withId(R.id.el_revision_scanBtn)).perform(click());
-    }
-
-    private void openNavigationDrawer() {
-        try {
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    mActivityTestRule.getActivity().getDrawer().openDrawer(GravityCompat.START);
-                }
-            });
-        } catch (Throwable throwable) {
-            throwable.printStackTrace();
-        }
     }
 
     private static Matcher<View> childAtPosition(

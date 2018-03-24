@@ -1,7 +1,12 @@
 package android.inventory.siemens.cz.siemensinventory.helpers;
 
+import android.content.Context;
 import android.inventory.siemens.cz.siemensinventory.R;
+import android.inventory.siemens.cz.siemensinventory.activities.MainActivity;
+import android.inventory.siemens.cz.siemensinventory.scenarios.Login;
 import android.support.test.espresso.matcher.BoundedMatcher;
+import android.support.test.rule.ActivityTestRule;
+import android.support.v4.view.GravityCompat;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -19,12 +24,17 @@ import static android.support.test.espresso.action.ViewActions.replaceText;
 import static android.support.test.espresso.action.ViewActions.scrollTo;
 import static android.support.test.espresso.action.ViewActions.typeText;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
+import static android.support.test.internal.runner.junit4.statement.UiThreadStatement.runOnUiThread;
 
 /**
  * Created by I333206 on 23.03.2018.
  */
 
 public class When {
+
+    public static void iLogin() {
+        Login.loginWithCorrectCredentials();
+    }
 
     public static void iPressBack() {
         pressBack();
@@ -52,6 +62,22 @@ public class When {
 
     public static void iWriteIntoSearchField(Matcher<View> view, String query) {
         onView(view).perform(click(), typeText(query), closeSoftKeyboard());
+    }
+
+
+    public static void iOpenNavigationDrawer(final ActivityTestRule<MainActivity> context) {
+        try {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    context.getActivity().getDrawer().openDrawer(GravityCompat.START);
+                }
+            });
+        } catch (Throwable throwable) {
+            throwable.printStackTrace();
+        }
+
+        When.iSleepFor(1000);
     }
 
     private static Matcher<View> childAtPosition(
