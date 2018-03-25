@@ -93,28 +93,22 @@ class SettingsActivity : AppCompatActivity() {
 
         private fun setListeners() {
             findPreference("testConnectionToService").onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                //TODO:
 
                 if(serviceSettings?.isUrlWellFormated() == true) {
                     serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                            if(response?.isSuccessful != null && response.isSuccessful) {
+                            if(response?.isSuccessful == true) {
                                 snackbarNotifier?.show("Connection is successful!")
-                                //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is successful!", Toast.LENGTH_LONG ).show()
                             } else {
                                 snackbarNotifier?.show("Connection is not successful!")
-                                //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                             }
                         }
-
                         override fun onFailure(call: Call<Void>?, t: Throwable?) {
                             snackbarNotifier?.show("Connection is not successful!")
-                            //Toast.makeText(this@GeneralPreferenceFragment.context, "Connection is not successful!", Toast.LENGTH_LONG ).show()
                         }
                     })
                 } else {
                     snackbarNotifier?.show(getString(R.string.service_url_not_valid))
-                    //Toast.makeText(this.context, R.string.service_url_not_valid, Toast.LENGTH_LONG).show()
                 }
                 true
             }

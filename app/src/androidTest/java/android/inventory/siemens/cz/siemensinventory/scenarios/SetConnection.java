@@ -29,7 +29,9 @@ import static org.hamcrest.Matchers.is;
 
 public class SetConnection {
 
-    private static String ipAddress = "10.182.37.17", path = "/rest", port = "8080";
+    private static String ipAddress = "192.168.0.30", path = "/rest", port = "8080";
+
+    //private static String ipAddress = "10.182.37.17", path = "/rest", port = "8080";
 
 
     public static void setConnectionIfIncorrect() {

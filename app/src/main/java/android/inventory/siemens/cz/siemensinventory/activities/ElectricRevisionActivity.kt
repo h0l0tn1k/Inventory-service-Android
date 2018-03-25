@@ -6,14 +6,12 @@ import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.adapters.ElectricRevisionResultsAdapter
 import android.inventory.siemens.cz.siemensinventory.api.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.tools.ProgressIndicator
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.SearchView
-import com.bluehomestudio.progresswindow.ProgressWindow
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_electric_revision.*
 import retrofit2.Call
@@ -32,16 +30,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_electric_revision)
 
-        adapter = ElectricRevisionResultsAdapter(this, emptyList())
-        el_revision_search_box.setOnQueryTextListener(this)
-        el_revision_search_results.adapter = adapter
-        el_revision_search_results.onItemClickListener = AdapterView.OnItemClickListener {
-            adapter, view, position, id ->
-            run {
-                val device = adapter.getItemAtPosition(position) as Device
-                startDeviceActivity(device)
-            }
-        }
+        initLayoutElements()
 
         snackbarNotifier = SnackbarNotifier(electric_revision_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
@@ -49,12 +38,21 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         el_revision_scanBtn.setOnClickListener { startScan() }
     }
 
-    private fun startProgressBar() {
+    private fun initLayoutElements() {
+        adapter = ElectricRevisionResultsAdapter(this, emptyList())
+        el_revision_search_box.setOnQueryTextListener(this)
+        el_revision_search_results.adapter = adapter
+        el_revision_search_results.onItemClickListener = AdapterView.OnItemClickListener { adapter, _, position, _ ->
+            startDeviceActivity(adapter.getItemAtPosition(position) as Device)
+        }
+    }
+
+    private fun showProgressBar() {
         el_revision_progress_bar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        el_revision_progress_bar.visibility = View.INVISIBLE
+        el_revision_progress_bar.visibility = View.GONE
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -67,14 +65,14 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
     private fun updateResultsList(devices : List<Device>, queryEmpty : Boolean) {
         if(queryEmpty) {
-            el_revision_results_text.visibility = View.GONE
+            //el_revision_results_text.visibility = View.GONE
             el_revision_search_results.visibility = View.GONE
             el_revision_no_results_text.visibility = View.GONE
             adapter?.updateList(emptyList())
             return
         }
 
-        el_revision_results_text.visibility = View.VISIBLE
+        //el_revision_results_text.visibility = View.VISIBLE
 
         if(devices.isEmpty()) {
             el_revision_no_results_text.visibility = View.VISIBLE
@@ -93,7 +91,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
         if(isSerialNumberValid(query)) {
             val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
-            startProgressBar()
+            showProgressBar()
             queue?.enqueue( object : Callback<List<Device>> {
                 override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                     if(response?.isSuccessful == true) {
@@ -128,7 +126,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
                 val deviceBarcodeId = data.getStringExtra(parameterName)
                 if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
                     val queue = deviceApi?.getDeviceByBarcodeId(deviceBarcodeId)
-                    startProgressBar()
+                    showProgressBar()
                     queue?.enqueue(object : Callback<Device> {
                         override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                             this@ElectricRevisionActivity.onResponse(response)

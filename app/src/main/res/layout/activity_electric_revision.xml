@@ -16,7 +16,7 @@
         <SearchView
             android:id="@+id/el_revision_search_box"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="60dp"
             android:background="#FFF"
             android:iconifiedByDefault="false"
             android:queryHint="@string/enter_serial_number" />
@@ -27,8 +27,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:indeterminate="true"
-            android:visibility="invisible"/>
-
+            android:visibility="gone"/>
+<!--
         <TextView
             android:id="@+id/el_revision_results_text"
             android:layout_width="match_parent"
@@ -38,7 +38,7 @@
             android:layout_marginTop="5dp"
             android:text="@string/results"
             android:visibility="gone"/>
-
+-->
         <TextView
             android:id="@+id/el_revision_no_results_text"
             android:layout_width="match_parent"
@@ -62,8 +62,8 @@
         android:id="@+id/el_revision_scanBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:src="@drawable/ic_menu_camera"

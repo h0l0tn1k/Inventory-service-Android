@@ -30,14 +30,21 @@ class LoginActivity : AppCompatActivity() {
         btn_login?.setOnClickListener{loginUser()}
         btn_setting?.setOnClickListener{launchSettings()}
 
-        if(ServiceSettings(this).isUrlWellFormated()) {
+        checkConnectionToService()
+    }
+
+    override fun onBackPressed() {
+        //do nothing
+    }
+
+    private fun checkConnectionToService() {
+        if (ServiceSettings(this).isUrlWellFormated()) {
             ServiceSettings(this).checkConnection().enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
-                    if(response?.isSuccessful == null || !response.isSuccessful) {
+                    if (response?.isSuccessful != true) {
                         snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
                     }
                 }
-
                 override fun onFailure(call: Call<Void>?, t: Throwable?) {
                     snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
                 }
@@ -45,10 +52,6 @@ class LoginActivity : AppCompatActivity() {
         } else {
             snackbarNotifier?.show(getString(R.string.service_url_not_valid))
         }
-    }
-
-    override fun onBackPressed() {
-        //do nothing
     }
 
     private fun launchSettings() {

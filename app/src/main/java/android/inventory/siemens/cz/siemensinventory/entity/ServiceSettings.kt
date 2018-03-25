@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.adapters.SupplierAdapter
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.preference.PreferenceManager
+import android.util.Patterns
 import android.webkit.URLUtil
 import com.orhanobut.hawk.Hawk
 import kotlinx.android.synthetic.main.activity_suppliers.*
@@ -60,6 +61,6 @@ class ServiceSettings(context: Context) {
     }
 
     fun isUrlWellFormated(): Boolean {
-        return URLUtil.isValidUrl(this.getServiceUrlFormatted())
+        return Patterns.WEB_URL.matcher(getServiceUrlFormatted()).matches()
     }
 }
