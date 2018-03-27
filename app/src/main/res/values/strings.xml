@@ -83,6 +83,9 @@
     <string name="number_picker_formatter">%d</string>
     <string name="roboto_light">sans-serif-light</string>
     <string name="permissions">Permissions</string>
+    <string name="no">No</string>
+    <string name="yes">Yes</string>
+    <string name="passed_electric_revision">Passed electric revision?</string>
 
 
 </resources>
