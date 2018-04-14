@@ -1,11 +1,13 @@
-package android.inventory.siemens.cz.siemensinventory.activities
+package android.inventory.siemens.cz.siemensinventory.electricrevision
 
 import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.adapters.ElectricRevisionResultsAdapter
-import android.inventory.siemens.cz.siemensinventory.api.DeviceServiceApi
+import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
+import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -145,6 +147,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     private fun startDeviceActivity(device : Device) {
         val deviceIntent = Intent(this@ElectricRevisionActivity, DeviceActivity::class.java)
         deviceIntent.putExtra("device", Gson().toJson(device))
+        deviceIntent.putExtra("intent", DeviceIntent.EL_REVISION.toString())
         startActivity(deviceIntent)
     }
 

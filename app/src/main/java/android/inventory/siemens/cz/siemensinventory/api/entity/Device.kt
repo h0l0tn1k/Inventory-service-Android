@@ -1,7 +1,9 @@
 package android.inventory.siemens.cz.siemensinventory.api.entity
 
+import java.util.*
+
 /**
- * Created by I333206 on 04.03.2018.
+ * Created by Stefan Matta on 04.03.2018.
  */
 class Device(
         var id: Long,

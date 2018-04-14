@@ -1,7 +1,8 @@
-package android.inventory.siemens.cz.siemensinventory.adapters
+package android.inventory.siemens.cz.siemensinventory.device
 
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.entity.KeyValueParameters
 import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.view.LayoutInflater
@@ -17,8 +18,10 @@ import android.widget.TextView
  */
 class DeviceParametersAdapter(
         private val context: Context,
-        private val parameters: List<KeyValueParameters>
+        private var device : Device
 ) : BaseAdapter() {
+
+    private var parameters: List<KeyValueParameters> = getParameters()
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val parameter = getItem(position)
@@ -33,7 +36,7 @@ class DeviceParametersAdapter(
         parameterNameView.text = parameter.key
 
         //TODO: read only mode
-        val parameterValueReadonly = view?.findViewById(R.id.parameterValueReadonly) as TextView
+        val parameterValueReadonly = view.findViewById(R.id.parameterValueReadonly) as TextView
         parameterValueReadonly.text = parameter.value
 
         //TODO: if edit mode
@@ -47,4 +50,19 @@ class DeviceParametersAdapter(
     override fun getItemId(position: Int): Long = position.toLong()
     override fun getCount(): Int = parameters.size
 
+    private fun getParameters() : List<KeyValueParameters> {
+        return listOf(
+                KeyValueParameters("Barcode Number", device.barcodeNumber),
+                KeyValueParameters("Device Type", device.objectTypeName),
+                KeyValueParameters("Serial Number", device.serialNumber),
+                KeyValueParameters("Owner", device.ownerName),
+                KeyValueParameters("Department", device.departmentName),
+                KeyValueParameters("Current Holder", device.holderName),
+                KeyValueParameters("Project", device.projectName),
+                KeyValueParameters("Company Owner", device.companyOwnerName),
+                //KeyValueParameters("Add Date", addDateString),
+                KeyValueParameters("Status", device.deviceStateName),
+                KeyValueParameters("Last Revision Date", device.lastRevisionDateString)
+        )
+    }
 }

@@ -5,7 +5,10 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
+import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.entity.Permission
+import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -13,7 +16,6 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.widget.TextView
@@ -128,6 +130,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //Activities
             //R.id.nav_borrow -> Intent(this, BorrowDeviceActivity::class.java)
             //TODO add inventory
+            R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
             R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)

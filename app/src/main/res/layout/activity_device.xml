@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="android.inventory.siemens.cz.siemensinventory.activities.DeviceActivity">
+    tools:context="android.inventory.siemens.cz.siemensinventory.device.DeviceActivity">
 
     <ListView
         android:id="@+id/deviceParameters"
@@ -16,44 +16,8 @@
         android:layout_above="@+id/device_el_revision_result_section"
         />
 
-    <LinearLayout
+    <include
         android:id="@+id/device_el_revision_result_section"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:background="@color/white"
-        android:padding="15dp"
-        android:layout_alignParentBottom="true">
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="20sp"
-            android:layout_gravity="center"
-            android:layout_marginBottom="20dp"
-            android:text="@string/passed_electric_revision"/>
-
-        <LinearLayout
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:orientation="horizontal">
-
-            <Button
-                android:id="@+id/device_passed_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:text="@string/yes"/>
-
-            <Button
-                android:layout_marginStart="10dp"
-                android:id="@+id/device_failed_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                style="@style/Widget.AppCompat.Button.Colored"
-                android:text="@string/no"/>
-        </LinearLayout>
-    </LinearLayout>
+        layout="@layout/device_el_revision_confirmation" />
 
 </RelativeLayout>

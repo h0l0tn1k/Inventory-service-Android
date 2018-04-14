@@ -1,4 +1,4 @@
-package android.inventory.siemens.cz.siemensinventory.dialogs
+package android.inventory.siemens.cz.siemensinventory.electricrevision
 
 import android.app.Activity
 import android.content.DialogInterface

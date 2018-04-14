@@ -1,17 +1,14 @@
-package android.inventory.siemens.cz.siemensinventory.api
+package android.inventory.siemens.cz.siemensinventory.device
 
 import android.content.Context
+import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.Project
-import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import com.google.gson.JsonDeserializer
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
-import java.util.*
 
 interface DeviceServiceApi {
     

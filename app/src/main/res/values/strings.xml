@@ -73,11 +73,15 @@
     <string name="results">Results</string>
     <string name="no_results_found">No Results Found</string>
 
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+
     <string name="find">Find</string>
     <string name="device">Device</string>
     <string name="profile">Profile</string>
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
 
+    <string name="select_calibration_date">Select Calibration Date</string>
 
     <!-- Number Picker -->
     <string name="number_picker_formatter">%d</string>
