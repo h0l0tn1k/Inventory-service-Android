@@ -21,7 +21,7 @@ interface InventoryRecordsServiceApi {
     fun getInvetoryRecord(@Path("id") inventoryRecordId: Long) : Call<InventoryRecord>
 
     @PUT("inventoryrecords/{id}/{checked}")
-    fun updateCheckedValue(@Path("id") inventoryRecordId: Long, @Path("checked") checked: Boolean)
+    fun updateCheckedValue(@Path("id") inventoryRecordId: Long, @Path("checked") checked: Boolean) : Call<Void>
 
     object Factory {
         fun create(context : Context): InventoryRecordsServiceApi {

@@ -7,7 +7,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 
 /**
- * Created by I333206 on 22.03.2018.
+ * Created by Stefan Matta on 22.03.2018.
  */
 class SnackbarNotifier(
         val layout : View,

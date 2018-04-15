@@ -13,11 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_above="@+id/device_el_revision_result_section"
-        />
+        android:layout_above="@+id/device_generic_result_section"/>
 
     <include
-        android:id="@+id/device_el_revision_result_section"
-        layout="@layout/device_el_revision_confirmation" />
+        android:id="@+id/device_generic_result_section"
+        layout="@layout/device_generic_confirmation" />
 
 </RelativeLayout>

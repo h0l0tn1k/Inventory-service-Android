@@ -14,7 +14,7 @@ import android.widget.ImageView
 import android.widget.TextView
 
 /**
- * Created by Stefan on 06-Mar-18.
+ * Created by Stefan Matta on 06-Mar-18.
  */
 class DeviceParametersAdapter(
         private val context: Context,

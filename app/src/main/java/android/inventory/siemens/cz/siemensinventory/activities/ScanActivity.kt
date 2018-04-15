@@ -63,7 +63,6 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         finish()
     }
 
-
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()

@@ -1,7 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.adapters
 
 /**
- * Created by Stefan on 03-Mar-18.
+ * Created by Stefan Matta on 03-Mar-18.
  */
 
 import android.content.Context

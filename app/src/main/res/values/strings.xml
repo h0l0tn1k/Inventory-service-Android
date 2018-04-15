@@ -90,6 +90,7 @@
     <string name="no">No</string>
     <string name="yes">Yes</string>
     <string name="passed_electric_revision">Passed electric revision?</string>
+    <string name="inventory_device_present">Device present?</string>
 
 
 </resources>

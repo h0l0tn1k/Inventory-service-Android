@@ -13,7 +13,6 @@ import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_inventory.*
 import retrofit2.Call
@@ -78,16 +77,24 @@ class InventoryActivity : AppCompatActivity(){
 
         when(requestCode) {
             SCAN_ACTIVITY_REQUEST_CODE -> handleScanActivityResult(resultCode, data)
-            DEVICE_ACTIVITY_REQUEST_CODE -> handleDeviceActivityResult(requestCode, data)
+            DEVICE_ACTIVITY_REQUEST_CODE -> handleDeviceActivityResult(resultCode, data)
         }
     }
 
     private fun handleDeviceActivityResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val deviceChecked = data.getBooleanExtra(deviceParameterName, false)
-            if(deviceChecked) {
-                loadData()
-            }
+            val inventoryRecord = Gson().fromJson(data.getStringExtra("result"), InventoryResult::class.java)
+            inventoryApi?.updateCheckedValue(inventoryRecord.id, inventoryRecord.registered)
+                ?.enqueue(object : Callback<Void> {
+                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                        if (response?.isSuccessful == true) {
+                            loadData()
+                        }
+                    }
+                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                        this@InventoryActivity.onFailure()
+                    }
+                })
         }
     }
 

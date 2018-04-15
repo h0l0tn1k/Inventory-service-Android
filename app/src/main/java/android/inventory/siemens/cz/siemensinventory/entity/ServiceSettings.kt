@@ -16,7 +16,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 
 /**
- * Created by Stefan on 13-Mar-18.
+ * Created by Stefan Matta on 13-Mar-18.
  */
 class ServiceSettings(context: Context) {
 

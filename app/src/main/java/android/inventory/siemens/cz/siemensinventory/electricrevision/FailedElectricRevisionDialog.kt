@@ -5,7 +5,7 @@ import android.content.DialogInterface
 import android.support.v7.app.AlertDialog
 
 /**
- * Created by I333206 on 24.03.2018.
+ * Created by Stefan Matta on 24.03.2018.
  */
 
 class FailedElectricRevisionDialog {

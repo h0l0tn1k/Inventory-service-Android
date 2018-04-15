@@ -1,6 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.api.entity
 
-import java.util.*
+import android.inventory.siemens.cz.siemensinventory.inventory.InventoryResult
 
 /**
  * Created by Stefan Matta on 04.03.2018.
@@ -18,5 +18,6 @@ class Device(
         var companyOwnerName: String,
         //var addDate: Date,
         var deviceStateName: String,
-        var lastRevisionDateString: String) {
+        var lastRevisionDateString: String,
+        var inventoryRecord : InventoryResult) {
 }

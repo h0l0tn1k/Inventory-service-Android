@@ -17,12 +17,12 @@ import android.widget.AdapterView
 import android.widget.SearchView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_calibration.*
-import kotlinx.android.synthetic.main.activity_electric_revision.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CalibrationActivity : AppCompatActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
+class CalibrationActivity :  AppCompatActivity(),
+        SearchView.OnQueryTextListener, SearchView.OnCloseListener  {
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 1
     private var snackbarNotifier: SnackbarNotifier? = null
@@ -107,7 +107,6 @@ class CalibrationActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         }
     }
 
-
     private fun updateResultsList(devices : List<Device>, queryEmpty : Boolean) {
         if(queryEmpty) {
             //calibration_results_text.visibility = View.GONE
@@ -161,23 +160,6 @@ class CalibrationActivity : AppCompatActivity(), SearchView.OnQueryTextListener,
         deviceIntent.putExtra("intent", DeviceIntent.CALIBRATION.toString())
         startActivity(deviceIntent)
     }
-
-//    private fun startManualScan() {
-//        //TODO: add validations
-//
-//        val queue = deviceApi?.getDeviceBySerialNo(serialNoEditTxt.text.toString())
-//        queue?.enqueue(object : Callback<Device> {
-//            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-//                val device = response?.body()
-//                if(device != null) {
-//                    startDeviceActivity(device)
-//                }
-//            }
-//            override fun onFailure(call: Call<Device>?, t: Throwable?) {
-//                Toast.makeText(this@CalibrationActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
-//            }
-//        })
-//    }
 
     private fun startScan() {
         val scanIntent = Intent(this, ScanActivity::class.java )

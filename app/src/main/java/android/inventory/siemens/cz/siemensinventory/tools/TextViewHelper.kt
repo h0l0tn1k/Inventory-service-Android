@@ -6,7 +6,7 @@ import android.view.animation.AnimationUtils
 import android.widget.TextView
 
 /**
- * Created by I333206 on 22.03.2018.
+ * Created by Stefan Matta on 22.03.2018.
  */
 class TextViewHelper {
 

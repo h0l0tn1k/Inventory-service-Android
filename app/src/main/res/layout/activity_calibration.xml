@@ -28,17 +28,7 @@
             android:layout_height="wrap_content"
             android:indeterminate="true"
             android:visibility="invisible"/>
-<!--
-        <TextView
-            android:id="@+id/calibration_results_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textSize="18sp"
-            android:layout_marginStart="20dp"
-            android:layout_marginTop="5dp"
-            android:text="@string/results"
-            android:visibility="gone"/>
--->
+
         <TextView
             android:id="@+id/calibration_no_results_text"
             android:layout_width="match_parent"

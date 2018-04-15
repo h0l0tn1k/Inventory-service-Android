@@ -14,7 +14,7 @@ import java.time.format.DateTimeFormatter
 import java.util.*
 
 /**
- * Created by I333206 on 24.03.2018.
+ * Created by Stefan Matta on 24.03.2018.
  */
 
 class PassedElectricRevisionDialog {

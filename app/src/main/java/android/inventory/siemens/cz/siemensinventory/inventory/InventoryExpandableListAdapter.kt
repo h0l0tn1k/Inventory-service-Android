@@ -27,7 +27,6 @@ class InventoryExpandableListAdapter(
     }
 
     override fun getGroupView(groupPosition: Int, isExpanded: Boolean, convertView: View?, parent: ViewGroup?): View {
-
         var view = convertView
 
         if(view == null) {
@@ -53,7 +52,6 @@ class InventoryExpandableListAdapter(
     }
 
     override fun getChildView(groupPosition: Int, childPosition: Int, isLastChild: Boolean, convertView: View?, parent: ViewGroup?): View {
-
         var view = convertView
 
         if(view == null) {
@@ -64,7 +62,6 @@ class InventoryExpandableListAdapter(
 
         val deviceNameTv = view?.findViewById(R.id.inventory_item_device_name) as TextView
         deviceNameTv.text = "${device.objectTypeName} (${device.serialNumber})"
-
 
         return view
     }
@@ -81,20 +78,6 @@ class InventoryExpandableListAdapter(
         this.inventoryRecords = inventoryRecords
         notifyDataSetChanged()
     }
-
-//    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-//        val inventoryRecord = getItem(position)
-//
-//        var view = convertView
-//
-//        if (view == null) {
-//            view = LayoutInflater.from(context).inflate(R.layout.inventory_list_item, parent, false)
-//        }
-//
-//        val deviceNameTv = view?.findViewById(R.id.inventory_item_device_name) as TextView
-//
-//        return view
-//    }
 
     private fun getGroupKeyAtPosition(p : Int) : String {
         return this.inventoryRecords.keys.toTypedArray()[p]

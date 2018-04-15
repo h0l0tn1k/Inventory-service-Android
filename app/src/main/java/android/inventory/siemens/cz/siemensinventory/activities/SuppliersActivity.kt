@@ -23,14 +23,6 @@ import com.baoyz.swipemenulistview.SwipeMenuCreator
 import android.widget.ArrayAdapter
 import android.util.TypedValue
 
-
-
-
-
-
-
-
-
 class SuppliersActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,6 +30,7 @@ class SuppliersActivity : AppCompatActivity() {
         setContentView(R.layout.activity_suppliers)
 
         createSwipeMenu()
+
         val suppliersApi = SupplierServiceApi.Factory.create(this).getSuppliers()
 
         suppliersApi.enqueue(object : Callback<List<Supplier>> {
@@ -47,7 +40,6 @@ class SuppliersActivity : AppCompatActivity() {
                     supplier_list_view.adapter = SupplierAdapter(this@SuppliersActivity, suppliers)
                 }
             }
-
             override fun onFailure(call: Call<List<Supplier>>?, t: Throwable?) {
                 Toast.makeText(this@SuppliersActivity, getText(R.string.error_cannot_connect_to_service), Toast.LENGTH_LONG).show()
             }

@@ -10,7 +10,7 @@ import android.widget.BaseAdapter
 import android.widget.TextView
 
 /**
- * Created by I333206 on 24.03.2018.
+ * Created by Stefan Matta on 24.03.2018.
  */
 class ElectricRevisionResultsAdapter (
         private val context: Context,
