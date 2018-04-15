@@ -2,17 +2,10 @@ package android.inventory.siemens.cz.siemensinventory.entity
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.inventory.siemens.cz.siemensinventory.adapters.SupplierAdapter
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.preference.PreferenceManager
 import android.util.Patterns
-import android.webkit.URLUtil
-import com.orhanobut.hawk.Hawk
-import kotlinx.android.synthetic.main.activity_suppliers.*
 import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import retrofit2.Retrofit
 
 /**
