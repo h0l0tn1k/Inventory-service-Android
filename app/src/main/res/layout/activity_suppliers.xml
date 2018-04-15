@@ -8,12 +8,6 @@
     android:orientation="vertical"
     tools:context="android.inventory.siemens.cz.siemensinventory.activities.SuppliersActivity">
 
-    <!--<ListView-->
-        <!--android:id="@+id/supplier_list_view"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"/>-->
-
-
     <com.baoyz.swipemenulistview.SwipeMenuListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

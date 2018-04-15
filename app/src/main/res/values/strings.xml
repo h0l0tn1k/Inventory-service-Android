@@ -82,7 +82,7 @@
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
 
     <string name="select_calibration_date">Select Calibration Date</string>
-
+    <string name="name">Name</string>
     <!-- Number Picker -->
     <string name="number_picker_formatter">%d</string>
     <string name="roboto_light">sans-serif-light</string>

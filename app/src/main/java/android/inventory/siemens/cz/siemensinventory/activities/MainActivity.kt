@@ -9,6 +9,8 @@ import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActi
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
+import android.inventory.siemens.cz.siemensinventory.view.ViewEntityActivity
+import android.inventory.siemens.cz.siemensinventory.view.ViewType
 import android.os.Bundle
 import android.support.design.widget.NavigationView
 import android.support.v4.view.GravityCompat
@@ -136,10 +138,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
 
             //Views
-            R.id.nav_suppliers -> Intent(this, SuppliersActivity::class.java)
-            R.id.nav_departments -> Intent(this, DepartmentsActivity::class.java)
-            R.id.nav_company_owners -> Intent(this, CompanyOwnersActivity::class.java)
-            R.id.nav_project -> Intent(this, ProjectsActivity::class.java)
+            R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
+                getViewEntityActivityIntent(item.itemId)
+            }
 
             //Others
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
@@ -154,5 +155,22 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun getViewEntityActivityIntent(id : Int) : Intent {
+        val intent = Intent(this,  ViewEntityActivity::class.java)
+        val viewType = when(id) {
+            R.id.nav_project -> ViewType.Projects
+            R.id.nav_departments -> ViewType.Departments
+            R.id.nav_company_owners -> ViewType.CompanyOwners
+            R.id.nav_suppliers -> ViewType.Suppliers
+            else -> {
+                //FIX
+                ViewType.Projects
+            }
+        }
+        intent.putExtra("viewtype", viewType.toString())
+
+        return intent
     }
 }

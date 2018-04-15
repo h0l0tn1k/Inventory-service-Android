@@ -2,7 +2,6 @@ package android.inventory.siemens.cz.siemensinventory.api
 
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
-import android.inventory.siemens.cz.siemensinventory.api.entity.User
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory

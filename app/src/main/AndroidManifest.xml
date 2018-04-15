@@ -66,6 +66,7 @@
         <activity
             android:name=".inventory.InventoryActivity"
             android:label="@string/inventory" />
+        <activity android:name=".view.ViewEntityActivity"></activity>
     </application>
 
 </manifest>
