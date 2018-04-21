@@ -2,8 +2,10 @@ package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.R.id.nav_borrow
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
@@ -91,6 +93,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         //TODO use some ID's instead of numbers, reordering of menu items will change these numbers
         val activitiesSubMenu = menu.getItem(1).subMenu
+
+
 
         //BORROW
 //        activitiesSubMenu.getItem(0).isVisible = false

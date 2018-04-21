@@ -22,16 +22,19 @@ class BorrowActivity : AppCompatActivity() {
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val parameterName = "device_barcode_id"
     private var deviceApi : DeviceServiceApi? = null
+    private var adapter : BorrowedDevicesAdapter? = null
     private var snackbarNotifier: SnackbarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_borrow)
 
-        borrow_borrowed_devices_lv.adapter = BorrowedDevicesAdapter(this, emptyList())
+        adapter = BorrowedDevicesAdapter(this, emptyList())
+        borrow_borrowed_devices_lv.adapter = adapter
         snackbarNotifier = SnackbarNotifier(borrow_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
         borrow_scanBtn.setOnClickListener { startScan() }
+        getDevicesMock()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -96,5 +99,22 @@ class BorrowActivity : AppCompatActivity() {
         } else {
             response.toString()
         }
+    }
+
+    //TODO: fix, this is only for testing
+    //returning all devices instead of devices
+    //that are currently borrowed by current user
+    private fun getDevicesMock() {
+        val queue = deviceApi?.getDevices()
+        queue?.enqueue(object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                if(response?.isSuccessful == true) {
+                    adapter?.updateList(response.body() as List<Device>)
+                }
+            }
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                this@BorrowActivity.onFailure()
+            }
+        })
     }
 }

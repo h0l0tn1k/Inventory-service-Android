@@ -93,4 +93,5 @@
     <string name="inventory_device_present">Device present?</string>
 
     <string name="borrow_device_question">Do you want to borrow this device?</string>
+    <string name="currently_borrowed_devices">Currently borrowed devices</string>
 </resources>
