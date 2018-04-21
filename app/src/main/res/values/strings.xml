@@ -92,5 +92,5 @@
     <string name="passed_electric_revision">Passed electric revision?</string>
     <string name="inventory_device_present">Device present?</string>
 
-
+    <string name="borrow_device_question">Do you want to borrow this device?</string>
 </resources>

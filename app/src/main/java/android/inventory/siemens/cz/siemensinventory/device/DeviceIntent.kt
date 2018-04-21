@@ -5,5 +5,6 @@ enum class DeviceIntent {
     CALIBRATION,
     DISPLAY,
     INVENTORY,
-    EDIT
+    EDIT,
+    BORROW
 }

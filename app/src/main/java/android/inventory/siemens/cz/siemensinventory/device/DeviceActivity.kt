@@ -35,11 +35,22 @@ class DeviceActivity : DevActivity() {
         deviceIntent = DeviceIntent.valueOf(intent.getStringExtra("intent"))
 
         when(deviceIntent) {
-            DeviceIntent.EL_REVISION -> { setElRevisionView() }
+            DeviceIntent.BORROW -> { setBorrowView() }
             DeviceIntent.CALIBRATION -> { setCalibrationView() }
+            DeviceIntent.EL_REVISION -> { setElRevisionView() }
             DeviceIntent.INVENTORY -> { setInventoryView() }
             else -> { }
         }
+    }
+
+    private fun setBorrowView() {
+        displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
+        device_failed_btn.visibility = View.GONE
+        device_passed_btn.setOnClickListener { borrowDevice() }
+    }
+
+    private fun borrowDevice() {
+
     }
 
     private fun setInventoryView() {

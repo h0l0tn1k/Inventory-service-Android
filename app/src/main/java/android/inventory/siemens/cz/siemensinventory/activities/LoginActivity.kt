@@ -41,7 +41,7 @@ class LoginActivity : AppCompatActivity() {
     private fun loginAsJosef() {
         login_email?.setText("josef.novak@siemens.com")
         login_password?.setText("ASDF001")
-        fireLoginUserRequest()
+        loginUser()
     }
 
     private fun checkConnectionToService() {
@@ -66,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
-        if(isUserInputValid()) {
+        if(isUserInputValid() && ServiceSettings(this).isUrlWellFormated()) {
             fireLoginUserRequest()
         }
     }

@@ -54,7 +54,9 @@
         <activity
             android:name=".inventory.InventoryActivity"
             android:label="@string/inventory" />
-        <activity android:name=".view.ViewEntityActivity"></activity>
+        <activity android:name=".view.ViewEntityActivity" />
+        <activity android:name=".borrow.BorrowActivity"
+            android:label="@string/borrow_device"/>
     </application>
 
 </manifest>

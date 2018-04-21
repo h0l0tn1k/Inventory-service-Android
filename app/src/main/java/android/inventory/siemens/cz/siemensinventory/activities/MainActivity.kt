@@ -5,6 +5,7 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.entity.Permission
@@ -130,7 +131,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val intent = when (item.itemId) {
 
             //Activities
-            //R.id.nav_borrow -> Intent(this, BorrowDeviceActivity::class.java)
+            R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
             //TODO add inventory
             R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
