@@ -8,6 +8,7 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface DeviceServiceApi {
@@ -26,6 +27,12 @@ interface DeviceServiceApi {
 
     @GET("devices/serialno/like/{serialNo}")
     fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
+
+    @GET("devices/borrowed-by/{scdId}")
+    fun getBorrowedDevicesByScdId(@Path("scdId") scdId: Long?) : Call<List<Device>>
+
+    @POST("devices/{deviceId}/holder/{holderScdId}")
+    fun setHolder(@Path("deviceId") deviceId: Long?, @Path("holderScdId") holderScdId: Long?) : Call<Device>
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {

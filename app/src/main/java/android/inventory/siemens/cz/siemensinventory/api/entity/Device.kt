@@ -11,13 +11,14 @@ class Device(
         var barcodeNumber: String,
         var objectTypeName: String,
         var objectTypeVersion: String,
-        var ownerName: String,
         var departmentName: String,
         var holderName: String,
+        var holder : LoginUserScd?,
         var projectName: String,
         var companyOwnerName: String,
         //var addDate: Date,
         var deviceStateName: String,
         var lastRevisionDateString: String,
-        var inventoryRecord : InventoryResult) {
+        var inventoryRecord : InventoryResult,
+        var typeAndVersionName: String) {
 }

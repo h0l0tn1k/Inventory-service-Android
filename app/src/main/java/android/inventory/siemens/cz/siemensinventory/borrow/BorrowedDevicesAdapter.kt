@@ -25,11 +25,23 @@ class BorrowedDevicesAdapter(
         var view = convertView
 
         if (view == null) {
-            view = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false)
+            view = LayoutInflater.from(context).inflate(R.layout.borrowed_device_item, parent, false)
         }
 
-        val nameTextView = view?.findViewById(R.id.list_item_name) as TextView
-        nameTextView.text = device.objectTypeName + " " + device.objectTypeVersion
+        val deviceNameTv = view?.findViewById(R.id.borrowed_device_item_name_tv) as TextView
+        deviceNameTv.text = device.typeAndVersionName
+
+        val serialNumberTv = view.findViewById(R.id.borrowed_device_item_serial_number_tv) as TextView
+        serialNumberTv.text = device.serialNumber
+
+        val projectNameTv = view.findViewById(R.id.borrowed_device_item_project_name_tv) as TextView
+        projectNameTv.text = device.projectName
+
+        val departmentNameTv = view.findViewById(R.id.borrowed_device_item_department_name_tv) as TextView
+        departmentNameTv.text = device.departmentName
+
+        val deviceStateNameTv = view.findViewById(R.id.borrowed_device_item_device_state_tv) as TextView
+        deviceStateNameTv.text = device.deviceStateName
 
         return view
     }

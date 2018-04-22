@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.api.LoginUsersScdApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
@@ -20,8 +22,10 @@ import retrofit2.Response
 class BorrowActivity : AppCompatActivity() {
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
+    private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val parameterName = "device_barcode_id"
     private var deviceApi : DeviceServiceApi? = null
+    private var userScdApi : LoginUsersScdApi? = null
     private var adapter : BorrowedDevicesAdapter? = null
     private var snackbarNotifier: SnackbarNotifier? = null
 
@@ -31,10 +35,16 @@ class BorrowActivity : AppCompatActivity() {
 
         adapter = BorrowedDevicesAdapter(this, emptyList())
         borrow_borrowed_devices_lv.adapter = adapter
-        snackbarNotifier = SnackbarNotifier(borrow_layout, this)
+        borrow_borrowed_devices_lv.setOnItemClickListener { adapterView, _, position, _ ->
+            startDeviceActivity(adapterView.getItemAtPosition(position) as Device)
+        }
+        snackbarNotifier = SnackbarNotifier(borrow_device_swipe_refresh_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
+        userScdApi = LoginUsersScdApi.Factory.create(this)
         borrow_scanBtn.setOnClickListener { startScan() }
-        getDevicesMock()
+
+        borrow_device_swipe_refresh_layout.setOnRefreshListener { loadBorrowedDevices() }
+        loadBorrowedDevices()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,6 +67,8 @@ class BorrowActivity : AppCompatActivity() {
                     snackbarNotifier?.show(getString(R.string.unable_to_scan))
                 }
             }
+        } else if (requestCode == DEVICE_ACTIVITY_REQUEST_CODE) {
+            loadBorrowedDevices()
         }
     }
 
@@ -64,7 +76,7 @@ class BorrowActivity : AppCompatActivity() {
         val deviceIntent = Intent(this@BorrowActivity, DeviceActivity::class.java)
         deviceIntent.putExtra("device", Gson().toJson(device))
         deviceIntent.putExtra("intent", DeviceIntent.BORROW.toString())
-        startActivity(deviceIntent)
+        startActivityForResult(deviceIntent, DEVICE_ACTIVITY_REQUEST_CODE)
     }
 
     private fun startDeviceActivity(response : Response<Device>) {
@@ -72,6 +84,14 @@ class BorrowActivity : AppCompatActivity() {
         if(device != null) {
             startDeviceActivity(device)
         }
+    }
+
+    private fun hideProgressBar() {
+        borrow_device_swipe_refresh_layout.isRefreshing = false
+    }
+
+    private fun showProgressBar() {
+        borrow_device_swipe_refresh_layout.isRefreshing = true
     }
 
     private fun startScan() {
@@ -82,6 +102,7 @@ class BorrowActivity : AppCompatActivity() {
     }
 
     private fun onFailure() {
+        hideProgressBar()
         snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
     }
 
@@ -101,13 +122,12 @@ class BorrowActivity : AppCompatActivity() {
         }
     }
 
-    //TODO: fix, this is only for testing
-    //returning all devices instead of devices
-    //that are currently borrowed by current user
-    private fun getDevicesMock() {
-        val queue = deviceApi?.getDevices()
-        queue?.enqueue(object : Callback<List<Device>> {
+    private fun loadBorrowedDevices() {
+        showProgressBar()
+        deviceApi?.getBorrowedDevicesByScdId(AppData.loginUserScd?.scdId)
+                ?.enqueue(object : Callback<List<Device>> {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                hideProgressBar()
                 if(response?.isSuccessful == true) {
                     adapter?.updateList(response.body() as List<Device>)
                 }

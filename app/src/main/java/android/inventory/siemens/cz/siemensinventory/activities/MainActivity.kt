@@ -9,6 +9,7 @@ import android.inventory.siemens.cz.siemensinventory.R.id.nav_borrow
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
@@ -31,7 +32,6 @@ import kotlinx.android.synthetic.main.profile.*
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
-    private var user : LoginUserScd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +40,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        if(user == null) {
+        if(AppData.loginUserScd == null) {
             startLoginActivity()
         }
 
@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         if (requestCode == LOGIN_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
-                this.user = Gson().fromJson(data.getStringExtra("user"), LoginUserScd::class.java)
+                AppData.loginUserScd = Gson().fromJson(data.getStringExtra("user"), LoginUserScd::class.java)
             }
         }
     }
@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     override fun onBackPressed() {
-        drawer_layout.openDrawer(GravityCompat.END)
+        //drawer_layout.openDrawer(GravityCompat.END)
         if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
             drawer_layout.closeDrawer(GravityCompat.START)
         } else {
@@ -106,25 +106,29 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    private fun getUser() : LoginUserScd? {
+        return AppData.loginUserScd
+    }
+
     private fun setUserDetails() {
         val navEmail = findViewById<TextView>(R.id.nav_signed_in_email)
-        navEmail.text = this.user?.email
+        navEmail.text = getUser()?.email
         val navName = findViewById<TextView>(R.id.nav_signed_in_name)
-        navName.text = this.user?.getFullName()
+        navName.text = getUser()?.getFullName()
 
         val superiorUser = findViewById<TextView>(R.id.profile_superior_user_value)
-        superiorUser.text = this.user?.superiorName
+        superiorUser.text = getUser()?.superiorName
 
         val loggedIUser = findViewById<TextView>(R.id.profile_loggedin_user_value)
-        loggedIUser.text = this.user?.getFullName()
+        loggedIUser.text = getUser()?.getFullName()
 
         val permissions = listOf(
-                Permission("Read-only", user?.flagRead),
-                Permission("Edit", user?.flagWrite),
-                Permission("Borrowing", user?.flagBorrow),
-                Permission("Inventory-making", user?.flagInventory),
-                Permission("Revision-making", user?.flagRevision),
-                Permission("Admin", user?.flagAdmin)
+                Permission("Read-only", getUser()?.flagRead),
+                Permission("Edit", getUser()?.flagWrite),
+                Permission("Borrowing", getUser()?.flagBorrow),
+                Permission("Inventory-making", getUser()?.flagInventory),
+                Permission("Revision-making", getUser()?.flagRevision),
+                Permission("Admin", getUser()?.flagAdmin)
         )
 
         permissionsView.adapter = PermissionsAdapter(this, permissions)
@@ -136,7 +140,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             //Activities
             R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
-            //TODO add inventory
             R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
@@ -150,7 +153,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             //Others
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
             R.id.nav_logout -> {
-                user = null
+                AppData.loginUserScd = null
                 Intent(this, LoginActivity::class.java)
             }
             //TODO add About

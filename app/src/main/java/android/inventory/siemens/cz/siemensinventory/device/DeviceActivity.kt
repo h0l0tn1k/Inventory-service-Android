@@ -1,25 +1,27 @@
 package android.inventory.siemens.cz.siemensinventory.device
 
-import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.InventoryRecord
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationResult
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationRevisionResultDialog
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionResult
 import android.os.Bundle
 import com.google.gson.Gson
 import android.inventory.siemens.cz.siemensinventory.electricrevision.FailedElectricRevisionDialog
 import android.inventory.siemens.cz.siemensinventory.electricrevision.PassedElectricRevisionDialog
-import android.inventory.siemens.cz.siemensinventory.inventory.InventoryResult
 import android.view.View
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_device.*
 import kotlinx.android.synthetic.main.device_generic_confirmation.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class DeviceActivity : DevActivity() {
 
     private var device : Device? = null
+    private var deviceApi : DeviceServiceApi? = null
     private var deviceIntent : DeviceIntent? = null
     private val resultParameterName : String = "result"
 
@@ -27,6 +29,7 @@ class DeviceActivity : DevActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
 
+        deviceApi = DeviceServiceApi.Factory.create(this)
         deviceParameters.adapter = DeviceParametersAdapter(this, getDevice() as Device)
         handleIntent()
     }
@@ -44,13 +47,41 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setBorrowView() {
-        displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
+        if(isBorrowedByCurrentUser()) {
+            displayGenericConfirmationLayout(getString(R.string.borrow_return_device_question))
+            device_passed_btn.setOnClickListener { returnDevice() }
+        } else {
+            displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
+            device_passed_btn.setOnClickListener { borrowDevice() }
+        }
         device_failed_btn.visibility = View.GONE
-        device_passed_btn.setOnClickListener { borrowDevice() }
+    }
+
+    private fun setHolder(scdId : Long?) {
+        deviceApi?.setHolder(device?.id, scdId)?.enqueue(object : Callback<Device> {
+            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                if(response?.isSuccessful == true) {
+                    val dev = response.body() as Device
+                    Toast.makeText(this@DeviceActivity, "Device borrowed to: " + dev.holderName, Toast.LENGTH_LONG).show()
+                    //todo refresh view
+                    setResult(RESULT_OK, intent)
+                    finish()
+                } else {
+                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+            }
+        })
+    }
+
+    private fun returnDevice() {
+        setHolder(0)
     }
 
     private fun borrowDevice() {
-
+        setHolder(AppData.loginUserScd?.scdId)
     }
 
     private fun setInventoryView() {
@@ -98,6 +129,10 @@ class DeviceActivity : DevActivity() {
         intent.putExtra(resultParameterName, Gson().toJson(result))
         setResult(RESULT_OK, intent)
         finish()
+    }
+
+    private fun isBorrowedByCurrentUser() : Boolean {
+        return getDevice()?.holder?.scdId == AppData.loginUserScd?.scdId
     }
 
     override fun getDevice(): Device? {

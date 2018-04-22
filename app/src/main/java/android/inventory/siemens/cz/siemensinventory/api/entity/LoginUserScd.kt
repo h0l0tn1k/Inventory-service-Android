@@ -4,6 +4,7 @@ package android.inventory.siemens.cz.siemensinventory.api.entity
  * Created by Stefan Matta on 04.03.2018.
  */
 class LoginUserScd (
+        var scdId : Long,
         var firstName: String,
         var lastName: String,
         var email: String,

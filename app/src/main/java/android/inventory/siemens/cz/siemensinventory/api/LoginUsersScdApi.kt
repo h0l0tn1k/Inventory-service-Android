@@ -1,28 +1,24 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
 import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.api.entity.User
+import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Path
 
-interface UserServiceApi {
+interface LoginUsersScdApi {
 
-    @GET("users/")
-    fun getUsers() : Call<List<User>>
-
-    @GET("users/{userId}")
-    fun getUser(@Path("userId") userId: Long) : Call<User>
+    @GET("loginusers/")
+    fun getUsers() : Call<List<LoginUserScd>>
 
     object Factory {
-        fun create(context : Context): UserServiceApi {
+        fun create(context : Context): LoginUsersScdApi {
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl(SiemensServiceApi.getBaseUrl(context))
                     .build()
-                    .create<UserServiceApi>(UserServiceApi::class.java)
+                    .create<LoginUsersScdApi>(LoginUsersScdApi::class.java)
         }
     }
 }

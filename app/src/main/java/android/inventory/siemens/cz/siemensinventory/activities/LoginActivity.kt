@@ -5,6 +5,7 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.LoginServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
@@ -83,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
             override fun onResponse(call: Call<LoginUserScd>?, response: Response<LoginUserScd>) {
                 if(response.isSuccessful) {
                     val receivedUser = response.body() as LoginUserScd
+                    AppData.loginUserScd = receivedUser
                     val intent = Intent()
                     intent.putExtra("user", Gson().toJson(receivedUser))
                     setResult(RESULT_OK, intent)
