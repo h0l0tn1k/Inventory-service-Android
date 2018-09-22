@@ -2,7 +2,7 @@ package android.inventory.siemens.cz.siemensinventory.inventory
 
 import android.app.Activity
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.entity.InventoryRecord
+import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseExpandableListAdapter
@@ -11,10 +11,10 @@ import java.util.*
 
 class InventoryExpandableListAdapter(
         private val context : Activity,
-        var inventoryRecords : HashMap<String, List<InventoryRecord>>
+        var devices : HashMap<String, List<Device>>
 ) : BaseExpandableListAdapter() {
 
-    override fun getGroup(position: Int): List<InventoryRecord> {
+    override fun getGroup(position: Int): List<Device> {
         return getGroupAtPosition(position)
     }
 
@@ -43,7 +43,7 @@ class InventoryExpandableListAdapter(
         return getGroupAtPosition(position).size
     }
 
-    override fun getChild(groupPosition: Int, childPosititon: Int): InventoryRecord {
+    override fun getChild(groupPosition: Int, childPosititon: Int): Device {
         return getGroupAtPosition(groupPosition)[childPosititon]
     }
 
@@ -58,10 +58,10 @@ class InventoryExpandableListAdapter(
             view = context.layoutInflater.inflate(R.layout.inventory_list_item, null)
         }
 
-        val device = getChild(groupPosition, childPosition).deviceInventory
+        val device = getChild(groupPosition, childPosition)
 
         val deviceNameTv = view?.findViewById(R.id.inventory_item_device_name) as TextView
-        deviceNameTv.text = "${device.objectTypeName} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType.objectTypeName} (${device.serialNumber})"
 
         return view
     }
@@ -71,19 +71,19 @@ class InventoryExpandableListAdapter(
     }
 
     override fun getGroupCount(): Int {
-        return inventoryRecords.size
+        return devices.size
     }
 
-    fun updateList(inventoryRecords : HashMap<String, List<InventoryRecord>>) {
-        this.inventoryRecords = inventoryRecords
+    fun updateList(devices : HashMap<String, List<Device>>) {
+        this.devices = devices
         notifyDataSetChanged()
     }
 
     private fun getGroupKeyAtPosition(p : Int) : String {
-        return this.inventoryRecords.keys.toTypedArray()[p]
+        return this.devices.keys.toTypedArray()[p]
     }
 
-    private fun getGroupAtPosition(p : Int) : List<InventoryRecord> {
-        return this.inventoryRecords[getGroupKeyAtPosition(p)] as List<InventoryRecord>
+    private fun getGroupAtPosition(p : Int) : List<Device> {
+        return this.devices[getGroupKeyAtPosition(p)] as List<Device>
     }
 }

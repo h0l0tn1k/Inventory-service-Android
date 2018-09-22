@@ -50,7 +50,7 @@ class ServiceSettings(context: Context) {
     }
 
     fun checkConnection(): Call<Void> {
-        return Retrofit.Builder().baseUrl(getServiceUrlFormatted()).build().create(SiemensServiceApi::class.java).getService()
+        return Retrofit.Builder().baseUrl(getServiceUrlFormatted()).build().create(SiemensServiceApi::class.java).getServiceStatus()
     }
 
     fun isUrlWellFormated(): Boolean {

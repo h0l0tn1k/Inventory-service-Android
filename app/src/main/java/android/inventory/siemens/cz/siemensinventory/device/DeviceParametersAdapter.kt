@@ -52,16 +52,19 @@ class DeviceParametersAdapter(
 
     private fun getParameters() : List<KeyValueParameters> {
         return listOf(
-                KeyValueParameters("Device Type", device.typeAndVersionName),
+                KeyValueParameters("Device Type", device.deviceType.getDeviceTypeAndVersion()),
                 KeyValueParameters("Serial Number", device.serialNumber),
-                KeyValueParameters("Department", device.departmentName),
-                KeyValueParameters("Current Holder", device.holderName),
-                KeyValueParameters("Project", device.projectName),
-                KeyValueParameters("Company Owner", device.companyOwnerName),
+                KeyValueParameters("Department", device.department.name),
+                KeyValueParameters("Current Holder", device.getHolderFullName()),
+                KeyValueParameters("Owner", device.getOwnerFullName()),
+                KeyValueParameters("Project", device.project.name),
+                KeyValueParameters("Default Location", device.defaultLocation),
+                KeyValueParameters("Company Owner", device.companyOwner.name),
                 //KeyValueParameters("Add Date", addDateString),
-                KeyValueParameters("Status", device.deviceStateName),
-                KeyValueParameters("Last Revision Date", device.lastRevisionDateString),
-                KeyValueParameters("Barcode Number", device.barcodeNumber)
+                KeyValueParameters("Status", device.deviceState.name),
+//                KeyValueParameters("Last Revision Date", device.lastRevisionDateString),
+                KeyValueParameters("Barcode Number", device.barcodeNumber),
+                KeyValueParameters("Comment", device.comment)
         )
     }
 }

@@ -10,6 +10,8 @@ import retrofit2.http.Path
 
 interface LoginServiceApi {
 
+    //TODO: CHANGE!!
+
     @GET("login/{email}/{password}")
     fun login(@Path("email") email: String,@Path("password") password: String) : Call<LoginUserScd>
 

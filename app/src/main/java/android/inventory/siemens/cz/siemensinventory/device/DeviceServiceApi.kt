@@ -7,9 +7,7 @@ import com.google.gson.GsonBuilder
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface DeviceServiceApi {
     
@@ -19,24 +17,23 @@ interface DeviceServiceApi {
     @GET("devices/{deviceId}")
     fun getDevice(@Path("deviceId") deviceId: Long) : Call<Device>
 
-    @GET("devices/barcode/{barcodeId}")
+    @GET("devices/barcodeNumber/{barcodeId}")
     fun getDeviceByBarcodeId(@Path("barcodeId") barcodeId: String) : Call<Device>
 
-    @GET("devices/serialno/{serialNo}")
+    @GET("devices/serialNumber/{serialNo}")
     fun getDeviceBySerialNo(@Path("serialNo") serialNo: String) : Call<Device>
 
     @GET("devices/serialno/like/{serialNo}")
     fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
 
     @GET("devices/borrowed-by/{scdId}")
-    fun getBorrowedDevicesByScdId(@Path("scdId") scdId: Long?) : Call<List<Device>>
+    fun getBorrowedDevicesByUserId(@Path("scdId") scdId: Long?) : Call<List<Device>>
 
-    @POST("devices/{deviceId}/holder/{holderScdId}")
-    fun setHolder(@Path("deviceId") deviceId: Long?, @Path("holderScdId") holderScdId: Long?) : Call<Device>
+    @PUT("devices/{deviceId}")
+    fun updateDevice(@Path("deviceId") deviceId: Long?, @Body device: Device?) : Call<Device>
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {
-            //val gson = GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm").create()
             val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
 
             return Retrofit.Builder()

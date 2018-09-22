@@ -4,6 +4,7 @@ package android.inventory.siemens.cz.siemensinventory.api.entity
  * Created by Stefan Matta on 04.03.2018.
  */
 class LoginUserScd (
+        var id: Long,
         var scdId : Long,
         var firstName: String,
         var lastName: String,
@@ -17,6 +18,10 @@ class LoginUserScd (
         var flagAdmin: Boolean) {
 
     fun getFullName() : String {
-        return "$firstName $lastName"
+        val fullName = "$firstName $lastName"
+        if(fullName.isNotBlank()) {
+            return fullName
+        }
+        return "-"
     }
 }

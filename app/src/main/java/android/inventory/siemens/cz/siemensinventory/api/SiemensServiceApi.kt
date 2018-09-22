@@ -7,8 +7,8 @@ import retrofit2.http.GET
 
 interface SiemensServiceApi {
 
-    @GET("users/")
-    fun getService() : Call<Void>
+    @GET("/actuator/health/")
+    fun getServiceStatus() : Call<Void>
 
     companion object {
 

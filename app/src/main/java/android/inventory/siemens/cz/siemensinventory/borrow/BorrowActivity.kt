@@ -124,7 +124,7 @@ class BorrowActivity : AppCompatActivity() {
 
     private fun loadBorrowedDevices() {
         showProgressBar()
-        deviceApi?.getBorrowedDevicesByScdId(AppData.loginUserScd?.scdId)
+        deviceApi?.getBorrowedDevicesByUserId(AppData.loginUserScd?.id)
                 ?.enqueue(object : Callback<List<Device>> {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 hideProgressBar()

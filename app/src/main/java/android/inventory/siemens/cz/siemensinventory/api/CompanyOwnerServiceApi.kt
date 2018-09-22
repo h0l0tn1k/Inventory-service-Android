@@ -10,10 +10,10 @@ import retrofit2.http.Path
 
 interface CompanyOwnerServiceApi {
     
-    @GET("companyowners/")
+    @GET("company-owners/")
     fun getCompanyOwners() : Call<List<CompanyOwner>>
 
-    @GET("companyowners/{companyowner}")
+    @GET("company-owners/{companyowner}")
     fun getCompanyOwner(@Path("companyowner") companyOwnerId: Long) : Call<CompanyOwner>
 
     object Factory {

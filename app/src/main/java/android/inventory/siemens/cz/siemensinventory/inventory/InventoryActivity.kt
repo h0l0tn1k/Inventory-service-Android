@@ -6,7 +6,6 @@ import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.InventoryRecordsServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.InventoryRecord
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
@@ -51,10 +50,10 @@ class InventoryActivity : AppCompatActivity(){
         ))
         inventory_layout.setOnRefreshListener { loadData() }
         inventory_devices_lv.setAdapter(adapter)
-        inventory_devices_lv.setOnChildClickListener({ _, _, groupPosition, childPosition, _ ->
-            startDeviceActivity(adapter?.getChild(groupPosition, childPosition)?.deviceInventory!!)
+        inventory_devices_lv.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
+            startDeviceActivity(adapter?.getChild(groupPosition, childPosition)!!)
             false
-        })
+        }
     }
 
     private fun startScanActivity() {
@@ -83,15 +82,15 @@ class InventoryActivity : AppCompatActivity(){
 
     private fun handleDeviceActivityResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val inventoryRecord = Gson().fromJson(data.getStringExtra("result"), InventoryResult::class.java)
-            inventoryApi?.updateCheckedValue(inventoryRecord.id, inventoryRecord.registered)
-                ?.enqueue(object : Callback<Void> {
-                    override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+            val inventoryRecord = Gson().fromJson(data.getStringExtra("result"), InventoryRecord::class.java)
+            inventoryApi?.updateInventoryRecord(inventoryRecord.id, inventoryRecord)
+                ?.enqueue(object : Callback<InventoryRecord> {
+                    override fun onResponse(call: Call<InventoryRecord>?, response: Response<InventoryRecord>?) {
                         if (response?.isSuccessful == true) {
                             loadData()
                         }
                     }
-                    override fun onFailure(call: Call<Void>?, t: Throwable?) {
+                    override fun onFailure(call: Call<InventoryRecord>?, t: Throwable?) {
                         this@InventoryActivity.onFailure()
                     }
                 })
@@ -121,29 +120,29 @@ class InventoryActivity : AppCompatActivity(){
     }
 
     private fun loadData() {
-        inventoryApi?.getUnCheckedDevices()?.enqueue( object : Callback<List<InventoryRecord>> {
-            override fun onResponse(call: Call<List<InventoryRecord>>?, response: Response<List<InventoryRecord>>?) {
+        inventoryApi?.getUnCheckedDevices()?.enqueue( object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 this@InventoryActivity.updateData(response, "Unchecked")
             }
-            override fun onFailure(call: Call<List<InventoryRecord>>?, t: Throwable?) {
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
                 this@InventoryActivity.onFailure()
             }
         } )
-        inventoryApi?.getCheckedDevices()?.enqueue( object : Callback<List<InventoryRecord>> {
-            override fun onResponse(call: Call<List<InventoryRecord>>?, response: Response<List<InventoryRecord>>?) {
+        inventoryApi?.getCheckedDevices()?.enqueue( object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 this@InventoryActivity.updateData(response, "Checked")
             }
-            override fun onFailure(call: Call<List<InventoryRecord>>?, t: Throwable?) {
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
                 this@InventoryActivity.onFailure()
             }
         } )
     }
 
-    private fun updateData(response: Response<List<InventoryRecord>>?, group: String) {
+    private fun updateData(response: Response<List<Device>>?, group: String) {
         if(response?.isSuccessful == true) {
-            val inventoryRecords = response.body() as List<InventoryRecord>
-            adapter?.inventoryRecords!![group] = inventoryRecords
-            adapter?.updateList(adapter?.inventoryRecords!!)
+            val devices = response.body() as List<Device>
+            adapter?.devices!![group] = devices
+            adapter?.updateList(adapter?.devices!!)
             hideProgressBar()
         }
     }

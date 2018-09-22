@@ -2,6 +2,8 @@ package android.inventory.siemens.cz.siemensinventory.device
 
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.api.entity.InventoryState
+import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationResult
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationRevisionResultDialog
 import android.inventory.siemens.cz.siemensinventory.data.AppData
@@ -57,12 +59,17 @@ class DeviceActivity : DevActivity() {
         device_failed_btn.visibility = View.GONE
     }
 
-    private fun setHolder(scdId : Long?) {
-        deviceApi?.setHolder(device?.id, scdId)?.enqueue(object : Callback<Device> {
+    private fun setHolder(user : LoginUserScd?) {
+        device?.holder = user
+        deviceApi?.updateDevice(device?.id, device)?.enqueue(object : Callback<Device> {
             override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                 if(response?.isSuccessful == true) {
+                    if(isBorrowedByCurrentUser()) {
+                        Toast.makeText(this@DeviceActivity, "Device returned", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this@DeviceActivity, "Device borrowed", Toast.LENGTH_LONG).show()
+                    }
                     val dev = response.body() as Device
-                    Toast.makeText(this@DeviceActivity, "Device borrowed to: " + dev.holderName, Toast.LENGTH_LONG).show()
                     //todo refresh view
                     setResult(RESULT_OK, intent)
                     finish()
@@ -77,11 +84,11 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun returnDevice() {
-        setHolder(0)
+        setHolder(null)
     }
 
     private fun borrowDevice() {
-        setHolder(AppData.loginUserScd?.scdId)
+        setHolder(AppData.loginUserScd)
     }
 
     private fun setInventoryView() {
@@ -93,7 +100,7 @@ class DeviceActivity : DevActivity() {
 
     private fun setInventoryResult(passed: Boolean) {
         val result = getDevice()?.inventoryRecord
-        result?.registered = passed
+        result?.inventoryState = if (passed)  InventoryState.OK else InventoryState.False
 
         intent.putExtra(resultParameterName, Gson().toJson(result))
         setResult(RESULT_OK, intent)
@@ -132,7 +139,7 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun isBorrowedByCurrentUser() : Boolean {
-        return getDevice()?.holder?.scdId == AppData.loginUserScd?.scdId
+        return getDevice()?.holder?.id == AppData.loginUserScd?.id
     }
 
     override fun getDevice(): Device? {
