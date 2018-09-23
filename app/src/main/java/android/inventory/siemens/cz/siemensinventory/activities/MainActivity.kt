@@ -6,6 +6,10 @@ import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.R.id.nav_borrow
+import android.inventory.siemens.cz.siemensinventory.R.menu.activity_main_drawer
+import android.inventory.siemens.cz.siemensinventory.api.DeviceStatesServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceState
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
@@ -25,13 +29,18 @@ import android.view.MenuItem
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 import android.widget.TextView
+import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.profile.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
+    private var deviceStateApi: DeviceStatesServiceApi? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,11 +49,27 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
         nav_view.setNavigationItemSelectedListener(this)
 
-        if(AppData.loginUserScd == null) {
+        if (getUser() == null) {
             startLoginActivity()
         }
 
         profileChangePasswordBtn.setOnClickListener { startChangePasswordActivity() }
+
+        initStaticData()
+    }
+
+    private fun initStaticData() {
+        deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
+        deviceStateApi?.getDeviceStates()?.enqueue(object : Callback<List<DeviceState>> {
+            override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
+                if(response?.isSuccessful == true) {
+                    AppData.deviceStates = response.body()
+                }
+            }
+            override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
+                Toast.makeText(this@MainActivity, "Error while loading device states", Toast.LENGTH_SHORT).show()
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -57,25 +82,58 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    fun getDrawer() : DrawerLayout {
-        return drawer_layout
-    }
-
     override fun onBackPressed() {
-        //drawer_layout.openDrawer(GravityCompat.END)
-        if (drawer_layout.isDrawerOpen(GravityCompat.START)) {
-            drawer_layout.closeDrawer(GravityCompat.START)
+        if (getDrawer().isDrawerOpen(GravityCompat.START)) {
+            getDrawer().closeDrawer(GravityCompat.START)
         } else {
             super.onBackPressed()
         }
     }
 
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val intent = when (item.itemId) {
+
+            //Activities
+            R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
+            R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
+            R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
+            R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
+            //R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
+
+            //Views
+            R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
+                getViewEntityActivityIntent(item.itemId)
+            }
+
+            //Others
+            R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
+            R.id.nav_logout -> {
+                AppData.loginUserScd = null
+                Intent(this, LoginActivity::class.java)
+            }
+            //TODO add About
+            else -> null
+        }
+        if (intent != null) startActivity(intent)
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         setUserDetails()
-        setMenuItemsVisibility(menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
-        return true
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        //todo finish permissions
+        menu?.findItem(R.id.nav_borrow_group)?.isVisible = getUser()?.flagBorrow == true
+        menu?.findItem(R.id.nav_inventory_group)?.isVisible = getUser()?.flagInventory == true
+        menu?.findItem(R.id.nav_electric_revision_group)?.isVisible = getUser()?.flagRevision == true
+        menu?.findItem(R.id.nav_calibration_group)?.isVisible = getUser()?.flagRevision == true
+        //menu?.findItem(R.id.nav_user_permissions_group)?.isVisible = getUser()?.flagAdmin == true
+        return super.onPrepareOptionsMenu(menu)
     }
 
     private fun startChangePasswordActivity() {
@@ -85,29 +143,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE)
-    }
-
-    private fun setMenuItemsVisibility(menu : Menu) {
-        //TODO finish Menu Items visibility
-        menuInflater.inflate(R.menu.activity_main_drawer, menu)
-
-        //TODO use some ID's instead of numbers, reordering of menu items will change these numbers
-        val activitiesSubMenu = menu.getItem(1).subMenu
-
-
-
-        //BORROW
-//        activitiesSubMenu.getItem(0).isVisible = false
-        //Inventory
-//        activitiesSubMenu.getItem(1).isVisible = (this.user?.flagBorrow == true)
-//        menu.getItem(R.id.nav_edit_user_permissions).isVisible = (this.user?.flagAdmin == true)
-//        menu.getItem(R.id.nav_electric_revision).isVisible = (this.user?.flagRevision == true)
-//        menu.getItem(R.id.nav_calibration).isVisible = (this.user?.flagCalibration)
-
-    }
-
-    private fun getUser() : LoginUserScd? {
-        return AppData.loginUserScd
     }
 
     private fun setUserDetails() {
@@ -134,40 +169,17 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         permissionsView.adapter = PermissionsAdapter(this, permissions)
     }
 
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-
-        val intent = when (item.itemId) {
-
-            //Activities
-            R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
-            R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
-            R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
-            R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
-            R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
-
-            //Views
-            R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
-                getViewEntityActivityIntent(item.itemId)
-            }
-
-            //Others
-            R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
-            R.id.nav_logout -> {
-                AppData.loginUserScd = null
-                Intent(this, LoginActivity::class.java)
-            }
-            //TODO add About
-            else -> null
-        }
-        if(intent != null) startActivity(intent)
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
+    fun getDrawer(): DrawerLayout {
+        return drawer_layout
     }
 
-    private fun getViewEntityActivityIntent(id : Int) : Intent {
-        val intent = Intent(this,  ViewEntityActivity::class.java)
-        val viewType = when(id) {
+    private fun getUser(): LoginUserScd? {
+        return AppData.loginUserScd
+    }
+
+    private fun getViewEntityActivityIntent(id: Int): Intent {
+        val intent = Intent(this, ViewEntityActivity::class.java)
+        val viewType = when (id) {
             R.id.nav_project -> ViewType.Projects
             R.id.nav_departments -> ViewType.Departments
             R.id.nav_company_owners -> ViewType.CompanyOwners

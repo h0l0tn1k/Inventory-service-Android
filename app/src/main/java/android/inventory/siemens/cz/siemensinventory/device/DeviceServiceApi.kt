@@ -23,7 +23,7 @@ interface DeviceServiceApi {
     @GET("devices/serialNumber/{serialNo}")
     fun getDeviceBySerialNo(@Path("serialNo") serialNo: String) : Call<Device>
 
-    @GET("devices/serialno/like/{serialNo}")
+    @GET("devices/serialNumber/like/{serialNo}")
     fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
 
     @GET("devices/borrowed-by/{scdId}")
@@ -34,7 +34,8 @@ interface DeviceServiceApi {
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {
-            val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
+            //val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
+            val gson = GsonBuilder().create()
 
             return Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create(gson))

@@ -8,5 +8,5 @@ import android.support.v7.app.AppCompatActivity
 abstract class DevActivity : AppCompatActivity() {
     abstract fun setPassedRevisionParams(result: ElectricRevisionResult)
     abstract fun setCalibrationParams(result : CalibrationResult)
-    abstract fun getDevice(): Device?
+    abstract fun getDeviceFromIntent(): Device?
 }

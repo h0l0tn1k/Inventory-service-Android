@@ -1,7 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.electricrevision
 
-import android.app.Activity
 import android.content.DialogInterface
+import android.inventory.siemens.cz.siemensinventory.device.DevActivity
 import android.support.v7.app.AlertDialog
 
 /**
@@ -10,7 +10,10 @@ import android.support.v7.app.AlertDialog
 
 class FailedElectricRevisionDialog {
 
-    fun showDialog(context : Activity) {
+    private var context: DevActivity? = null
+
+    fun showDialog(context: DevActivity) {
+        this.context = context
         AlertDialog.Builder(context)
                 .setMessage("Are you sure device is not ok?")
                 .setPositiveButton("Yes", negativeDialogClickListener)
@@ -21,7 +24,7 @@ class FailedElectricRevisionDialog {
     private var negativeDialogClickListener: DialogInterface.OnClickListener = DialogInterface.OnClickListener { dialog, which ->
         when (which) {
             DialogInterface.BUTTON_POSITIVE -> {
-                //Update DB
+                this.context?.finish()
             }
             DialogInterface.BUTTON_NEGATIVE -> {
                 //do nothing

@@ -56,6 +56,7 @@ class CalibrationRevisionResultDialog {
         val cal = Calendar.getInstance()
         val dateP = revDateDatePicker as DatePicker
         cal.set(dateP.year, dateP.month, dateP.dayOfMonth)
-        return CalibrationResult(cal.time)
+        //todo: interval hardcoded, get from input
+        return CalibrationResult(cal.time, 5)
     }
 }

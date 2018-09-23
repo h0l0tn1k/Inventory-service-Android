@@ -30,19 +30,12 @@ class LoginActivity : AppCompatActivity() {
 
         btn_login?.setOnClickListener{loginUser()}
         btn_setting?.setOnClickListener{launchSettings()}
-        btn_login_as_josef?.setOnClickListener { loginAsJosef() }
 
         checkConnectionToService()
     }
 
     override fun onBackPressed() {
         //do nothing
-    }
-
-    private fun loginAsJosef() {
-        login_email?.setText("josef.novak@siemens.com")
-        login_password?.setText("ASDF001")
-        loginUser()
     }
 
     private fun checkConnectionToService() {
@@ -77,6 +70,7 @@ class LoginActivity : AppCompatActivity() {
 
         user.enqueue(object: Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
+                AppData.loginUserScd = null
                 snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
                 setResult(Activity.RESULT_CANCELED, intent)
             }

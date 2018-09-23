@@ -12,6 +12,6 @@ class DeviceType(
 ) {
 
     fun getDeviceTypeAndVersion(): String {
-        return "$objectTypeName $version"
+        return "$objectTypeName, Version: $version"
     }
 }

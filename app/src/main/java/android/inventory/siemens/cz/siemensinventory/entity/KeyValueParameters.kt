@@ -6,4 +6,5 @@ package android.inventory.siemens.cz.siemensinventory.entity
 class KeyValueParameters(
         var key : String,
         var value : String
+        //,var edit: Boolean
 )

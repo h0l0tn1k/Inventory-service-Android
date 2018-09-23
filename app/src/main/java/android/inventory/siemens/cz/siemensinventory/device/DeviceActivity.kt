@@ -1,9 +1,11 @@
 package android.inventory.siemens.cz.siemensinventory.device
 
+import android.content.DialogInterface
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.InventoryState
-import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.inventory.siemens.cz.siemensinventory.api.CalibrationServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.ElectricRevisionServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.entity.*
+import android.inventory.siemens.cz.siemensinventory.borrow.BorrowDialog
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationResult
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationRevisionResultDialog
 import android.inventory.siemens.cz.siemensinventory.data.AppData
@@ -19,11 +21,14 @@ import kotlinx.android.synthetic.main.device_generic_confirmation.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.text.SimpleDateFormat
 
 class DeviceActivity : DevActivity() {
 
     private var device : Device? = null
-    private var deviceApi : DeviceServiceApi? = null
+    private var deviceApi = DeviceServiceApi.Factory.create(this)
+    private var electricRevisionApi = ElectricRevisionServiceApi.Factory.create(this)
+    private var calibrationApi = CalibrationServiceApi.Factory.create(this)
     private var deviceIntent : DeviceIntent? = null
     private val resultParameterName : String = "result"
 
@@ -31,8 +36,8 @@ class DeviceActivity : DevActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
 
-        deviceApi = DeviceServiceApi.Factory.create(this)
-        deviceParameters.adapter = DeviceParametersAdapter(this, getDevice() as Device)
+        deviceParameters.adapter = DeviceParametersAdapter(this, getDeviceFromIntent() as Device)
+        device = getDeviceFromIntent()
         handleIntent()
     }
 
@@ -49,25 +54,53 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setBorrowView() {
-        if(isBorrowedByCurrentUser()) {
-            displayGenericConfirmationLayout(getString(R.string.borrow_return_device_question))
-            device_passed_btn.setOnClickListener { returnDevice() }
-        } else {
-            displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
-            device_passed_btn.setOnClickListener { borrowDevice() }
-        }
+        device_passed_btn.visibility = View.GONE
         device_failed_btn.visibility = View.GONE
+        device_close_btn.visibility = View.GONE
+        when {
+            isBorrowedByCurrentUser() -> {
+                device_passed_btn.visibility = View.VISIBLE
+                displayGenericConfirmationLayout(getString(R.string.borrow_return_device_question))
+                device_passed_btn.setOnClickListener {
+                    val dialog = BorrowDialog(this)
+                    dialog.buildDialog(device, false, DialogInterface.OnClickListener { _, _ ->
+                        device?.comment = dialog.getComment()
+                        device?.deviceState = dialog.getDeviceState()
+                        returnDevice()
+                    })
+                    dialog.show()
+                }
+            }
+            isBorrowedByNoOne() -> {
+                device_passed_btn.visibility = View.VISIBLE
+                displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
+                device_passed_btn.setOnClickListener {
+                    val dialog = BorrowDialog(this)
+                    dialog.buildDialog(device, true, DialogInterface.OnClickListener { _, _ ->
+                        device?.comment = dialog.getComment()
+                        device?.deviceState = dialog.getDeviceState()
+                        borrowDevice()
+                    })
+                    dialog.show()
+                }
+            }
+            else -> {
+                device_close_btn.visibility = View.VISIBLE
+                displayGenericConfirmationLayout(getString(R.string.device_borrowed_by_other_user))
+                device_close_btn.setOnClickListener { finish() }
+            }
+        }
     }
 
     private fun setHolder(user : LoginUserScd?) {
         device?.holder = user
-        deviceApi?.updateDevice(device?.id, device)?.enqueue(object : Callback<Device> {
+        deviceApi.updateDevice(device?.id, device).enqueue(object : Callback<Device> {
             override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                 if(response?.isSuccessful == true) {
                     if(isBorrowedByCurrentUser()) {
-                        Toast.makeText(this@DeviceActivity, "Device returned", Toast.LENGTH_LONG).show()
-                    } else {
                         Toast.makeText(this@DeviceActivity, "Device borrowed", Toast.LENGTH_LONG).show()
+                    } else {
+                        Toast.makeText(this@DeviceActivity, "Device returned", Toast.LENGTH_LONG).show()
                     }
                     val dev = response.body() as Device
                     //todo refresh view
@@ -99,8 +132,8 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setInventoryResult(passed: Boolean) {
-        val result = getDevice()?.inventoryRecord
-        result?.inventoryState = if (passed)  InventoryState.OK else InventoryState.False
+        val result = getDeviceFromIntent()?.inventoryRecord
+        result?.inventoryState = if (passed) InventoryState.OK else InventoryState.False
 
         intent.putExtra(resultParameterName, Gson().toJson(result))
         setResult(RESULT_OK, intent)
@@ -125,13 +158,43 @@ class DeviceActivity : DevActivity() {
     }
 
     override fun setPassedRevisionParams(result: ElectricRevisionResult) {
-        //TODO: update revision data local & db
-        this.device?.lastRevisionDateString = result.revisionDate.toString()
+        this.device?.revision?.revisionInterval = result.period
+
+        electricRevisionApi?.createElectricRevision(this.device?.revision)?.enqueue(object : Callback<DeviceElectricRevision> {
+            override fun onResponse(call: Call<DeviceElectricRevision>?, response: Response<DeviceElectricRevision>?) {
+                if(response?.isSuccessful == true) {
+                    Toast.makeText(this@DeviceActivity, "Electric Revision updated", Toast.LENGTH_LONG).show()
+                    device?.revision = response.body() as DeviceElectricRevision
+                    setResult(RESULT_OK, intent)
+                    finish()
+                } else {
+                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onFailure(call: Call<DeviceElectricRevision>?, t: Throwable?) {
+                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+            }
+        })
     }
 
     override fun setCalibrationParams(result: CalibrationResult) {
-        //TODO: add implementation
-        Toast.makeText(this, "Date is: " + result.date, Toast.LENGTH_LONG).show()
+        device?.calibration?.lastCalibrationDateString = SimpleDateFormat("yyyy-MM-dd").format(result.date)
+
+        calibrationApi.createCalibrations(device?.calibration).enqueue(object : Callback<DeviceCalibration> {
+            override fun onResponse(call: Call<DeviceCalibration>?, response: Response<DeviceCalibration>?) {
+                if(response?.isSuccessful == true) {
+                    Toast.makeText(this@DeviceActivity, "Calibration updated", Toast.LENGTH_LONG).show()
+                    device?.calibration = response.body() as DeviceCalibration
+                    setResult(RESULT_OK, intent)
+                    finish()
+                } else {
+                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+                }
+            }
+            override fun onFailure(call: Call<DeviceCalibration>?, t: Throwable?) {
+                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
+            }
+        })
 
         intent.putExtra(resultParameterName, Gson().toJson(result))
         setResult(RESULT_OK, intent)
@@ -139,11 +202,14 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun isBorrowedByCurrentUser() : Boolean {
-        return getDevice()?.holder?.id == AppData.loginUserScd?.id
+        return device?.holder?.id == AppData.loginUserScd?.id
     }
 
-    override fun getDevice(): Device? {
-        device = Gson().fromJson(intent.getStringExtra("device"), Device::class.java)
-        return device
+    private fun isBorrowedByNoOne() : Boolean {
+        return device?.holder?.id == null
+    }
+
+    override fun getDeviceFromIntent(): Device? {
+        return Gson().fromJson(intent.getStringExtra("device"), Device::class.java)
     }
 }

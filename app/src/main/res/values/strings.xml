@@ -6,6 +6,7 @@
     <!-- Activities -->
     <string name="activities">Activities</string>
     <string name="borrow_device">Borrow Device</string>
+    <string name="return_device">Return Device</string>
     <string name="electric_revision">Electric Revision</string>
     <string name="inventory">Inventory</string>
     <string name="calibration">Calibration</string>
@@ -78,6 +79,7 @@
 
     <string name="find">Find</string>
     <string name="device">Device</string>
+    <string name="device_type_and_version">Device type &amp; version</string>
     <string name="profile">Profile</string>
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>
 
@@ -92,6 +94,7 @@
     <string name="passed_electric_revision">Passed electric revision?</string>
     <string name="inventory_device_present">Device present?</string>
 
+    <string name="device_borrowed_by_other_user">This device is borrowed by other user</string>
     <string name="borrow_device_question">Do you want to borrow this device?</string>
     <string name="borrow_return_device_question">Do you want to return this device?</string>
     <string name="currently_borrowed_devices">Currently borrowed devices</string>
@@ -99,4 +102,16 @@
     <string name="project">Project</string>
     <string name="device_state">Device State</string>
     <string name="serial_number">Serial Number</string>
+    <string name="default_location">Default Location</string>
+    <string name="qr_code_value">QR Code Value</string>
+    <string name="device_type">Device type</string>
+    <string name="owner">Owner</string>
+    <string name="inventory_number">Inventory Number</string>
+    <string name="company_owner">Company Owner</string>
+    <string name="add_date">Add date</string>
+    <string name="nst">NST</string>
+    <string name="comment">Comment</string>
+    <string name="status">Status</string>
+    <string name="close">Close</string>
+    <string name="current_holder">Current Holder</string>
 </resources>

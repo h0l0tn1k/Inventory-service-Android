@@ -12,6 +12,7 @@ import android.widget.BaseAdapter
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.TextView
+import java.time.format.DateTimeFormatter
 
 /**
  * Created by Stefan Matta on 06-Mar-18.
@@ -52,19 +53,21 @@ class DeviceParametersAdapter(
 
     private fun getParameters() : List<KeyValueParameters> {
         return listOf(
-                KeyValueParameters("Device Type", device.deviceType.getDeviceTypeAndVersion()),
+                KeyValueParameters("Device type & version", device.deviceType.getDeviceTypeAndVersion()),
                 KeyValueParameters("Serial Number", device.serialNumber),
-                KeyValueParameters("Department", device.department.name),
-                KeyValueParameters("Current Holder", device.getHolderFullName()),
+                KeyValueParameters("QR code value", device.barcodeNumber),
                 KeyValueParameters("Owner", device.getOwnerFullName()),
-                KeyValueParameters("Project", device.project.name),
                 KeyValueParameters("Default Location", device.defaultLocation),
-                KeyValueParameters("Company Owner", device.companyOwner.name),
-                //KeyValueParameters("Add Date", addDateString),
-                KeyValueParameters("Status", device.deviceState.name),
+                KeyValueParameters("NST Value", device.nstValue),
+                KeyValueParameters("Inventory Number", device.getInventoryNumberString()),
 //                KeyValueParameters("Last Revision Date", device.lastRevisionDateString),
-                KeyValueParameters("Barcode Number", device.barcodeNumber),
-                KeyValueParameters("Comment", device.comment)
+                KeyValueParameters("Company Owner", device.companyOwner.name),
+                KeyValueParameters("Add Date", device.addDateString),
+                KeyValueParameters("Status", device.deviceState.name),
+                KeyValueParameters("Comment", device.comment),
+                KeyValueParameters("Current Holder", device.getHolderFullName()),
+                KeyValueParameters("Project", device.project.name),
+                KeyValueParameters("Department", device.department.name)
         )
     }
 }

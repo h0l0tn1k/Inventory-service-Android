@@ -15,6 +15,10 @@
         android:layout_alignParentTop="true"
         android:layout_above="@+id/device_generic_result_section"/>
 
+    <!--<include-->
+        <!--android:id="@+id/device_generic_result_section"-->
+        <!--layout="@layout/activity_device_create" />-->
+
     <include
         android:id="@+id/device_generic_result_section"
         layout="@layout/device_generic_confirmation" />

@@ -61,7 +61,11 @@ class InventoryExpandableListAdapter(
         val device = getChild(groupPosition, childPosition)
 
         val deviceNameTv = view?.findViewById(R.id.inventory_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType.objectTypeName} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        val locationTv = view.findViewById(R.id.device_item_location_tv) as TextView
+        locationTv.text = device.defaultLocation
+        val departmentTv = view.findViewById(R.id.device_item_department_tv) as TextView
+        departmentTv.text = device.department.name
 
         return view
     }
