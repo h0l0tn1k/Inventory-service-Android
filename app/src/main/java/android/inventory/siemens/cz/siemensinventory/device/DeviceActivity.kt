@@ -1,5 +1,6 @@
 package android.inventory.siemens.cz.siemensinventory.device
 
+import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.CalibrationServiceApi
@@ -16,12 +17,17 @@ import android.inventory.siemens.cz.siemensinventory.electricrevision.FailedElec
 import android.inventory.siemens.cz.siemensinventory.electricrevision.PassedElectricRevisionDialog
 import android.view.View
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_device.*
+import kotlinx.android.synthetic.main.activity_device_create.*
 import kotlinx.android.synthetic.main.device_generic_confirmation.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
+import android.databinding.DataBindingUtil
+import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
+import android.widget.EditText
+import java.util.*
+
 
 class DeviceActivity : DevActivity() {
 
@@ -31,13 +37,16 @@ class DeviceActivity : DevActivity() {
     private var calibrationApi = CalibrationServiceApi.Factory.create(this)
     private var deviceIntent : DeviceIntent? = null
     private val resultParameterName : String = "result"
+    private var deviceBinding: ActivityDeviceCreateBinding? = null
+    private val calendar = Calendar.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_device)
+        setContentView(R.layout.activity_device_create)
+        deviceBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_create) as ActivityDeviceCreateBinding
 
-        deviceParameters.adapter = DeviceParametersAdapter(this, getDeviceFromIntent() as Device)
         device = getDeviceFromIntent()
+        deviceBinding?.device = device
         handleIntent()
     }
 
@@ -54,42 +63,42 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setBorrowView() {
-        device_passed_btn.visibility = View.GONE
-        device_failed_btn.visibility = View.GONE
-        device_close_btn.visibility = View.GONE
-        when {
-            isBorrowedByCurrentUser() -> {
-                device_passed_btn.visibility = View.VISIBLE
-                displayGenericConfirmationLayout(getString(R.string.borrow_return_device_question))
-                device_passed_btn.setOnClickListener {
-                    val dialog = BorrowDialog(this)
-                    dialog.buildDialog(device, false, DialogInterface.OnClickListener { _, _ ->
-                        device?.comment = dialog.getComment()
-                        device?.deviceState = dialog.getDeviceState()
-                        returnDevice()
-                    })
-                    dialog.show()
-                }
-            }
-            isBorrowedByNoOne() -> {
-                device_passed_btn.visibility = View.VISIBLE
-                displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
-                device_passed_btn.setOnClickListener {
-                    val dialog = BorrowDialog(this)
-                    dialog.buildDialog(device, true, DialogInterface.OnClickListener { _, _ ->
-                        device?.comment = dialog.getComment()
-                        device?.deviceState = dialog.getDeviceState()
-                        borrowDevice()
-                    })
-                    dialog.show()
-                }
-            }
-            else -> {
-                device_close_btn.visibility = View.VISIBLE
-                displayGenericConfirmationLayout(getString(R.string.device_borrowed_by_other_user))
-                device_close_btn.setOnClickListener { finish() }
-            }
-        }
+//        device_passed_btn.visibility = View.GONE
+//        device_failed_btn.visibility = View.GONE
+//        device_close_btn.visibility = View.GONE
+//        when {
+//            isBorrowedByCurrentUser() -> {
+//                device_passed_btn.visibility = View.VISIBLE
+//                displayGenericConfirmationLayout(getString(R.string.borrow_return_device_question))
+//                device_passed_btn.setOnClickListener {
+//                    val dialog = BorrowDialog(this)
+//                    dialog.buildDialog(device, false, DialogInterface.OnClickListener { _, _ ->
+//                        device?.comment = dialog.getComment()
+//                        device?.deviceState = dialog.getDeviceState()
+//                        returnDevice()
+//                    })
+//                    dialog.show()
+//                }
+//            }
+//            isBorrowedByNoOne() -> {
+//                device_passed_btn.visibility = View.VISIBLE
+//                displayGenericConfirmationLayout(getString(R.string.borrow_device_question))
+//                device_passed_btn.setOnClickListener {
+//                    val dialog = BorrowDialog(this)
+//                    dialog.buildDialog(device, true, DialogInterface.OnClickListener { _, _ ->
+//                        device?.comment = dialog.getComment()
+//                        device?.deviceState = dialog.getDeviceState()
+//                        borrowDevice()
+//                    })
+//                    dialog.show()
+//                }
+//            }
+//            else -> {
+//                device_close_btn.visibility = View.VISIBLE
+//                displayGenericConfirmationLayout(getString(R.string.device_borrowed_by_other_user))
+//                device_close_btn.setOnClickListener { finish() }
+//            }
+//        }
     }
 
     private fun setHolder(user : LoginUserScd?) {
@@ -125,10 +134,42 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setInventoryView() {
-        displayGenericConfirmationLayout(getString(R.string.inventory_device_present))
+        displayGenericConfirmationLayout()
 
-        device_passed_btn.setOnClickListener { setInventoryResult(true) }
-        device_failed_btn.setOnClickListener { setInventoryResult(false) }
+        device_save_btn.setOnClickListener { setInventoryResult(true) }
+        device_edit_btn.setOnClickListener { setInventoryResult(false) }
+
+        //layouts
+        device_layout_department.visibility = View.GONE
+        device_layout_nst.visibility = View.VISIBLE
+        device_layout_inventory_number.visibility = View.VISIBLE
+        device_layout_inventory_comment.visibility = View.VISIBLE
+        device_layout_inventory_result.visibility = View.VISIBLE
+
+        //fields
+        device_read_qr_code.visibility = View.VISIBLE
+        device_read_device_type.visibility = View.VISIBLE
+        device_read_serial_number.visibility = View.VISIBLE
+        device_edit_owner.visibility = View.VISIBLE
+        device_edit_default_location.visibility = View.VISIBLE
+        device_edit_nst.visibility = View.VISIBLE
+        //inventory
+        device_edit_inventory_number.visibility = View.VISIBLE
+        device_edit_inventory_comment.visibility = View.VISIBLE
+        device_edit_inventory_result.visibility = View.VISIBLE
+        initInventoryResultRadioButtons(device?.inventoryRecord?.inventoryState)
+    }
+
+    private fun initInventoryResultRadioButtons(inventoryState: InventoryState?) {
+        if(inventoryState?.state != null) {
+            when(inventoryState.state.toLowerCase()) {
+                "ok" -> inventory_result_radio_ok.isChecked = true
+                "false" -> inventory_result_radio_false.isChecked = true
+                "unclear" -> inventory_result_radio_unclear.isChecked = true
+            }
+        } else {
+            inventory_result_radio_unclear.isChecked = true
+        }
     }
 
     private fun setInventoryResult(passed: Boolean) {
@@ -145,22 +186,55 @@ class DeviceActivity : DevActivity() {
     }
 
     private fun setElRevisionView() {
-        displayGenericConfirmationLayout(getString(R.string.passed_electric_revision))
+        displayGenericConfirmationLayout()
 
-        device_passed_btn.setOnClickListener { PassedElectricRevisionDialog().showDialog(this) }
-        device_failed_btn.setOnClickListener { FailedElectricRevisionDialog().showDialog(this) }
+//        device_passed_btn.setOnClickListener { PassedElectricRevisionDialog().showDialog(this) }
+//        device_failed_btn.setOnClickListener { FailedElectricRevisionDialog().showDialog(this) }
+
+        device_read_qr_code.visibility = View.VISIBLE
+        device_read_device_type.visibility = View.VISIBLE
+        device_read_serial_number.visibility = View.VISIBLE
+        device_edit_owner.visibility = View.VISIBLE
+        device_edit_default_location.visibility = View.VISIBLE
+        device_edit_nst.visibility = View.VISIBLE
+        device_edit_inventory_number.visibility = View.VISIBLE
+
+        device_layout_department.visibility = View.GONE
+        device_layout_nst.visibility = View.VISIBLE
+        device_layout_inventory_number.visibility = View.VISIBLE
+        //electric revision
+        device_layout_last_el_revision_date.visibility = View.VISIBLE
+            device_read_last_el_revision_date.visibility = View.VISIBLE
+        device_layout_electric_revision_period.visibility = View.VISIBLE
+            device_edit_electric_revision_period.visibility = View.VISIBLE
+        // new rev date
+        device_layout_electric_revision_new_date.visibility = View.VISIBLE
+        device_edit_electric_revision_new_date.visibility = View.VISIBLE
+        device_edit_electric_revision_new_date.setOnClickListener { view -> newElectricRevisionDateListener(view) }
     }
 
-    private fun displayGenericConfirmationLayout(title : String) {
-        device_generic_result_section.visibility = View.VISIBLE
+    private fun newElectricRevisionDateListener(it: View?) {
+        val et = it as EditText
+        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
+            calendar.set(Calendar.YEAR, year)
+            calendar.set(Calendar.MONTH, month)
+            calendar.set(Calendar.DAY_OF_MONTH, day)
+            et.setText(SimpleDateFormat("dd.MM.yyyy",
+                    Locale.getDefault()).format(calendar.time))
+        }, calendar
+                .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
+                calendar.get(Calendar.DAY_OF_MONTH)).show()
+    }
+
+    private fun displayGenericConfirmationLayout() {
         layoutInflater.inflate(R.layout.device_generic_confirmation, null)
-        device_generic_question_box.text = title
+        device_close_btn.setOnClickListener { finish() }
     }
 
     override fun setPassedRevisionParams(result: ElectricRevisionResult) {
         this.device?.revision?.revisionInterval = result.period
 
-        electricRevisionApi?.createElectricRevision(this.device?.revision)?.enqueue(object : Callback<DeviceElectricRevision> {
+        electricRevisionApi.createElectricRevision(this.device?.revision).enqueue(object : Callback<DeviceElectricRevision> {
             override fun onResponse(call: Call<DeviceElectricRevision>?, response: Response<DeviceElectricRevision>?) {
                 if(response?.isSuccessful == true) {
                     Toast.makeText(this@DeviceActivity, "Electric Revision updated", Toast.LENGTH_LONG).show()

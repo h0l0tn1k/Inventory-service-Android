@@ -6,19 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:padding="15dp"
-    android:visibility="gone"
-    android:layout_alignParentBottom="true"
-    tools:showIn="@layout/activity_device">
-
-    <TextView
-        android:id="@+id/device_generic_question_box"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="20sp"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp"
-        android:text="@string/inventory_device_present" />
+    android:padding="5dp"
+    tools:showIn="@layout/activity_device_create">
 
     <LinearLayout
         android:layout_height="wrap_content"
@@ -26,21 +15,21 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/device_passed_btn"
+            android:id="@+id/device_save_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/yes" />
+            android:text="@string/save"/>
 
         <Button
             android:layout_marginStart="10dp"
-            android:id="@+id/device_failed_btn"
+            android:id="@+id/device_edit_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/no" />
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:text="@string/edit_device"/>
 
         <Button
             android:layout_marginStart="10dp"
@@ -48,8 +37,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            style="@style/Widget.AppCompat.Button.Colored"
-            android:text="@string/close" />
+            style="@style/Widget.AppCompat.Button.Borderless.Colored"
+            android:text="@string/close"/>
     </LinearLayout>
 
 </LinearLayout>

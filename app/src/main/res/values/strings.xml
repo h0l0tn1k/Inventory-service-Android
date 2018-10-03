@@ -114,4 +114,14 @@
     <string name="status">Status</string>
     <string name="close">Close</string>
     <string name="current_holder">Current Holder</string>
+    <string name="ok">OK</string>
+    <string name="unclear">Unclear</string>
+    <string name="false_string">False</string>
+    <string name="inventory_result">Inventory result</string>
+    <string name="inventory_comment">Inventory comment</string>
+    <string name="last_revision_date">Last Revision Date</string>
+    <string name="new_revision_date">New Revision Date</string>
+    <string name="revision_period">Revision Period</string>
+    <string name="year_s">year(s)</string>
+    <string name="edit_device">Edit Device</string>
 </resources>

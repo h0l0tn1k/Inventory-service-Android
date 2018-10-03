@@ -13,6 +13,8 @@ import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
+import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
@@ -21,7 +23,8 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class InventoryActivity : AppCompatActivity() {
+class InventoryActivity : AppCompatActivity(),
+        SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
@@ -29,7 +32,7 @@ class InventoryActivity : AppCompatActivity() {
     private var deviceApi: DeviceServiceApi? = null
     private var snackbarNotifier: SnackbarNotifier? = null
     private var inventoryApi: InventoryRecordsServiceApi? = null
-    private var adapter: InventoryExpandableListAdapter? = null
+    private var listAdapter: InventoryListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,22 +43,43 @@ class InventoryActivity : AppCompatActivity() {
         deviceApi = DeviceServiceApi.Factory.create(this)
 
         initListeners()
-        loadData()
     }
 
     private fun initListeners() {
+        inventory_search_box.setOnQueryTextListener(this)
         inventory_scanBtn.setOnClickListener { startScanActivity() }
 
-        adapter = InventoryExpandableListAdapter(this, hashMapOf(
-                "Checked" to emptyList(),
-                "Unchecked" to emptyList()
-        ))
-        inventory_layout.setOnRefreshListener { loadData() }
-        inventory_devices_lv.setAdapter(adapter)
-        inventory_devices_lv.setOnChildClickListener { _, _, groupPosition, childPosition, _ ->
-            startDeviceActivity(adapter?.getChild(groupPosition, childPosition)!!)
-            false
+        listAdapter = InventoryListAdapter(this, emptyList())
+        inventory_devices_lv.adapter = listAdapter
+        inventory_devices_lv.setOnItemClickListener { adapterView, _, position, _ ->
+            startDeviceActivity(adapterView.getItemAtPosition(position) as Device)
         }
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return false
+    }
+
+    override fun onQueryTextChange(query: String?): Boolean {
+        val queryIsEmpty = query?.isEmpty() == true
+
+        if (isSerialNumberValid(query)) {
+            val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
+            showProgressBar()
+            queue?.enqueue(object : Callback<List<Device>> {
+                override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                    updateData(response)
+                }
+
+                override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                    this@InventoryActivity.onFailure()
+                    hideProgressBar()
+                }
+            })
+        } else {
+            listAdapter?.updateList(emptyList())
+        }
+        return false
     }
 
     private fun startScanActivity() {
@@ -92,6 +116,7 @@ class InventoryActivity : AppCompatActivity() {
                                 loadData()
                             }
                         }
+
                         override fun onFailure(call: Call<InventoryRecord>?, t: Throwable?) {
                             this@InventoryActivity.onFailure()
                         }
@@ -103,8 +128,9 @@ class InventoryActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && data != null) {
             try {
                 val device = Gson().fromJson(data.getStringExtra(scanParameterName), Device::class.java)
+                //todo device might not exist -> create
                 startDeviceActivity(device)
-            } catch(ex : JsonSyntaxException) {
+            } catch (ex: JsonSyntaxException) {
                 Toast.makeText(this, "Device not found", Toast.LENGTH_LONG).show()
             }
         }
@@ -112,18 +138,9 @@ class InventoryActivity : AppCompatActivity() {
 
     private fun loadData() {
         showProgressBar()
-        inventoryApi?.getUnCheckedDevices()?.enqueue(object : Callback<List<Device>> {
+        deviceApi?.getDevices()?.enqueue(object : Callback<List<Device>> {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                this@InventoryActivity.updateData(response, "Unchecked")
-            }
-
-            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
-                this@InventoryActivity.onFailure()
-            }
-        })
-        inventoryApi?.getCheckedDevices()?.enqueue(object : Callback<List<Device>> {
-            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                this@InventoryActivity.updateData(response, "Checked")
+                this@InventoryActivity.updateData(response)
             }
 
             override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
@@ -132,26 +149,29 @@ class InventoryActivity : AppCompatActivity() {
         })
     }
 
-    private fun updateData(response: Response<List<Device>>?, group: String) {
+    private fun updateData(response: Response<List<Device>>?) {
         if (response?.isSuccessful == true) {
             val devices = response.body() as List<Device>
-            adapter?.devices!![group] = devices
-            adapter?.updateList(adapter?.devices!!)
-            hideProgressBar()
+            listAdapter?.updateList(devices)
         }
+        hideProgressBar()
     }
 
     private fun showProgressBar() {
-        inventory_layout.isRefreshing = true
+        inventory_progress_bar.visibility = View.VISIBLE
     }
 
     private fun hideProgressBar() {
-        inventory_layout.isRefreshing = false
+        inventory_progress_bar.visibility = View.GONE
     }
 
     private fun onFailure() {
         snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
         hideProgressBar()
+    }
+
+    override fun onClose(): Boolean {
+        return false
     }
 
     private fun showDeviceNotFound(barcodeNum: String) {
@@ -164,5 +184,9 @@ class InventoryActivity : AppCompatActivity() {
                     Toast.makeText(this@InventoryActivity, "Yaay", Toast.LENGTH_SHORT).show()
                 }
                 .setNegativeButton(android.R.string.no, null).show()
+    }
+
+    private fun isSerialNumberValid(query: String?): Boolean {
+        return query?.isNotEmpty() == true
     }
 }
