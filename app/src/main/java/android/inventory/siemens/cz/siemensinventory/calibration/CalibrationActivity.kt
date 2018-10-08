@@ -8,7 +8,6 @@ import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
-import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionResultsAdapter
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -28,7 +27,7 @@ class CalibrationActivity :  AppCompatActivity(),
     private var snackbarNotifier: SnackbarNotifier? = null
     private val parameterName = "device_barcode_id"
     private var deviceApi : DeviceServiceApi? = null
-    private var adapter : ElectricRevisionResultsAdapter? = null
+    private var adapter : CalibrationListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,7 +42,7 @@ class CalibrationActivity :  AppCompatActivity(),
     }
 
     private fun initLayoutElements() {
-        adapter = ElectricRevisionResultsAdapter(this, emptyList())
+        adapter = CalibrationListAdapter(this, emptyList())
         calibration_search_box.setOnQueryTextListener(this)
         calibration_search_results.adapter = adapter
         calibration_search_results.onItemClickListener = AdapterView.OnItemClickListener { adapter, _, position, _ ->

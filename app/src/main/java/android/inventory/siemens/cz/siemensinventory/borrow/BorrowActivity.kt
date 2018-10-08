@@ -54,14 +54,22 @@ class BorrowActivity : AppCompatActivity() {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 try {
                     val device = Gson().fromJson(data.getStringExtra(parameterName), Device::class.java)
+                    if (device == null) {
+                        displayDeviceNotFound()
+                        return
+                    }
                     startDeviceActivity(device)
                 } catch(ex : JsonSyntaxException) {
-                    Toast.makeText(this, "Device not found", Toast.LENGTH_LONG).show()
+                    displayDeviceNotFound()
                 }
             }
         } else if (requestCode == DEVICE_ACTIVITY_REQUEST_CODE) {
             loadBorrowedDevices()
         }
+    }
+
+    private fun displayDeviceNotFound() {
+        snackbarNotifier?.show(getString(R.string.no_device_found))
     }
 
     private fun startDeviceActivity(device : Device) {

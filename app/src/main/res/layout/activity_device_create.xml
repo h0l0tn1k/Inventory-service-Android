@@ -1,55 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android">
+
     <data>
-        <variable name="device" type="android.inventory.siemens.cz.siemensinventory.api.entity.Device"/>
+
+        <variable
+            name="device"
+            type="android.inventory.siemens.cz.siemensinventory.api.entity.Device" />
     </data>
-    <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
-        android:orientation="vertical"
+
+    <RelativeLayout xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".device.DeviceActivity">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:layout_above="@id/device_create_generic_result_section"
             android:layout_alignParentTop="true"
-            android:layout_above="@id/device_create_generic_result_section">
+            android:orientation="vertical">
 
             <!-- QR CODE -->
             <LinearLayout
                 android:id="@+id/device_layout_qr_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/qr_code_value"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_qr_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.barcodeNumber}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_qr_code"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.barcodeNumber}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- DEVICE TYPE -->
@@ -58,35 +65,38 @@
                 android:id="@+id/device_layout_device_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/device_type"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_device_type"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_device_type"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.deviceType.getDeviceTypeAndVersion()}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- SERIAL NUMBER -->
@@ -95,34 +105,37 @@
                 android:id="@+id/device_layout_serial_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/serial_number"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_serial_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.serialNumber}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_serial_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.serialNumber}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- OWNER -->
@@ -131,35 +144,78 @@
                 android:id="@+id/device_layout_owner"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/owner"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_owner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_owner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.getOwnerFullName()}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+            </LinearLayout>
+
+            <!-- CURRENT HOLDER -->
+
+            <LinearLayout
+                android:id="@+id/device_layout_holder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
+                    android:shadowRadius="2"
+                    android:text="@string/current_holder"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
+                <Spinner
+                    android:id="@+id/device_edit_holder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:spinnerMode="dropdown"
+                    android:text=""
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/device_read_holder"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:text="@{device.getHolderFullName()}"
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- DEFAULT LOCATION -->
@@ -168,34 +224,37 @@
                 android:id="@+id/device_layout_default_location"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/default_location"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_default_location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text="@{device.defaultLocation}"
-                    android:visibility="gone"/>
+                    android:layout_weight="1"
+                    android:text="@={device.defaultLocation}"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_default_location"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.defaultLocation}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- DEPARTMENT -->
@@ -204,35 +263,38 @@
                 android:id="@+id/device_layout_department"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_margin="5dp">
+                android:layout_margin="5dp"
+                android:orientation="horizontal">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/department"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_department"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
-                <EditText
+                    android:visibility="gone" />
+
+                <TextView
                     android:id="@+id/device_read_department"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.department.name}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- COMPANY OWNER -->
@@ -244,6 +306,7 @@
                 android:layout_margin="5dp"
                 android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -254,6 +317,7 @@
                     android:text="@string/company_owner"
                     android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_company_owner"
                     android:layout_width="0dp"
@@ -262,15 +326,16 @@
                     android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <EditText
                     android:id="@+id/device_read_company_owner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- PROJECT -->
@@ -279,36 +344,39 @@
                 android:id="@+id/device_layout_project"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/project"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_project"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <EditText
                     android:id="@+id/device_read_project"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- NST NUMBER -->
@@ -317,35 +385,38 @@
                 android:id="@+id/device_layout_nst"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/nst"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_nst"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text="@{device.nstValue}"
-                    android:visibility="gone"/>
+                    android:layout_weight="1"
+                    android:text="@={device.nstValue}"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_nst"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.nstValue}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- ADD DATE -->
@@ -380,36 +451,39 @@
                 android:id="@+id/device_layout_status"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/status"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:spinnerMode="dropdown"
                     android:text=""
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_status"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.deviceState.name}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- COMMENT -->
@@ -418,35 +492,38 @@
                 android:id="@+id/device_layout_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/comment"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text="@{device.comment}"
-                    android:visibility="gone"/>
+                    android:layout_weight="1"
+                    android:text="@={device.comment}"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.comment}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- INVENTORY NUMBER -->
@@ -455,35 +532,38 @@
                 android:id="@+id/device_layout_inventory_number"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/inventory_number"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_inventory_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text="@{device.inventoryNumber}"
-                    android:visibility="gone"/>
+                    android:layout_weight="1"
+                    android:text="@={device.inventoryNumber}"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_inventory_number"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.inventoryNumber}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
             <!-- INVENTORY RESULT -->
@@ -492,47 +572,58 @@
                 android:id="@+id/device_layout_inventory_result"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/inventory_result"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <RadioGroup
                     android:id="@+id/device_edit_inventory_result"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-                    <RadioButton android:id="@+id/inventory_result_radio_ok"
+
+                    <RadioButton
+                        android:id="@+id/inventory_result_radio_ok"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/ok"
-                        android:layout_marginEnd="10dp"/>
-                    <RadioButton android:id="@+id/inventory_result_radio_false"
+                        android:layout_marginEnd="10dp"
+                        android:checked="@{device.inventoryRecord.inventoryState.state.equals(`OK`)}"
+                        android:text="@string/ok" />
+
+                    <RadioButton
+                        android:id="@+id/inventory_result_radio_false"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/false_string"
-                        android:layout_marginEnd="10dp"/>
-                    <RadioButton android:id="@+id/inventory_result_radio_unclear"
+                        android:layout_marginEnd="10dp"
+                        android:checked="@{device.inventoryRecord.inventoryState.state.equals(`False`)}"
+                        android:text="@string/false_string" />
+
+                    <RadioButton
+                        android:id="@+id/inventory_result_radio_unclear"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/unclear"
-                        android:checked="true"/>
+                        android:checked="@{device.inventoryRecord.inventoryState.state.equals(`Unclear`)}"
+                        android:text="@string/unclear" />
                 </RadioGroup>
+
                 <TextView
                     android:id="@+id/device_read_inventory_result"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text=""/>
+                    android:layout_weight="1"
+                    android:text="" />
             </LinearLayout>
 
             <!-- INVENTORY COMMENT -->
@@ -541,35 +632,38 @@
                 android:id="@+id/device_layout_inventory_comment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/inventory_comment"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_inventory_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text="@{device.inventoryRecord.comment}"
-                    android:visibility="gone"/>
+                    android:layout_weight="1"
+                    android:text="@={device.inventoryRecord.comment}"
+                    android:visibility="gone" />
+
                 <TextView
                     android:id="@+id/device_read_inventory_comment"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.inventoryRecord.comment}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
 
@@ -581,27 +675,29 @@
                 android:id="@+id/device_layout_last_el_revision_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/last_revision_date"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <TextView
                     android:id="@+id/device_read_last_el_revision_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
+                    android:layout_weight="1"
                     android:text="@{device.revision.lastRevisionDateString}"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </LinearLayout>
 
 
@@ -614,6 +710,7 @@
                 android:layout_margin="5dp"
                 android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -622,14 +719,16 @@
                     android:text="@string/revision_period"
                     android:textColor="@color/lightBlack"
                     android:textSize="16sp" />
+
                 <Spinner
                     android:id="@+id/device_edit_electric_revision_period"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:spinnerMode="dialog"
                     android:layout_marginStart="40dp"
                     android:entries="@array/revisionPeriods"
-                    android:selectedItemPosition="@{device.revision.revisionInterval}"/>
+                    android:selectedItemPosition="@={device.revision.revisionInterval}"
+                    android:spinnerMode="dialog" />
+
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -643,28 +742,123 @@
                 android:id="@+id/device_layout_electric_revision_new_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
                 android:layout_margin="5dp"
+                android:orientation="horizontal"
                 android:visibility="gone">
+
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="start|center_vertical"
-                    android:textSize="16sp"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
                     android:shadowRadius="2"
-                    android:textColor="@color/lightBlack"
                     android:text="@string/new_revision_date"
-                    android:gravity="start|center_horizontal"/>
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+
                 <EditText
                     android:id="@+id/device_edit_electric_revision_new_date"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:layout_gravity="end"
-                    android:text=""
+                    android:layout_weight="1"
                     android:focusable="false"
-                    android:visibility="gone"/>
+                    android:text=""
+                    android:visibility="gone" />
+            </LinearLayout>
+
+
+            <!-- CALIBRATION -->
+
+            <!-- LAST CALIBRATION DATE-->
+
+            <LinearLayout
+                android:id="@+id/device_layout_last_calibration_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
+                    android:shadowRadius="2"
+                    android:text="@string/last_calibration_date"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+                <TextView
+                    android:id="@+id/device_read_last_calibration_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:text="@{device.calibration.lastCalibrationDateString}"/>
+            </LinearLayout>
+
+
+            <!-- CALIBRATION PERIOD-->
+
+            <LinearLayout
+                android:id="@+id/device_layout_calibration_period"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="start|center_horizontal"
+                    android:shadowRadius="2"
+                    android:text="@string/calibration_period"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+                <Spinner
+                    android:id="@+id/device_edit_calibration_period"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="40dp"
+                    android:entries="@array/revisionPeriods"
+                    android:selectedItemPosition="@={device.calibration.calibrationInterval}"
+                    android:spinnerMode="dialog" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/year_s" />
+            </LinearLayout>
+
+            <!-- NEW CALIBRATION DATE -->
+
+            <LinearLayout
+                android:id="@+id/device_layout_calibration_new_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="5dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
+                    android:shadowRadius="2"
+                    android:text="@string/new_calibration_date"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="16sp" />
+                <EditText
+                    android:id="@+id/device_edit_calibration_new_date"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:focusable="false"
+                    android:text=""/>
             </LinearLayout>
         </LinearLayout>
 
@@ -673,7 +867,15 @@
             layout="@layout/device_generic_confirmation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true" />
+
+        <include
+            android:id="@+id/device_borrow_section_toolbar"
+            layout="@layout/device_borrow_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:visibility="gone" />
 
     </RelativeLayout>
 </layout>

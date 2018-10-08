@@ -108,19 +108,17 @@ class InventoryActivity : AppCompatActivity(),
 
     private fun handleDeviceActivityResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
-            val inventoryRecord = Gson().fromJson(data.getStringExtra("result"), InventoryRecord::class.java)
-            inventoryApi?.updateInventoryRecord(inventoryRecord.id, inventoryRecord)
-                    ?.enqueue(object : Callback<InventoryRecord> {
-                        override fun onResponse(call: Call<InventoryRecord>?, response: Response<InventoryRecord>?) {
-                            if (response?.isSuccessful == true) {
-                                loadData()
-                            }
-                        }
-
-                        override fun onFailure(call: Call<InventoryRecord>?, t: Throwable?) {
+            val device = Gson().fromJson(data.getStringExtra("result"), Device::class.java)
+            deviceApi?.updateDevice(device.id, device)?.enqueue(object: Callback<Device> {
+                override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                    if (response?.isSuccessful == true) {
+                        loadData()
+                    }
+                }
+                override fun onFailure(call: Call<Device>?, t: Throwable?) {
                             this@InventoryActivity.onFailure()
-                        }
-                    })
+                }
+            })
         }
     }
 
@@ -142,7 +140,6 @@ class InventoryActivity : AppCompatActivity(),
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 this@InventoryActivity.updateData(response)
             }
-
             override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
                 this@InventoryActivity.onFailure()
             }

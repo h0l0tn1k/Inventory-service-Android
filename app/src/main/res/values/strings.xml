@@ -98,6 +98,7 @@
     <string name="borrow_device_question">Do you want to borrow this device?</string>
     <string name="borrow_return_device_question">Do you want to return this device?</string>
     <string name="currently_borrowed_devices">Currently borrowed devices</string>
+    <string name="borrowed_devices">Borrowed devices</string>
     <string name="department">Department</string>
     <string name="project">Project</string>
     <string name="device_state">Device State</string>
@@ -124,4 +125,10 @@
     <string name="revision_period">Revision Period</string>
     <string name="year_s">year(s)</string>
     <string name="edit_device">Edit Device</string>
+    <string name="no_device_found">No Device Found</string>
+    <string name="last_calibration_date">Last Calibration Date</string>
+    <string name="calibration_period">Calibration Period</string>
+    <string name="new_calibration_date">New Calibration Date</string>
+    <string name="calibration_days_left">Calibration Days Left</string>
+    <string name="revision_days_left">Revision Days Left</string>
 </resources>

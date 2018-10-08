@@ -26,7 +26,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     private val parameterName = "device_barcode_id"
     private var deviceApi : DeviceServiceApi? = null
     private var snackbarNotifier: SnackbarNotifier? = null
-    private var adapter : ElectricRevisionResultsAdapter? = null
+    private var adapter : ElectricRevisionListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +41,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     }
 
     private fun initLayoutElements() {
-        adapter = ElectricRevisionResultsAdapter(this, emptyList())
+        adapter = ElectricRevisionListAdapter(this, emptyList())
         el_revision_search_box.setOnQueryTextListener(this)
         el_revision_search_results.adapter = adapter
         el_revision_search_results.onItemClickListener = AdapterView.OnItemClickListener { adapter, _, position, _ ->
