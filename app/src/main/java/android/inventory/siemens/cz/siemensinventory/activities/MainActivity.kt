@@ -2,13 +2,8 @@ package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.app.Activity
 import android.content.Intent
-import android.databinding.DataBindingUtil
-import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.R.id.nav_borrow
-import android.inventory.siemens.cz.siemensinventory.R.menu.activity_main_drawer
 import android.inventory.siemens.cz.siemensinventory.api.DeviceStatesServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceState
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
@@ -26,34 +21,38 @@ import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.app_bar_main.*
+import android.widget.AdapterView
+import android.widget.GridView
 import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
-import kotlinx.android.synthetic.main.profile.*
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+class MainActivity : AppCompatActivity() {
 
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
     private var deviceStateApi: DeviceStatesServiceApi? = null
+    private var dashboardAdapter: DashboardAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-
-        nav_view.setNavigationItemSelectedListener(this)
 
         if (getUser() == null) {
             startLoginActivity()
         }
+        val gridview: GridView = findViewById(R.id.main_dashboard)
+        dashboardAdapter = DashboardAdapter(this)
+        gridview.adapter = dashboardAdapter
 
-        profileChangePasswordBtn.setOnClickListener { startChangePasswordActivity() }
+        gridview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            startActivityBasedOnNavItem(dashboardAdapter?.getItem(position)?.navId)
+        }
+//        profileChangePasswordBtn.setOnClickListener { startChangePasswordActivity() }
 
         initStaticData()
     }
@@ -62,10 +61,11 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
         deviceStateApi?.getDeviceStates()?.enqueue(object : Callback<List<DeviceState>> {
             override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
-                if(response?.isSuccessful == true) {
+                if (response?.isSuccessful == true) {
                     AppData.deviceStates = response.body()
                 }
             }
+
             override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
                 Toast.makeText(this@MainActivity, "Error while loading device states", Toast.LENGTH_SHORT).show()
             }
@@ -82,17 +82,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         }
     }
 
-    override fun onBackPressed() {
-        if (getDrawer().isDrawerOpen(GravityCompat.START)) {
-            getDrawer().closeDrawer(GravityCompat.START)
-        } else {
-            super.onBackPressed()
-        }
-    }
-
-    override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val intent = when (item.itemId) {
-
+    private fun startActivityBasedOnNavItem(navItemId: Int?) {
+        val intent = when (navItemId) {
             //Activities
             R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
             R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
@@ -102,7 +93,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
             //Views
             R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
-                getViewEntityActivityIntent(item.itemId)
+                getViewEntityActivityIntent(navItemId)
             }
 
             //Others
@@ -115,9 +106,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             else -> null
         }
         if (intent != null) startActivity(intent)
-
-        drawer_layout.closeDrawer(GravityCompat.START)
-        return true
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -146,16 +134,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun setUserDetails() {
-        val navEmail = findViewById<TextView>(R.id.nav_signed_in_email)
-        navEmail.text = getUser()?.email
-        val navName = findViewById<TextView>(R.id.nav_signed_in_name)
-        navName.text = getUser()?.getFullName()
-
-        val superiorUser = findViewById<TextView>(R.id.profile_superior_user_value)
-        superiorUser.text = getUser()?.superiorName
-
-        val loggedIUser = findViewById<TextView>(R.id.profile_loggedin_user_value)
-        loggedIUser.text = getUser()?.getFullName()
 
         val permissions = listOf(
                 Permission("Read-only", getUser()?.flagRead),
@@ -166,11 +144,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Permission("Admin", getUser()?.flagAdmin)
         )
 
-        permissionsView.adapter = PermissionsAdapter(this, permissions)
-    }
-
-    fun getDrawer(): DrawerLayout {
-        return drawer_layout
+//        permissionsView.adapter = PermissionsAdapter(this, permissions)
     }
 
     private fun getUser(): LoginUserScd? {

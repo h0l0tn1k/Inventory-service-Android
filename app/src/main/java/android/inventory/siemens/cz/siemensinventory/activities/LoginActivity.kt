@@ -9,9 +9,9 @@ import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-
+import android.support.v7.app.AppCompatActivity
+import android.view.animation.AnimationUtils
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
@@ -28,8 +28,8 @@ class LoginActivity : AppCompatActivity() {
 
         snackbarNotifier = SnackbarNotifier(login_activity_layout, this)
 
-        btn_login?.setOnClickListener{loginUser()}
-        btn_setting?.setOnClickListener{launchSettings()}
+        btn_login?.setOnClickListener { loginUser() }
+        login_btn_connection?.setOnClickListener { launchSettings() }
 
         checkConnectionToService()
     }
@@ -43,16 +43,22 @@ class LoginActivity : AppCompatActivity() {
             ServiceSettings(this).checkConnection().enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                     if (response?.isSuccessful != true) {
-                        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+                        showMessageAndShakeWithConnectionIcon(getString(R.string.error_cannot_connect_to_service))
                     }
                 }
+
                 override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                    snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+                    showMessageAndShakeWithConnectionIcon(getString(R.string.error_cannot_connect_to_service))
                 }
             })
         } else {
-            snackbarNotifier?.show(getString(R.string.service_url_not_valid))
+            showMessageAndShakeWithConnectionIcon(getString(R.string.service_url_not_valid))
         }
+    }
+
+    private fun showMessageAndShakeWithConnectionIcon(message: String) {
+        snackbarNotifier?.show(message)
+        login_btn_connection.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
     }
 
     private fun launchSettings() {
@@ -60,7 +66,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
-        if(isUserInputValid() && ServiceSettings(this).isUrlWellFormated()) {
+        if (isUserInputValid() && ServiceSettings(this).isUrlWellFormated()) {
             fireLoginUserRequest()
         }
     }
@@ -68,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
     private fun fireLoginUserRequest() {
         val user = LoginServiceApi.Factory.create(this).login(login_email?.text.toString(), login_password?.text.toString())
 
-        user.enqueue(object: Callback<LoginUserScd> {
+        user.enqueue(object : Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
                 AppData.loginUserScd = null
                 snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
@@ -76,7 +82,7 @@ class LoginActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<LoginUserScd>?, response: Response<LoginUserScd>) {
-                if(response.isSuccessful) {
+                if (response.isSuccessful) {
                     val receivedUser = response.body() as LoginUserScd
                     AppData.loginUserScd = receivedUser
                     val intent = Intent()
@@ -84,7 +90,7 @@ class LoginActivity : AppCompatActivity() {
                     setResult(RESULT_OK, intent)
                     finish()
                 } else {
-                    val message = when(response.code()) {
+                    val message = when (response.code()) {
                         401 -> getString(R.string.invalid_credentials)
                         else -> getString(R.string.unknown_error)
                     }
@@ -94,7 +100,7 @@ class LoginActivity : AppCompatActivity() {
         })
     }
 
-    private fun isUserInputValid() : Boolean {
+    private fun isUserInputValid(): Boolean {
         return TextViewHelper().withContext(this).isEmailValid(login_email).and.isNotEmpty(login_password, getString(R.string.password_empty)).isValid
     }
 }

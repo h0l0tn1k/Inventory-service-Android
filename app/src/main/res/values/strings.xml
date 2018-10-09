@@ -131,4 +131,5 @@
     <string name="new_calibration_date">New Calibration Date</string>
     <string name="calibration_days_left">Calibration Days Left</string>
     <string name="revision_days_left">Revision Days Left</string>
+    <string name="siemens_inventory">Siemens Inventory</string>
 </resources>

@@ -75,6 +75,7 @@
         android:id="@+id/profileChangePasswordBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Borderless.Colored"
         android:text="@string/change_password"/>
 
 </LinearLayout>
