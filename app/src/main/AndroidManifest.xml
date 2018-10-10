@@ -30,7 +30,7 @@
         </activity>
         <activity
             android:name=".activities.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
@@ -44,8 +44,8 @@
             android:label="@string/device" />
         <activity
             android:name=".activities.ChangePasswordActivity"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:label="@string/change_password" />
+            android:label="@string/change_password"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".calibration.CalibrationActivity"
             android:label="@string/calibration" />
@@ -56,8 +56,16 @@
             android:name=".inventory.InventoryActivity"
             android:label="@string/inventory" />
         <activity android:name=".view.ViewEntityActivity" />
-        <activity android:name=".borrow.BorrowActivity"
-            android:label="@string/borrowed_devices"/>
+        <activity
+            android:name=".borrow.BorrowActivity"
+            android:label="@string/borrowed_devices" />
+        <activity
+            android:name=".activities.ProfileActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".devicetype.DeviceTypesListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".devicetype.DeviceTypeActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
 </manifest>

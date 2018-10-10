@@ -51,6 +51,10 @@
     <item android:title="@string/views">
         <menu>
             <item
+                android:id="@+id/nav_device_type"
+                android:icon="@drawable/ic_menu_share"
+                android:title="@string/device_types" />
+            <item
                 android:id="@+id/nav_suppliers"
                 android:icon="@drawable/ic_menu_share"
                 android:title="@string/suppliers" />

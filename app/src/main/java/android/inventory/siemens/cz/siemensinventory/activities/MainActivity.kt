@@ -9,21 +9,17 @@ import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
 import android.inventory.siemens.cz.siemensinventory.data.AppData
+import android.inventory.siemens.cz.siemensinventory.devicetype.DeviceTypesListActivity
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
-import android.inventory.siemens.cz.siemensinventory.entity.Permission
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewEntityActivity
 import android.inventory.siemens.cz.siemensinventory.view.ViewType
 import android.os.Bundle
-import android.support.design.widget.NavigationView
-import android.support.v4.view.GravityCompat
-import android.support.v4.widget.DrawerLayout
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
-import android.view.MenuItem
 import android.widget.AdapterView
 import android.widget.GridView
-import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,24 +33,18 @@ class MainActivity : AppCompatActivity() {
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
     private var deviceStateApi: DeviceStatesServiceApi? = null
     private var dashboardAdapter: DashboardAdapter? = null
+    private var snackbarNotifier: SnackbarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        snackbarNotifier = SnackbarNotifier(main_activity_layout, this)
 
         if (getUser() == null) {
             startLoginActivity()
+        } else {
+            initView()
         }
-        val gridview: GridView = findViewById(R.id.main_dashboard)
-        dashboardAdapter = DashboardAdapter(this)
-        gridview.adapter = dashboardAdapter
-
-        gridview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-            startActivityBasedOnNavItem(dashboardAdapter?.getItem(position)?.navId)
-        }
-//        profileChangePasswordBtn.setOnClickListener { startChangePasswordActivity() }
-
-        initStaticData()
     }
 
     private fun initStaticData() {
@@ -65,7 +55,6 @@ class MainActivity : AppCompatActivity() {
                     AppData.deviceStates = response.body()
                 }
             }
-
             override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
                 Toast.makeText(this@MainActivity, "Error while loading device states", Toast.LENGTH_SHORT).show()
             }
@@ -78,13 +67,32 @@ class MainActivity : AppCompatActivity() {
         if (requestCode == LOGIN_ACTIVITY_REQUEST_CODE) {
             if (resultCode == Activity.RESULT_OK && data != null) {
                 AppData.loginUserScd = Gson().fromJson(data.getStringExtra("user"), LoginUserScd::class.java)
+                initView()
             }
         }
+    }
+
+    private fun initView() {
+        val gridview: GridView = findViewById(R.id.main_dashboard)
+        dashboardAdapter = DashboardAdapter(this)
+        gridview.adapter = dashboardAdapter
+
+        gridview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            val dashboardItem = dashboardAdapter?.getItem(position) as DashboardItem
+            if (dashboardItem.visible) {
+                startActivityBasedOnNavItem(dashboardItem.navId)
+            } else {
+                snackbarNotifier?.show(getString(R.string.no_permission_to_access_this_resource))
+            }
+        }
+
+        initStaticData()
     }
 
     private fun startActivityBasedOnNavItem(navItemId: Int?) {
         val intent = when (navItemId) {
             //Activities
+            R.id.nav_home -> Intent(this, ProfileActivity::class.java)
             R.id.nav_borrow -> Intent(this, BorrowActivity::class.java)
             R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
@@ -92,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             //R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
 
             //Views
+            R.id.nav_device_type -> Intent(this, DeviceTypesListActivity::class.java)
             R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
                 getViewEntityActivityIntent(navItemId)
             }
@@ -100,7 +109,8 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
             R.id.nav_logout -> {
                 AppData.loginUserScd = null
-                Intent(this, LoginActivity::class.java)
+                startLoginActivity()
+                null
             }
             //TODO add About
             else -> null
@@ -110,7 +120,6 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
-        setUserDetails()
         return super.onCreateOptionsMenu(menu)
     }
 
@@ -124,27 +133,9 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    private fun startChangePasswordActivity() {
-        startActivity(Intent(this, ChangePasswordActivity::class.java))
-    }
-
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivityForResult(intent, LOGIN_ACTIVITY_REQUEST_CODE)
-    }
-
-    private fun setUserDetails() {
-
-        val permissions = listOf(
-                Permission("Read-only", getUser()?.flagRead),
-                Permission("Edit", getUser()?.flagWrite),
-                Permission("Borrowing", getUser()?.flagBorrow),
-                Permission("Inventory-making", getUser()?.flagInventory),
-                Permission("Revision-making", getUser()?.flagRevision),
-                Permission("Admin", getUser()?.flagAdmin)
-        )
-
-//        permissionsView.adapter = PermissionsAdapter(this, permissions)
     }
 
     private fun getUser(): LoginUserScd? {

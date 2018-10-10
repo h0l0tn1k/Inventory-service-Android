@@ -45,6 +45,7 @@
     <string name="unknown_error">"Unknown error occurred."</string>
     <string name="service_url_not_valid">"Service URL is not valid. Please specify service URL in settings."</string>
     <string name="error_cannot_connect_to_service">ERROR: Cannot connect to service. Please check connection parameters.</string>
+    <string name="error_loading_data">Error loading data</string>
 
     <string name="home">Home</string>
     <string name="new_text">New</string>
@@ -132,4 +133,12 @@
     <string name="calibration_days_left">Calibration Days Left</string>
     <string name="revision_days_left">Revision Days Left</string>
     <string name="siemens_inventory">Siemens Inventory</string>
+    <string name="no_permission_to_access_this_resource">You don\'t have required permissions to access this resource</string>
+    <string name="device_types">Device Types</string>
+    <string name="manufacturer">Manufacturer</string>
+    <string name="order_number">Order Number</string>
+    <string name="version">Version</string>
+    <string name="supplier">Supplier</string>
+    <string name="price">Price</string>
+    <string name="classification">Classification</string>
 </resources>
