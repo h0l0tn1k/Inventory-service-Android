@@ -19,7 +19,7 @@ interface DeviceTypeServiceApi {
     fun getDeviceType(@Path("deviceTypeId") deviceTypeId: Long) : Call<DeviceType>
 
     @PUT("device-types/{deviceTypeId}")
-    fun updateDeviceType(@Path("deviceTypeId") deviceTypeId: Long?, @Body device: DeviceType?) : Call<DeviceType>
+    fun updateDeviceType(@Path("deviceTypeId") deviceTypeId: Long?, @Body deviceType: DeviceType?) : Call<DeviceType>
 
     @POST("device-types/")
     fun createDeviceType(@Body device: DeviceType?) : Call<DeviceType>

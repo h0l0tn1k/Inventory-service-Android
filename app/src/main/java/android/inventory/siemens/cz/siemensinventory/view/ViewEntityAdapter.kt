@@ -18,6 +18,10 @@ class ViewEntityAdapter(
         context.hideProgressBar()
     }
 
+    fun getList() : List<ViewEntity> {
+        return this.items
+    }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View? {
         val item = getItem(position)
 

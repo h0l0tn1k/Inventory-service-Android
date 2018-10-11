@@ -38,7 +38,7 @@
                     android:shadowRadius="2"
                     android:text="@string/device_type"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_device_type"
@@ -56,7 +56,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.objectTypeName}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}" />
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp"  />
             </LinearLayout>
 
             <!-- VERSION -->
@@ -76,7 +77,7 @@
                     android:shadowRadius="2"
                     android:text="@string/version"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_version"
@@ -94,7 +95,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.version}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"/>
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- Classification -->
@@ -114,7 +116,7 @@
                     android:shadowRadius="2"
                     android:text="@string/classification"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_classification"
@@ -131,7 +133,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.classification}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}" />
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- manufacturer -->
@@ -151,7 +154,7 @@
                     android:shadowRadius="2"
                     android:text="@string/manufacturer"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_manufacturer"
@@ -168,7 +171,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.manufacturer}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}" />
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp"  />
             </LinearLayout>
 
             <!-- Order number -->
@@ -188,7 +192,7 @@
                     android:shadowRadius="2"
                     android:text="@string/order_number"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_order_number"
@@ -205,7 +209,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.orderNumber}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"/>
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- Supplier -->
@@ -226,7 +231,7 @@
                     android:shadowRadius="2"
                     android:text="@string/supplier"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <Spinner
                     android:id="@+id/device_type_edit_supplier"
@@ -245,7 +250,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.supplier.name}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"/>
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp" />
             </LinearLayout>
 
             <!-- price -->
@@ -265,7 +271,7 @@
                     android:shadowRadius="2"
                     android:text="@string/price"
                     android:textColor="@color/lightBlack"
-                    android:textSize="16sp" />
+                    android:textSize="18sp" />
 
                 <EditText
                     android:id="@+id/device_type_edit_price"
@@ -283,7 +289,8 @@
                     android:layout_gravity="end"
                     android:layout_weight="1"
                     android:text="@{deviceType.getPriceString()}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"/>
+                    android:visibility="@{viewMode.getVisibilityForRead()}"
+                    android:textSize="18sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -313,7 +320,7 @@
                     android:layout_weight="1"
                     style="@style/Widget.AppCompat.Button.Borderless.Colored"
                     android:text="@string/edit"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"/>
+                    android:visibility="@{viewMode.getShowUserEdit()}"/>
 
                 <Button
                     android:layout_marginStart="10dp"

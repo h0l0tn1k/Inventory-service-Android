@@ -19,6 +19,6 @@ class Supplier(id: Long, name: String)
     }
 
     override fun hashCode(): Int {
-        return (id.toInt() * 31 + name.hashCode()) * 31
+        return (id?.toInt() * 31 + name.hashCode()) * 31
     }
 }

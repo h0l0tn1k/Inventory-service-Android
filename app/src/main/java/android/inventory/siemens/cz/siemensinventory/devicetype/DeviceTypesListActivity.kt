@@ -7,6 +7,7 @@ import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.support.v7.app.AppCompatActivity
@@ -44,6 +45,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
         device_type_search_results.onItemClickListener = AdapterView.OnItemClickListener { adapter, _, position, _ ->
             startDeviceTypeActivity(adapter.getItemAtPosition(position) as DeviceType)
         }
+        device_type_addNew.visibility = if (AppData.loginUserScd?.flagWrite == true) View.VISIBLE else View.GONE
         device_type_addNew.setOnClickListener { startCreateDeviceTypeActivity() }
     }
 
@@ -116,6 +118,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
         val deviceTypeIntent = Intent(this@DeviceTypesListActivity, DeviceTypeActivity::class.java)
         deviceTypeIntent.putExtra("deviceType", Gson().toJson(DeviceType()))
         deviceTypeIntent.putExtra("editMode", true)
+        deviceTypeIntent.putExtra("createMode", true)
         startActivity(deviceTypeIntent)
     }
 

@@ -46,7 +46,7 @@ class DeviceTypeListAdapter(
         supplierTv.text = deviceType.supplier?.name
 
         val priceTv = view.findViewById(R.id.device_type_list_item_price) as TextView
-        priceTv.text = "${deviceType.price} CZK"
+        priceTv.text = "${deviceType.price}CZK"
 
         return view
     }

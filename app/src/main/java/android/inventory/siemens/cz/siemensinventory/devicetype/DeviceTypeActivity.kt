@@ -6,15 +6,16 @@ import android.inventory.siemens.cz.siemensinventory.api.DeviceTypeServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceType2Binding
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewMode
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
+import android.view.View
 import android.widget.ArrayAdapter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_device_type2.*
-import kotlinx.android.synthetic.main.activity_device_type_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,8 +23,8 @@ import retrofit2.Response
 class DeviceTypeActivity : AppCompatActivity() {
 
     private var deviceTypeBinding: ActivityDeviceType2Binding? = null
-    private var deviceTypeApi : DeviceTypeServiceApi? = null
-    private var supplierApi : SupplierServiceApi? = null
+    private var deviceTypeApi: DeviceTypeServiceApi? = null
+    private var supplierApi: SupplierServiceApi? = null
     private val suppliers = arrayListOf<Supplier>()
     private var snackbarNotifier: SnackbarNotifier? = null
 
@@ -33,7 +34,7 @@ class DeviceTypeActivity : AppCompatActivity() {
 
         deviceTypeBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_type2) as ActivityDeviceType2Binding
         deviceTypeBinding?.deviceType = getDeviceTypeFromIntent()
-        deviceTypeBinding?.viewMode = ViewMode(getEditModeFromIntent())
+        deviceTypeBinding?.viewMode = ViewMode(isEditMode())
         deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
         supplierApi = SupplierServiceApi.Factory.create(this)
         snackbarNotifier = SnackbarNotifier(activity_device_layout, this)
@@ -44,19 +45,41 @@ class DeviceTypeActivity : AppCompatActivity() {
 
     private fun initListeners() {
         device_type_edit_btn.setOnClickListener {
-            changeViewMode(true)
+            changeViewMode(true, getDeviceTypeFromIntent())
         }
         device_type_cancel_btn.setOnClickListener {
-            //reset to previous values
-            deviceTypeBinding?.deviceType = getDeviceTypeFromIntent()
-            changeViewMode(false)
+//            reset to previous values
+            if(isCreateMode()) { finish() }
+            changeViewMode(false, getDeviceTypeFromIntent())
         }
         device_type_save_btn.setOnClickListener {
-
-            //todo update or create
-            changeViewMode(false)
+            val deviceType = deviceTypeBinding?.deviceType as DeviceType
+            deviceType.price = deviceTypeBinding?.deviceTypeEditPrice?.text.toString().toDouble()
+            deviceType.supplier = device_type_edit_supplier.selectedItem as Supplier
+            if (isCreateMode()) {
+                deviceTypeApi?.createDeviceType(deviceType)?.enqueue(callback())
+            } else {
+                //update
+                deviceTypeApi?.updateDeviceType(deviceType.id, deviceType)?.enqueue(callback())
+            }
         }
         device_type_close_btn.setOnClickListener { finish() }
+    }
+
+    private fun callback() : Callback<DeviceType> {
+        return object : Callback<DeviceType> {
+            override fun onFailure(call: Call<DeviceType?>, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+            }
+            override fun onResponse(call: Call<DeviceType>?, response: Response<DeviceType>?) {
+                if (response?.isSuccessful == true) {
+                    changeViewMode(false, response.body())
+                    snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                }
+            }
+        }
     }
 
     private fun loadSuppliers() {
@@ -83,16 +106,15 @@ class DeviceTypeActivity : AppCompatActivity() {
         return Gson().fromJson(intent.getStringExtra("deviceType"), DeviceType::class.java)
     }
 
-    private fun getEditModeFromIntent(): Boolean {
-        return intent.getBooleanExtra("editMode",false)
+    private fun isEditMode(): Boolean {
+        return intent.getBooleanExtra("editMode", false)
     }
 
-    private fun changeViewMode(editMode : Boolean) {
-        //todo this is not correct change when update and create is in place
-        val devType = deviceTypeBinding?.deviceType as DeviceType
-        val price = deviceTypeBinding?.deviceTypeEditPrice?.text?.toString()?.toDouble()
-        devType.price = price ?: 0.0
-        devType.supplier = device_type_edit_supplier.selectedItem as Supplier
+    private fun isCreateMode(): Boolean {
+        return intent.getBooleanExtra("createMode", false)
+    }
+
+    private fun changeViewMode(editMode: Boolean, devType: DeviceType?) {
         intent.putExtra("deviceType", Gson().toJson(devType))
         intent.putExtra("editMode", editMode)
         recreate()
