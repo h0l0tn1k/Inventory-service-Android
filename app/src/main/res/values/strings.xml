@@ -58,6 +58,7 @@
     <string name="new_text">New</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
+    <string name="entity_was_deleted">Entity was removed</string>
 
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>
@@ -101,6 +102,9 @@
     <string name="yes">Yes</string>
     <string name="passed_electric_revision">Passed electric revision?</string>
     <string name="inventory_device_present">Device present?</string>
+
+    <string name="name_cannot_be_empty">Entity name cannot be empty</string>
+    <string name="entity_already_exists">Entity \'%1$s\' already exists.</string>
 
     <string name="device_borrowed_by_other_user">This device is borrowed by other user</string>
     <string name="borrow_device_question">Do you want to borrow this device?</string>

@@ -8,21 +8,24 @@ import android.inventory.siemens.cz.siemensinventory.view.ViewEntity
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Path
+import retrofit2.http.*
 
 interface DepartmentsServiceApi {
     
     @GET("departments/")
     fun getDepartments() : Call<List<Department>>
 
-    @GET("departments/{department}")
-    fun getDepartment(@Path("department") departmentId: Long) : Call<Department>
+    @GET("departments/{departmentId}")
+    fun getDepartment(@Path("departmentId") departmentId: Long) : Call<Department>
 
     @POST("departments/")
     fun createDepartment(@Body department: GenericNameEntity?): Call<Department>
+
+    @PUT("departments/{departmentId}")
+    fun updateDepartment(@Path("departmentId") departmentId: Long, @Body department: ViewEntity?): Call<Department>
+
+    @DELETE("departments/{departmentId}")
+    fun deleteDepartment(@Path("departmentId") departmentId: Long) : Call<Void>
 
     object Factory {
         fun create(context : Context): DepartmentsServiceApi {

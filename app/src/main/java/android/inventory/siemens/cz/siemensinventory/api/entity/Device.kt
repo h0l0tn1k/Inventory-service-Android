@@ -10,13 +10,13 @@ class Device(
         var serialNumber: String,
         var barcodeNumber: String,
         var deviceType: DeviceType,
-        var department: Department,
+        var department: Department?,
         var calibration: DeviceCalibration,
         var revision: DeviceElectricRevision,
         var holder: LoginUserScd?,
         var owner: LoginUserScd?,
-        var project: Project,
-        var companyOwner: CompanyOwner,
+        var project: Project?,
+        var companyOwner: CompanyOwner?,
         var comment: String,
         var nstValue: String,
         var defaultLocation: String,
@@ -45,5 +45,26 @@ class Device(
             return ""
         }
         return inventoryNumber as String
+    }
+
+    fun getDepartmentName(): String {
+        if (department == null) {
+            return "-"
+        }
+        return department?.name.toString()
+    }
+
+    fun getCompanyOwnerName(): String {
+        if (companyOwner == null) {
+            return "-"
+        }
+        return companyOwner?.name.toString()
+    }
+
+    fun getProjectName(): String {
+        if (project == null) {
+            return "-"
+        }
+        return project?.name.toString()
     }
 }

@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="viewMode" type="android.inventory.siemens.cz.siemensinventory.view.ViewMode"/>
+    </data>
+    <RelativeLayout
+        android:id="@+id/activity_create_edit_layout"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".view.CreateEditNewEntityActivity">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:layout_centerVertical="true">
+            <TextView
+                android:id="@+id/activity_create_edit_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="30sp"
+                android:text="Something"/>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/generic_entity_edit_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:visibility="@{viewMode.getVisibilityForEdit()}">
+
+                <EditText
+                    android:id="@+id/activity_create_edit_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Enter"
+                    android:inputType="text"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <LinearLayout
+                android:id="@+id/generic_entity_read_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:visibility="@{viewMode.getVisibilityForRead()}">
+
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_weight="1"
+                    android:gravity="start|center_horizontal"
+                    android:shadowRadius="2"
+                    android:text="@string/name"
+                    android:textColor="@color/lightBlack"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/activity_create_read_name"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_weight="1"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/generic_entity_result_section"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:padding="5dp"
+            android:layout_alignParentBottom="true">
+
+            <Button
+                android:id="@+id/generic_entity_save_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Colored"
+                android:text="@string/save"
+                android:visibility="@{viewMode.getVisibilityForEdit()}"/>
+
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/generic_entity_edit_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="@string/edit"
+                android:visibility="@{viewMode.getShowUserEdit()}"/>
+
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/generic_entity_delete_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="@string/delete"
+                android:visibility="@{viewMode.getShowUserEdit()}"/>
+
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/generic_entity_close_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="@string/close"
+                android:visibility="@{viewMode.getVisibilityForRead()}"/>
+
+            <Button
+                android:layout_marginStart="10dp"
+                android:id="@+id/generic_entity_cancel_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
+                android:text="@string/cancel"
+                android:visibility="@{viewMode.getVisibilityForEdit()}"/>
+        </LinearLayout>
+
+    </RelativeLayout>
+</layout>

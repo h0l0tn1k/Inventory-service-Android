@@ -40,7 +40,7 @@ class InventoryListAdapter(
         locationTv.text = device.defaultLocation
 
         val departmentTv = view.findViewById(R.id.device_item_department_tv) as TextView
-        departmentTv.text = device.department.name
+        departmentTv.text = device.getDepartmentName()
 
         return view
     }

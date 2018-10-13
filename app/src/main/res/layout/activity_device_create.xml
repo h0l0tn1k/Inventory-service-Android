@@ -292,7 +292,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:text="@{device.department.name}"
+                    android:text="@{device.getDepartmentName()}"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -327,13 +327,13 @@
                     android:text=""
                     android:visibility="gone" />
 
-                <EditText
+                <TextView
                     android:id="@+id/device_read_company_owner"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:text=""
+                    android:text="@{device.getCompanyOwnerName()}"
                     android:visibility="gone" />
             </LinearLayout>
 
@@ -368,13 +368,13 @@
                     android:text=""
                     android:visibility="gone" />
 
-                <EditText
+                <TextView
                     android:id="@+id/device_read_project"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:layout_weight="1"
-                    android:text=""
+                    android:text="@{device.getProjectName()}"
                     android:visibility="gone" />
             </LinearLayout>
 

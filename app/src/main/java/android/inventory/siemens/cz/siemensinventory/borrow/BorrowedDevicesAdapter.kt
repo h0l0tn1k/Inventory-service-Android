@@ -35,10 +35,10 @@ class BorrowedDevicesAdapter(
         serialNumberTv.text = device.serialNumber
 
         val projectNameTv = view.findViewById(R.id.borrowed_device_item_project_name_tv) as TextView
-        projectNameTv.text = device.project.name
+        projectNameTv.text = device.getProjectName()
 
         val departmentNameTv = view.findViewById(R.id.borrowed_device_item_department_name_tv) as TextView
-        departmentNameTv.text = device.department.name
+        departmentNameTv.text = device.getDepartmentName()
 
         val deviceStateNameTv = view.findViewById(R.id.borrowed_device_item_device_state_tv) as TextView
         deviceStateNameTv.text = device.deviceState.name

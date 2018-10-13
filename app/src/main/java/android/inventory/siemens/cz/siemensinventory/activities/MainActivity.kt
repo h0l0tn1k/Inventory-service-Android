@@ -154,7 +154,7 @@ class MainActivity : AppCompatActivity() {
                 ViewType.Projects
             }
         }
-        intent.putExtra("viewtype", viewType.toString())
+        intent.putExtra("viewType", viewType.toString())
 
         return intent
     }

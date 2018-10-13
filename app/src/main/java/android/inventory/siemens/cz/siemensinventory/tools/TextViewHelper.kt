@@ -28,7 +28,7 @@ class TextViewHelper {
     }
 
     fun isNotEmpty(field: TextView?, errorMessage : String? = null) : TextViewHelper {
-        if(field?.text.toString().isEmpty()) {
+        if(field?.text.toString().trim().isEmpty()) {
             setErrorAndShake(field, errorMessage)
             isValid = false
         }
@@ -40,8 +40,8 @@ class TextViewHelper {
         if(message == null) {
             message = context?.getString(R.string.field_empty)
         }
-
         field?.error = message
         field?.startAnimation(AnimationUtils.loadAnimation(context, R.anim.shake))
+        isValid = false
     }
 }

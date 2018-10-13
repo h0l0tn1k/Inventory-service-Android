@@ -1,20 +1,15 @@
 package android.inventory.siemens.cz.siemensinventory.view
 
-import android.content.Context
+import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.data.AppData
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.AdapterView
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_view_entity.*
-import android.widget.EditText
-import android.view.ViewGroup
-import android.view.LayoutInflater
-import android.content.DialogInterface
-import android.inventory.siemens.cz.siemensinventory.api.entity.GenericNameEntity
-import android.content.Context.INPUT_METHOD_SERVICE
-import android.view.inputmethod.InputMethodManager
 
 
 class ViewEntityActivity : AppCompatActivity() {
@@ -22,6 +17,8 @@ class ViewEntityActivity : AppCompatActivity() {
     private var adapter: ViewEntityAdapter? = null
     private var viewType: ViewType? = null
     private var dataProvider: ViewEntityDataProvider? = null
+    private var snackbarNotifier: SnackbarNotifier? = null
+    private val NEW_EDIT_ENTITY_ACTIVITY_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,28 +29,44 @@ class ViewEntityActivity : AppCompatActivity() {
         loadData()
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == NEW_EDIT_ENTITY_ACTIVITY_REQUEST_CODE) {
+            loadData()
+        }
+    }
+
     private fun initView() {
         setView()
+        snackbarNotifier = SnackbarNotifier(generic_entity_layout, this)
         view_generic_addNew.visibility = if (AppData.loginUserScd?.flagWrite == true) View.VISIBLE else View.GONE
         view_generic_addNew.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setTitle(getDialogTitleString())
-            val viewInflated = LayoutInflater.from(this).inflate(R.layout.dialog_new_generic_entity, null)
-            val input = viewInflated.findViewById(R.id.input) as EditText
-            input.hint = getDialogInputHintString()
-            input.requestFocus()
-            builder.setView(viewInflated)
-            builder.setPositiveButton(getString(R.string.create)) { _, _ ->
-                //todo validation
-                dataProvider?.createData(GenericNameEntity(input.text.toString()))
-            }
-            builder.setNegativeButton(getString(R.string.cancel)) { dialog, _ -> dialog.cancel() }
-            builder.show()
+            startCreateEditEntity()
         }
         adapter = ViewEntityAdapter(this, emptyList())
         view_generic_list_view.adapter = getAdapter()
+        view_generic_list_view.onItemClickListener = AdapterView.OnItemClickListener { adapter, _, position, _ ->
+            startEntityActivity(adapter?.getItemAtPosition(position) as ViewEntity)
+        }
         dataProvider = ViewEntityDataProvider(this, getViewType(), getAdapter())
         view_entity_layout.setOnRefreshListener { loadData() }
+    }
+
+    private fun startCreateEditEntity() {
+        val newEditEntityIntent = Intent(this, CreateEditNewEntityActivity::class.java)
+        newEditEntityIntent.putExtra("viewType", getViewType().toString())
+        newEditEntityIntent.putExtra("editMode", true)
+        newEditEntityIntent.putExtra("createMode", true)
+        newEditEntityIntent.putExtra("existingEntityNames", adapter?.getList()?.map { x -> x.name }?.toTypedArray())
+        startActivityForResult(newEditEntityIntent, NEW_EDIT_ENTITY_ACTIVITY_REQUEST_CODE)
+    }
+
+    private fun startEntityActivity(entity: ViewEntity) {
+        val newEditEntityIntent = Intent(this, CreateEditNewEntityActivity::class.java)
+        newEditEntityIntent.putExtra("viewType", getViewType().toString())
+        newEditEntityIntent.putExtra("entity", Gson().toJson(entity))
+        newEditEntityIntent.putExtra("existingEntityNames", adapter?.getList()?.map { x -> x.name }?.toTypedArray())
+        startActivityForResult(newEditEntityIntent, NEW_EDIT_ENTITY_ACTIVITY_REQUEST_CODE)
     }
 
     fun hideProgressBar() {
@@ -80,30 +93,12 @@ class ViewEntityActivity : AppCompatActivity() {
     private fun getViewType(): ViewType {
         if (viewType == null) {
             try {
-                viewType = ViewType.valueOf(intent.getStringExtra("viewtype"))
+                viewType = ViewType.valueOf(intent.getStringExtra("viewType"))
             } catch (ex: IllegalArgumentException) {
-                throw IllegalArgumentException("Variable 'viewtype' is not specified.")
+                throw IllegalArgumentException("Variable 'viewType' is not specified.")
             }
         }
 
         return viewType as ViewType
-    }
-
-    private fun getDialogTitleString() : String {
-        return when (getViewType()) {
-            ViewType.Departments -> getString(R.string.new_department)
-            ViewType.CompanyOwners -> getString(R.string.new_company_owner)
-            ViewType.Suppliers -> getString(R.string.new_supplier)
-            ViewType.Projects -> getString(R.string.new_project)
-        }
-    }
-
-    private fun getDialogInputHintString() : String {
-        return when (getViewType()) {
-            ViewType.Departments -> getString(R.string.department)
-            ViewType.CompanyOwners -> getString(R.string.company_owner)
-            ViewType.Suppliers -> getString(R.string.supplier)
-            ViewType.Projects -> getString(R.string.project)
-        }
     }
 }

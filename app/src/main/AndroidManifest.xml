@@ -62,9 +62,13 @@
         <activity
             android:name=".activities.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".devicetype.DeviceTypesListActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".devicetype.DeviceTypeActivity"
+        <activity
+            android:name=".devicetype.DeviceTypesListActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".devicetype.DeviceTypeActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".view.CreateEditNewEntityActivity"
             android:theme="@style/AppTheme.NoActionBar"/>
     </application>
 
