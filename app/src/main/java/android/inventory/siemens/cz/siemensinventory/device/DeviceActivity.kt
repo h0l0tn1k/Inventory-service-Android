@@ -1,15 +1,13 @@
 package android.inventory.siemens.cz.siemensinventory.device
 
+import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.CalibrationServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.ElectricRevisionServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.*
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowDialog
-import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationResult
 import android.inventory.siemens.cz.siemensinventory.data.AppData
-import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionResult
 import android.os.Bundle
 import com.google.gson.Gson
 import android.view.View
@@ -21,46 +19,56 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
 import android.databinding.DataBindingUtil
+import android.inventory.siemens.cz.siemensinventory.api.*
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
 import android.inventory.siemens.cz.siemensinventory.tools.DateParser
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.EditText
 import android.widget.RadioButton
 import kotlinx.android.synthetic.main.device_borrow_section.*
 import java.util.*
 
 
-class DeviceActivity : DevActivity() {
+class DeviceActivity : AppCompatActivity() {
 
+    private val EDIT_DEVICE_ACTIVITY_REQUEST_CODE = 0
     private var device : Device? = null
-    private var deviceApi = DeviceServiceApi.Factory.create(this)
-    private var electricRevisionApi = ElectricRevisionServiceApi.Factory.create(this)
-    private var calibrationApi = CalibrationServiceApi.Factory.create(this)
     private var deviceIntent : DeviceIntent? = null
     private val resultParameterName : String = "result"
     private var deviceBinding: ActivityDeviceCreateBinding? = null
     private val calendar = Calendar.getInstance()
+    private var snackbarNotifier: SnackbarNotifier? = null
+
+    //apis
+    private var deviceApi = DeviceServiceApi.Factory.create(this)
+    private var electricRevisionApi = ElectricRevisionServiceApi.Factory.create(this)
+    private var calibrationApi = CalibrationServiceApi.Factory.create(this)
+    private var deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
+    private var loginUserApi = LoginUsersScdApi.Factory.create(this)
+    private var departmentApi = DepartmentsServiceApi.Factory.create(this)
+    private var companyOwnerApi = CompanyOwnerServiceApi.Factory.create(this)
+    private var projectApi = ProjectServiceApi.Factory.create(this)
+    private var deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
+
+    private val deviceTypes = arrayListOf<DeviceType>()
+    private val departments = arrayListOf<Department>()
+    private val companyOwners = arrayListOf<CompanyOwner>()
+    private val projects = arrayListOf<Project>()
+    private val deviceStates = arrayListOf<DeviceState>()
+    private val users = arrayListOf<LoginUserScd>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_create)
         deviceBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_create) as ActivityDeviceCreateBinding
+        snackbarNotifier = SnackbarNotifier(activity_device_layout, this)
 
         device = getDeviceFromIntent()
         deviceBinding?.device = device
         handleIntent()
-    }
-
-    private fun handleIntent() {
-        deviceIntent = DeviceIntent.valueOf(intent.getStringExtra("intent"))
-
-        when(deviceIntent) {
-            DeviceIntent.BORROW -> { setBorrowView() }
-            DeviceIntent.CALIBRATION -> { setCalibrationView() }
-            DeviceIntent.EL_REVISION -> { setElRevisionView() }
-            DeviceIntent.INVENTORY -> { setInventoryView() }
-            else -> { }
-        }
-        device_close_btn.setOnClickListener { finish() }
     }
 
     private fun setBorrowView() {
@@ -148,13 +156,202 @@ class DeviceActivity : DevActivity() {
         setHolder(AppData.loginUserScd)
     }
 
+    private fun loadDeviceTypes() {
+        deviceTypeApi.getDeviceTypes().enqueue(object : Callback<List<DeviceType>> {
+            override fun onFailure(call: Call<List<DeviceType>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<DeviceType>>?, response: Response<List<DeviceType>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        deviceTypes.addAll(response.body() as List<DeviceType>)
+                    }
+                    device_edit_device_type.adapter = ArrayAdapter<DeviceType>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, deviceTypes)
+                    device_edit_device_type.setSelection(deviceTypes.indexOf(deviceBinding?.device?.deviceType))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadUsers() {
+        loginUserApi.getUsers().enqueue(object: Callback<List<LoginUserScd>> {
+            override fun onFailure(call: Call<List<LoginUserScd>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<LoginUserScd>>?, response: Response<List<LoginUserScd>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        users.addAll(response.body() as List<LoginUserScd>)
+                    }
+                    //add empty user option
+                    users.add(0, LoginUserScd(0, 0))
+                    device_edit_owner.adapter = ArrayAdapter<LoginUserScd>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, users)
+                    device_edit_owner.setSelection(users.indexOf(deviceBinding?.device?.owner))
+                    device_edit_holder.adapter = ArrayAdapter<LoginUserScd>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, users)
+                    device_edit_holder.setSelection(users.indexOf(deviceBinding?.device?.holder))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadDepartments() {
+        departmentApi.getDepartments().enqueue(object : Callback<List<Department>> {
+            override fun onFailure(call: Call<List<Department>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<Department>>?, response: Response<List<Department>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        departments.addAll(response.body() as List<Department>)
+                    }
+                    device_edit_department.adapter = ArrayAdapter<Department>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, departments)
+                    device_edit_department.setSelection(departments.indexOf(deviceBinding?.device?.department))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadCompanyOwners() {
+        companyOwnerApi.getCompanyOwners().enqueue(object: Callback<List<CompanyOwner>> {
+            override fun onFailure(call: Call<List<CompanyOwner>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<CompanyOwner>>?, response: Response<List<CompanyOwner>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        companyOwners.addAll(response.body() as List<CompanyOwner>)
+                    }
+                    device_edit_company_owner.adapter = ArrayAdapter<CompanyOwner>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, companyOwners)
+                    device_edit_company_owner.setSelection(companyOwners.indexOf(deviceBinding?.device?.companyOwner))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadProjects() {
+        projectApi.getProjects().enqueue(object: Callback<List<Project>> {
+            override fun onFailure(call: Call<List<Project>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<Project>>?, response: Response<List<Project>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        projects.addAll(response.body() as List<Project>)
+                    }
+                    device_edit_project.adapter = ArrayAdapter<Project>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, projects)
+                    device_edit_project.setSelection(projects.indexOf(deviceBinding?.device?.project))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadDeviceStates() {
+        deviceStateApi.getDeviceStates().enqueue(object : Callback<List<DeviceState>> {
+            override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
+                snackbarNotifier?.show(getString(R.string.error_loading_data))
+            }
+            override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
+                if (response?.isSuccessful == true) {
+                    if (response.body() != null) {
+                        deviceStates.addAll(response.body() as List<DeviceState>)
+                    }
+                    device_edit_status.adapter = ArrayAdapter<DeviceState>(this@DeviceActivity,
+                            android.R.layout.simple_spinner_dropdown_item, deviceStates)
+                    device_edit_status.setSelection(deviceStates.indexOf(deviceBinding?.device?.deviceState))
+                } else {
+                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                }
+            }
+        })
+    }
+
+    private fun loadSpinnerValues() {
+        loadDeviceTypes()
+        loadDepartments()
+        loadCompanyOwners()
+        loadProjects()
+        loadDeviceStates()
+        loadUsers()
+    }
+
+    private fun setEditView() {
+        loadSpinnerValues()
+
+        device_save_btn.setOnClickListener {
+            //todo validation?
+            val device = deviceBinding?.device as Device
+            device.deviceType = device_edit_device_type.selectedItem as DeviceType
+            device.department = device_edit_department.selectedItem as Department?
+            device.companyOwner = device_edit_company_owner.selectedItem as CompanyOwner?
+            device.project = device_edit_project.selectedItem as Project?
+            device.deviceState = device_edit_status.selectedItem as DeviceState
+
+            val owner = device_edit_owner.selectedItem as LoginUserScd
+            device.owner = if (owner.isEmptyUser() == true) null else owner
+            val holder = device_edit_holder.selectedItem as LoginUserScd
+            device.holder = if (holder.isEmptyUser() == true) null else holder
+
+            deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
+                override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                    snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                }
+                override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                    if (response?.isSuccessful == true) {
+                        intent.putExtra("device", Gson().toJson(response.body()))
+                        snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                        setResult(Activity.RESULT_OK, intent)
+                        finish()
+                    } else {
+                        snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                    }
+                }
+            })
+        }
+        device_edit_btn.visibility = View.GONE
+        device_read_qr_code.visibility = View.VISIBLE
+        device_edit_device_type.visibility = View.VISIBLE
+        device_edit_serial_number.visibility = View.VISIBLE
+        device_edit_owner.visibility = View.VISIBLE
+        device_edit_holder.visibility = View.VISIBLE
+        device_edit_default_location.visibility = View.VISIBLE
+        device_edit_department.visibility = View.VISIBLE
+
+        device_layout_company_owner.visibility = View.VISIBLE
+        device_edit_company_owner.visibility = View.VISIBLE
+
+        device_layout_project.visibility = View.VISIBLE
+        device_edit_project.visibility = View.VISIBLE
+
+        device_layout_nst.visibility = View.VISIBLE
+        device_edit_nst.visibility = View.VISIBLE
+
+        device_layout_status.visibility = View.VISIBLE
+        device_edit_status.visibility = View.VISIBLE
+
+        device_layout_comment.visibility = View.VISIBLE
+        device_edit_comment.visibility = View.VISIBLE
+    }
+
     private fun setInventoryView() {
         displayGenericConfirmationLayout()
 
         device_save_btn.setOnClickListener { saveInventoryState() }
-        device_edit_btn.setOnClickListener {
-            //TODO go to edit device mode
-        }
 
         //layouts
         device_layout_department.visibility = View.GONE
@@ -255,48 +452,21 @@ class DeviceActivity : DevActivity() {
         device_close_btn.setOnClickListener { finish() }
     }
 
-    override fun setPassedRevisionParams(result: ElectricRevisionResult) {
-        this.device?.revision?.revisionInterval = result.period
-
-        electricRevisionApi.createElectricRevision(this.device?.revision).enqueue(object : Callback<DeviceElectricRevision> {
-            override fun onResponse(call: Call<DeviceElectricRevision>?, response: Response<DeviceElectricRevision>?) {
-                if(response?.isSuccessful == true) {
-                    Toast.makeText(this@DeviceActivity, "Electric Revision updated", Toast.LENGTH_LONG).show()
-                    device?.revision = response.body() as DeviceElectricRevision
-                    setResult(RESULT_OK, intent)
-                    finish()
-                } else {
-                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-                }
-            }
-            override fun onFailure(call: Call<DeviceElectricRevision>?, t: Throwable?) {
-                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-            }
-        })
+    private fun startDeviceEditActivity(editMode: Boolean, device: Device?) {
+        val deviceActivity = Intent(this, DeviceActivity::class.java)
+        deviceActivity.putExtra("device", Gson().toJson(device))
+        deviceActivity.putExtra("intent", DeviceIntent.EDIT.toString())
+        deviceActivity.putExtra("editMode", editMode)
+        startActivityForResult(deviceActivity, EDIT_DEVICE_ACTIVITY_REQUEST_CODE)
     }
 
-    override fun setCalibrationParams(result: CalibrationResult) {
-        device?.calibration?.lastCalibrationDateString = SimpleDateFormat("yyyy-MM-dd").format(result.date)
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
-        calibrationApi.createCalibrations(device?.calibration).enqueue(object : Callback<DeviceCalibration> {
-            override fun onResponse(call: Call<DeviceCalibration>?, response: Response<DeviceCalibration>?) {
-                if(response?.isSuccessful == true) {
-                    Toast.makeText(this@DeviceActivity, "Calibration updated", Toast.LENGTH_LONG).show()
-                    device?.calibration = response.body() as DeviceCalibration
-                    setResult(RESULT_OK, intent)
-                    finish()
-                } else {
-                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-                }
-            }
-            override fun onFailure(call: Call<DeviceCalibration>?, t: Throwable?) {
-                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-            }
-        })
-
-        intent.putExtra(resultParameterName, Gson().toJson(result))
-        setResult(RESULT_OK, intent)
-        finish()
+        if(requestCode == EDIT_DEVICE_ACTIVITY_REQUEST_CODE && Activity.RESULT_OK == resultCode) {
+            intent.putExtra("device", data?.getStringExtra("device"))
+            recreate()
+        }
     }
 
     private fun isBorrowedByCurrentUser() : Boolean {
@@ -307,7 +477,24 @@ class DeviceActivity : DevActivity() {
         return device?.holder?.id == null
     }
 
-    override fun getDeviceFromIntent(): Device? {
+    private fun getDeviceFromIntent(): Device? {
         return Gson().fromJson(intent.getStringExtra("device"), Device::class.java)
+    }
+
+    private fun handleIntent() {
+        deviceIntent = DeviceIntent.valueOf(intent.getStringExtra("intent"))
+
+        when(deviceIntent) {
+            DeviceIntent.BORROW -> { setBorrowView() }
+            DeviceIntent.CALIBRATION -> { setCalibrationView() }
+            DeviceIntent.EL_REVISION -> { setElRevisionView() }
+            DeviceIntent.INVENTORY -> { setInventoryView() }
+            DeviceIntent.EDIT -> { setEditView() }
+            else -> { }
+        }
+        device_close_btn.setOnClickListener { finish() }
+        device_edit_btn.setOnClickListener {
+            startDeviceEditActivity(true, getDeviceFromIntent())
+        }
     }
 }

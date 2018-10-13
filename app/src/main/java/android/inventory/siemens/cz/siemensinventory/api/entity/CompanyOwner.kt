@@ -7,5 +7,4 @@ import android.inventory.siemens.cz.siemensinventory.view.ViewEntity
  */
 class CompanyOwner(id: Long, name: String)
     : ViewEntity(id, name) {
-
 }

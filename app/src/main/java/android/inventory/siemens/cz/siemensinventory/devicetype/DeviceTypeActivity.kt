@@ -37,7 +37,7 @@ class DeviceTypeActivity : AppCompatActivity() {
         deviceTypeBinding?.viewMode = ViewMode(isEditMode())
         deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
         supplierApi = SupplierServiceApi.Factory.create(this)
-        snackbarNotifier = SnackbarNotifier(activity_device_layout, this)
+        snackbarNotifier = SnackbarNotifier(activity_device_type_layout, this)
 
         loadSuppliers()
         initListeners()

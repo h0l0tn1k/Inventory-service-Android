@@ -9,7 +9,7 @@ import retrofit2.http.GET
 
 interface LoginUsersScdApi {
 
-    @GET("loginusers/")
+    @GET("users/")
     fun getUsers() : Call<List<LoginUserScd>>
 
     object Factory {
