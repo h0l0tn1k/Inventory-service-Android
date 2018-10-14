@@ -34,7 +34,7 @@ class InventoryListAdapter(
         inventoryStateIv.setImageDrawable(context.getDrawable(getInventoryStateIcon(device.inventoryRecord?.inventoryState)))
 
         val deviceNameTv = view.findViewById(R.id.inventory_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (SN: ${device.serialNumber})"
 
         val locationTv = view.findViewById(R.id.device_item_location_tv) as TextView
         locationTv.text = device.defaultLocation

@@ -34,7 +34,7 @@ class ElectricRevisionListAdapter(
         revisionStateIv.setImageDrawable(device.revision?.getDaysLeftIcon(context))
 
         val deviceNameTv = view.findViewById(R.id.el_revision_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (SN: ${device.serialNumber})"
 
         val daysLeftTv = view.findViewById(R.id.el_revision_item_days_left_tv) as TextView
         val daysLeft = device.revision?.getDaysLeft()

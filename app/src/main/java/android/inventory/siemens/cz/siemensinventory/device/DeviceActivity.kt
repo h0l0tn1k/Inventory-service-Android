@@ -44,8 +44,6 @@ class DeviceActivity : AppCompatActivity() {
 
     //apis
     private var deviceApi = DeviceServiceApi.Factory.create(this)
-    private var electricRevisionApi = ElectricRevisionServiceApi.Factory.create(this)
-    private var calibrationApi = CalibrationServiceApi.Factory.create(this)
     private var deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
     private var loginUserApi = LoginUsersScdApi.Factory.create(this)
     private var departmentApi = DepartmentsServiceApi.Factory.create(this)
@@ -53,6 +51,7 @@ class DeviceActivity : AppCompatActivity() {
     private var projectApi = ProjectServiceApi.Factory.create(this)
     private var deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
 
+    //arrays
     private val deviceTypes = arrayListOf<DeviceType>()
     private val departments = arrayListOf<Department>()
     private val companyOwners = arrayListOf<CompanyOwner>()
@@ -419,14 +418,13 @@ class DeviceActivity : AppCompatActivity() {
     private fun saveInventoryState() {
         val checkedInventoryState = findViewById<RadioButton>(device_edit_inventory_result.checkedRadioButtonId)
         device?.inventoryRecord?.inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
-
-        intent.putExtra(resultParameterName, Gson().toJson(device))
-        intent.putExtra("intent", DeviceIntent.INVENTORY.toString())
-        setResult(RESULT_OK, intent)
-        finish()
+        finishActivityWithResult(device)
     }
 
     private fun setCalibrationView() {
+        displayGenericConfirmationLayout()
+
+        device_save_btn.setOnClickListener { saveCalibration() }
         //layouts
         device_layout_holder.visibility = View.GONE
         device_layout_department.visibility = View.GONE
@@ -448,11 +446,16 @@ class DeviceActivity : AppCompatActivity() {
         device_edit_calibration_new_date.setOnClickListener { view -> newDateListener(view) }
     }
 
+    private fun saveCalibration() {
+        device?.calibration?.calibrationInterval = device_edit_calibration_period.selectedItemPosition
+        device?.calibration?.lastCalibrationDateString = device_edit_calibration_new_date.text.toString()
+        finishActivityWithResult(device)
+    }
+
     private fun setElRevisionView() {
         displayGenericConfirmationLayout()
 
-//        device_passed_btn.setOnClickListener { PassedElectricRevisionDialog().showDialog(this) }
-//        device_failed_btn.setOnClickListener { FailedElectricRevisionDialog().showDialog(this) }
+        device_save_btn.setOnClickListener { saveRevisionState() }
 
         device_read_qr_code.visibility = View.VISIBLE
         device_read_device_type.visibility = View.VISIBLE
@@ -475,6 +478,19 @@ class DeviceActivity : AppCompatActivity() {
         device_layout_electric_revision_new_date.visibility = View.VISIBLE
         device_edit_electric_revision_new_date.visibility = View.VISIBLE
         device_edit_electric_revision_new_date.setOnClickListener { view -> newDateListener(view) }
+    }
+
+    private fun saveRevisionState() {
+        device?.revision?.revisionInterval = device_edit_electric_revision_period.selectedItemPosition
+        device?.revision?.lastRevisionDateString = device_edit_electric_revision_new_date.text.toString()
+        finishActivityWithResult(device)
+    }
+
+    private fun finishActivityWithResult(device: Device?) {
+        intent.putExtra(resultParameterName, Gson().toJson(device))
+        intent.putExtra("intent", DeviceIntent.INVENTORY.toString())
+        setResult(RESULT_OK, intent)
+        finish()
     }
 
     private fun newDateListener(it: View?) {
@@ -528,13 +544,26 @@ class DeviceActivity : AppCompatActivity() {
         deviceIntent = DeviceIntent.valueOf(intent.getStringExtra("intent"))
 
         when (deviceIntent) {
-            DeviceIntent.BORROW -> { setBorrowView() }
-            DeviceIntent.CALIBRATION -> { setCalibrationView() }
-            DeviceIntent.EL_REVISION -> { setElRevisionView() }
-            DeviceIntent.INVENTORY -> { setInventoryView() }
-            DeviceIntent.EDIT -> { setEditView() }
-            DeviceIntent.CREATE -> { setCreateView() }
-            else -> { }
+            DeviceIntent.BORROW -> {
+                setBorrowView()
+            }
+            DeviceIntent.CALIBRATION -> {
+                setCalibrationView()
+            }
+            DeviceIntent.EL_REVISION -> {
+                setElRevisionView()
+            }
+            DeviceIntent.INVENTORY -> {
+                setInventoryView()
+            }
+            DeviceIntent.EDIT -> {
+                setEditView()
+            }
+            DeviceIntent.CREATE -> {
+                setCreateView()
+            }
+            else -> {
+            }
         }
         device_close_btn.setOnClickListener { finish() }
         device_edit_btn.setOnClickListener {

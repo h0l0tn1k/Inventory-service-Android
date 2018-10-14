@@ -5,25 +5,19 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.InventoryRecordsServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.LoginUsersScdApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
-import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Bundle
-import android.support.v7.app.AlertDialog.*
+import android.support.v7.app.AlertDialog.Builder
 import android.support.v7.app.AppCompatActivity
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.SearchView
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
-import kotlinx.android.synthetic.main.activity_device_create.*
 import kotlinx.android.synthetic.main.activity_inventory.*
-import kotlinx.android.synthetic.main.dashboard_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -33,9 +27,9 @@ class InventoryActivity : AppCompatActivity(),
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
-    private val scanParameterName = "device_barcode_id"
+    private val scanParameterName = "device"
     private var deviceApi: DeviceServiceApi? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackBarNotifier: SnackbarNotifier? = null
     private var inventoryApi: InventoryRecordsServiceApi? = null
     private var listAdapter: InventoryListAdapter? = null
 
@@ -43,7 +37,7 @@ class InventoryActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inventory)
 
-        snackbarNotifier = SnackbarNotifier(inventory_layout, this)
+        snackBarNotifier = SnackbarNotifier(inventory_layout, this)
         inventoryApi = InventoryRecordsServiceApi.Factory.create(this)
         deviceApi = DeviceServiceApi.Factory.create(this)
 
@@ -126,10 +120,25 @@ class InventoryActivity : AppCompatActivity(),
             if (deviceIntent == DeviceIntent.CREATE) {
                 inventory_search_box.setQuery(device.serialNumber, true)
             } else if (deviceIntent == DeviceIntent.INVENTORY) {
+                val inventoryRecord = device.inventoryRecord as InventoryRecord
+                inventoryApi?.updateInventoryRecord(inventoryRecord.id, inventoryRecord)?.enqueue(object : Callback<InventoryRecord> {
+                    override fun onFailure(call: Call<InventoryRecord>?, t: Throwable?) {
+                        this@InventoryActivity.onFailure()
+                    }
+                    override fun onResponse(call: Call<InventoryRecord>?, response: Response<InventoryRecord>?) {
+                        if (response?.isSuccessful == true) {
+                            snackBarNotifier?.show(getString(R.string.able_to_save_changes))
+                        } else {
+                            this@InventoryActivity.onFailure()
+                        }
+                    }
+                })
                 deviceApi?.updateDevice(device.id, device)?.enqueue(object : Callback<Device> {
                     override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                         if (response?.isSuccessful == true) {
                             loadData()
+                        } else {
+                            this@InventoryActivity.onFailure()
                         }
                     }
                     override fun onFailure(call: Call<Device>?, t: Throwable?) {
@@ -151,7 +160,7 @@ class InventoryActivity : AppCompatActivity(),
                     startDeviceActivity(device)
                 }
             } catch (ex: JsonSyntaxException) {
-                Toast.makeText(this, "Device not found", Toast.LENGTH_LONG).show()
+                snackBarNotifier?.show(getString(R.string.device_doesnt_exist))
             }
         }
     }
@@ -186,7 +195,7 @@ class InventoryActivity : AppCompatActivity(),
     }
 
     private fun onFailure() {
-        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+        snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
         hideProgressBar()
     }
 

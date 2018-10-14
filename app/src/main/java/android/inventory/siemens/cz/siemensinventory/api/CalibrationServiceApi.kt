@@ -7,11 +7,13 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
+import retrofit2.http.PUT
+import retrofit2.http.Path
 
 interface CalibrationServiceApi {
 
-    @POST("calibrations/")
-    fun createCalibrations(@Body calibration: DeviceCalibration?): Call<DeviceCalibration>
+    @PUT("calibrations/{calibrationId}")
+    fun updateCalibration(@Path("calibrationId") calibrationId: Long?, @Body calibration: DeviceCalibration?): Call<DeviceCalibration>
 
     object Factory {
         fun create(context: Context): CalibrationServiceApi {

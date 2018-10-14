@@ -3,19 +3,23 @@ package android.inventory.siemens.cz.siemensinventory.electricrevision
 import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
-import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.ElectricRevisionServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceElectricRevision
+import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
+import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.view.View
 import android.widget.AdapterView
 import android.widget.SearchView
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_electric_revision.*
+import kotlinx.android.synthetic.main.activity_inventory.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,10 +27,12 @@ import retrofit2.Response
 class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
-    private val parameterName = "device_barcode_id"
-    private var deviceApi : DeviceServiceApi? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
-    private var adapter : ElectricRevisionListAdapter? = null
+    private val DEVICE_ACTIVITY_REQUEST_CODE = 1
+    private val scanParameterName = "device"
+    private var deviceApi: DeviceServiceApi? = null
+    private var revisionApi: ElectricRevisionServiceApi? = null
+    private var snackBarNotifier: SnackbarNotifier? = null
+    private var adapter: ElectricRevisionListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +40,9 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
         initLayoutElements()
 
-        snackbarNotifier = SnackbarNotifier(electric_revision_layout, this)
+        snackBarNotifier = SnackbarNotifier(electric_revision_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
+        revisionApi = ElectricRevisionServiceApi.Factory.create(this)
 
         el_revision_scanBtn.setOnClickListener { startScan() }
     }
@@ -65,8 +72,8 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         return false
     }
 
-    private fun updateResultsList(devices : List<Device>, queryEmpty : Boolean) {
-        if(queryEmpty) {
+    private fun updateResultsList(devices: List<Device>, queryEmpty: Boolean) {
+        if (queryEmpty) {
             //el_revision_results_text.visibility = View.GONE
             el_revision_search_results.visibility = View.GONE
             el_revision_no_results_text.visibility = View.GONE
@@ -76,7 +83,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
         //el_revision_results_text.visibility = View.VISIBLE
 
-        if(devices.isEmpty()) {
+        if (devices.isEmpty()) {
             el_revision_no_results_text.visibility = View.VISIBLE
             el_revision_search_results.visibility = View.GONE
         } else {
@@ -91,21 +98,22 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     override fun onQueryTextChange(query: String?): Boolean {
         val queryIsEmpty = query?.isEmpty() == true
 
-        if(isSerialNumberValid(query)) {
+        if (isSerialNumberValid(query)) {
             val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
             showProgressBar()
-            queue?.enqueue( object : Callback<List<Device>> {
+            queue?.enqueue(object : Callback<List<Device>> {
                 override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                    if(response?.isSuccessful == true) {
+                    if (response?.isSuccessful == true) {
                         val devices = response.body() as List<Device>
                         updateResultsList(devices, queryIsEmpty)
                     }
                 }
+
                 override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
                     this@ElectricRevisionActivity.onFailure()
                     hideProgressBar()
                 }
-            } )
+            })
         } else {
             updateResultsList(emptyList(), queryIsEmpty)
         }
@@ -114,8 +122,8 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     }
 
     private fun startScan() {
-        val scanIntent = Intent(this, ScanActivity::class.java )
-        scanIntent.putExtra("parameterName", parameterName)
+        val scanIntent = Intent(this, ScanActivity::class.java)
+        scanIntent.putExtra("parameterName", scanParameterName)
 
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
     }
@@ -123,66 +131,75 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == SCAN_ACTIVITY_REQUEST_CODE) {
-            if (resultCode == Activity.RESULT_OK && data != null) {
-                val deviceBarcodeId = data.getStringExtra(parameterName)
-                if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
-                    val queue = deviceApi?.getDeviceByBarcodeId(deviceBarcodeId)
-                    showProgressBar()
-                    queue?.enqueue(object : Callback<Device> {
-                        override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                            this@ElectricRevisionActivity.onResponse(response)
-                        }
-                        override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                            this@ElectricRevisionActivity.onFailure()
-                        }
-                    })
+        when (requestCode) {
+            SCAN_ACTIVITY_REQUEST_CODE -> handleScanActivityResult(resultCode, data)
+            DEVICE_ACTIVITY_REQUEST_CODE -> handleDeviceActivityResult(resultCode, data)
+        }
+    }
+
+    private fun handleScanActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            try {
+                val device = Gson().fromJson(data.getStringExtra(scanParameterName), Device::class.java)
+                if (device == null) {
+                    snackBarNotifier?.show(getString(R.string.device_doesnt_exist))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.unable_to_scan))
+                    startDeviceActivity(device)
                 }
+            } catch (ex: JsonSyntaxException) {
+                snackBarNotifier?.show(getString(R.string.device_doesnt_exist))
             }
         }
     }
 
-    private fun startDeviceActivity(device : Device) {
+    private fun handleDeviceActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK && data != null) {
+            val deviceIntent = DeviceIntent.valueOf(data.getStringExtra("intent"))
+            val device = Gson().fromJson(data.getStringExtra("result"), Device::class.java)
+            if (deviceIntent == DeviceIntent.CREATE) {
+                inventory_search_box.setQuery(device.serialNumber, true)
+            } else if (deviceIntent == DeviceIntent.INVENTORY) {
+                val revision = device.revision as DeviceElectricRevision
+                revisionApi?.updateRevision(revision.id, revision)?.enqueue(object : Callback<DeviceElectricRevision> {
+                    override fun onFailure(call: Call<DeviceElectricRevision>?, t: Throwable?) {
+                        this@ElectricRevisionActivity.onFailure()
+                    }
+                    override fun onResponse(call: Call<DeviceElectricRevision>?, response: Response<DeviceElectricRevision>?) {
+                        if (response?.isSuccessful == true) {
+                            snackBarNotifier?.show(getString(R.string.able_to_save_changes))
+                            onQueryTextChange(el_revision_search_box.query.toString())
+                        } else {
+                            this@ElectricRevisionActivity.onFailure()
+                        }
+                    }
+                })
+                deviceApi?.updateDevice(device.id, device)?.enqueue(object : Callback<Device> {
+                    override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                        if (response?.isSuccessful != true) {
+                            this@ElectricRevisionActivity.onFailure()
+                        }
+                    }
+                    override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                        this@ElectricRevisionActivity.onFailure()
+                    }
+                })
+            }
+        }
+    }
+
+    private fun startDeviceActivity(device: Device) {
         val deviceIntent = Intent(this@ElectricRevisionActivity, DeviceActivity::class.java)
         deviceIntent.putExtra("device", Gson().toJson(device))
         deviceIntent.putExtra("intent", DeviceIntent.EL_REVISION.toString())
-        startActivity(deviceIntent)
-    }
-
-    private fun startDeviceActivity(response : Response<Device>) {
-        val device = response.body()
-        if(device != null) {
-            startDeviceActivity(device)
-        }
+        startActivityForResult(deviceIntent, DEVICE_ACTIVITY_REQUEST_CODE)
     }
 
     private fun onFailure() {
-        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+        snackBarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
         hideProgressBar()
     }
 
-    private fun onResponse(response: Response<Device>?) {
-        hideProgressBar()
-        if (response?.isSuccessful == true) {
-            startDeviceActivity(response)
-        } else {
-            snackbarNotifier?.show(getResponseMessage(response))
-        }
-    }
-
-    private fun getResponseMessage(response : Response<Device>?) : String {
-        return if (response?.message() != null) {
-            response.message()
-        } else {
-            response.toString()
-        }
-    }
-
-    private fun isSerialNumberValid(query : String?) : Boolean {
+    private fun isSerialNumberValid(query: String?): Boolean {
         return query?.isNotEmpty() == true
     }
 }
-
-
