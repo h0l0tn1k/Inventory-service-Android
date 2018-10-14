@@ -103,6 +103,8 @@
     <string name="passed_electric_revision">Passed electric revision?</string>
     <string name="inventory_device_present">Device present?</string>
 
+    <string name="device_doesnt_exist">Device doesn\'t exist</string>
+    <string name="do_you_want_to_create_new_device">Device with barcode \'%1$s\' not found. Would you like to create new device?</string>
     <string name="name_cannot_be_empty">Entity name cannot be empty</string>
     <string name="entity_already_exists">Entity \'%1$s\' already exists.</string>
 

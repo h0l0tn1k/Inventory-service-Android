@@ -31,10 +31,10 @@ class InventoryListAdapter(
         }
 
         val inventoryStateIv = view?.findViewById(R.id.inventory_item_inventory_state_iv) as ImageView
-        inventoryStateIv.setImageDrawable(context.getDrawable(getInventoryStateIcon(device.inventoryRecord.inventoryState)))
+        inventoryStateIv.setImageDrawable(context.getDrawable(getInventoryStateIcon(device.inventoryRecord?.inventoryState)))
 
         val deviceNameTv = view.findViewById(R.id.inventory_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (${device.serialNumber})"
 
         val locationTv = view.findViewById(R.id.device_item_location_tv) as TextView
         locationTv.text = device.defaultLocation
@@ -45,8 +45,8 @@ class InventoryListAdapter(
         return view
     }
 
-    private fun getInventoryStateIcon(inventoryState: InventoryState): Int {
-        return when (inventoryState.state) {
+    private fun getInventoryStateIcon(inventoryState: InventoryState?): Int {
+        return when (inventoryState?.state) {
             "OK" -> R.drawable.ic_check_green_a700_24dp
             "False" -> R.drawable.ic_close_red_800_24dp
             "Unclear" -> R.drawable.ic_help_yellow_800_24dp

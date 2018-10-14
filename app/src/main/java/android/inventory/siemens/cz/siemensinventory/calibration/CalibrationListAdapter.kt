@@ -32,21 +32,24 @@ class CalibrationListAdapter(
         }
 
         val calibrationStateIv = view?.findViewById(R.id.calibration_item_state_iv) as ImageView
-        calibrationStateIv.setImageDrawable(device.calibration.getDaysLeftIcon(context))
+        calibrationStateIv.setImageDrawable(device.calibration?.getDaysLeftIcon(context))
 
         val deviceNameTv = view.findViewById(R.id.calibration_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (${device.serialNumber})"
 
         val daysLeftTv = view.findViewById(R.id.calibration_item_days_left_tv) as TextView
-        val daysLeft = device.calibration.getDaysLeft()
-        daysLeftTv.text = if (daysLeft == null) "" else daysLeft.toString()
-        daysLeftTv.setTextColor(device.calibration.getDaysLeftColor(context))
+        val daysLeft = device.calibration?.getDaysLeft()
+        daysLeftTv.text = daysLeft?.toString() ?: ""
+        val daysLeftColor = device.calibration?.getDaysLeftColor(context)
+        if(daysLeftColor != null) {
+            daysLeftTv.setTextColor(daysLeftColor)
+        }
 
         val lastCalibrationDateTv = view.findViewById(R.id.calibration_item_last_calibration_date_tv) as TextView
-        lastCalibrationDateTv.text = device.calibration.lastCalibrationDateString
+        lastCalibrationDateTv.text = device.calibration?.lastCalibrationDateString
 
         val calibrationPeriodTv = view.findViewById(R.id.calibration_item_period_tv) as TextView
-        calibrationPeriodTv.text = device.calibration.getPeriodString()
+        calibrationPeriodTv.text = device.calibration?.getPeriodString()
 
         return view
     }

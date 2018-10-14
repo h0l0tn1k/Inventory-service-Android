@@ -4,40 +4,40 @@ import android.app.Activity
 import android.app.DatePickerDialog
 import android.content.DialogInterface
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.*
 import android.inventory.siemens.cz.siemensinventory.api.entity.*
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowDialog
 import android.inventory.siemens.cz.siemensinventory.data.AppData
+import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
+import android.inventory.siemens.cz.siemensinventory.inventory.InventoryRecord
+import android.inventory.siemens.cz.siemensinventory.tools.DateParser
+import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Bundle
-import com.google.gson.Gson
+import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.RadioButton
 import android.widget.Toast
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_device_create.*
+import kotlinx.android.synthetic.main.device_borrow_section.*
 import kotlinx.android.synthetic.main.device_generic_confirmation.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.text.SimpleDateFormat
-import android.databinding.DataBindingUtil
-import android.inventory.siemens.cz.siemensinventory.api.*
-import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
-import android.inventory.siemens.cz.siemensinventory.tools.DateParser
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
-import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.EditText
-import android.widget.RadioButton
-import kotlinx.android.synthetic.main.device_borrow_section.*
 import java.util.*
 
 
 class DeviceActivity : AppCompatActivity() {
 
     private val EDIT_DEVICE_ACTIVITY_REQUEST_CODE = 0
-    private var device : Device? = null
-    private var deviceIntent : DeviceIntent? = null
-    private val resultParameterName : String = "result"
+    private var device: Device? = null
+    private var deviceIntent: DeviceIntent? = null
+    private val resultParameterName: String = "result"
     private var deviceBinding: ActivityDeviceCreateBinding? = null
     private val calendar = Calendar.getInstance()
     private var snackbarNotifier: SnackbarNotifier? = null
@@ -69,6 +69,7 @@ class DeviceActivity : AppCompatActivity() {
         device = getDeviceFromIntent()
         deviceBinding?.device = device
         handleIntent()
+        loadSpinnerValues()
     }
 
     private fun setBorrowView() {
@@ -124,12 +125,12 @@ class DeviceActivity : AppCompatActivity() {
         }
     }
 
-    private fun setHolder(user : LoginUserScd?) {
+    private fun setHolder(user: LoginUserScd?) {
         device?.holder = user
         deviceApi.updateDevice(device?.id, device).enqueue(object : Callback<Device> {
             override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                if(response?.isSuccessful == true) {
-                    if(isBorrowedByCurrentUser()) {
+                if (response?.isSuccessful == true) {
+                    if (isBorrowedByCurrentUser()) {
                         Toast.makeText(this@DeviceActivity, "Device borrowed", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(this@DeviceActivity, "Device returned", Toast.LENGTH_LONG).show()
@@ -142,6 +143,7 @@ class DeviceActivity : AppCompatActivity() {
                     Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
                 }
             }
+
             override fun onFailure(call: Call<Device>?, t: Throwable?) {
                 Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
             }
@@ -161,6 +163,7 @@ class DeviceActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<DeviceType>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<DeviceType>>?, response: Response<List<DeviceType>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -177,10 +180,11 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadUsers() {
-        loginUserApi.getUsers().enqueue(object: Callback<List<LoginUserScd>> {
+        loginUserApi.getUsers().enqueue(object : Callback<List<LoginUserScd>> {
             override fun onFailure(call: Call<List<LoginUserScd>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<LoginUserScd>>?, response: Response<List<LoginUserScd>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -206,6 +210,7 @@ class DeviceActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<Department>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<Department>>?, response: Response<List<Department>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -222,10 +227,11 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadCompanyOwners() {
-        companyOwnerApi.getCompanyOwners().enqueue(object: Callback<List<CompanyOwner>> {
+        companyOwnerApi.getCompanyOwners().enqueue(object : Callback<List<CompanyOwner>> {
             override fun onFailure(call: Call<List<CompanyOwner>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<CompanyOwner>>?, response: Response<List<CompanyOwner>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -242,10 +248,11 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadProjects() {
-        projectApi.getProjects().enqueue(object: Callback<List<Project>> {
+        projectApi.getProjects().enqueue(object : Callback<List<Project>> {
             override fun onFailure(call: Call<List<Project>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<Project>>?, response: Response<List<Project>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -266,6 +273,7 @@ class DeviceActivity : AppCompatActivity() {
             override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
                 snackbarNotifier?.show(getString(R.string.error_loading_data))
             }
+
             override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
                 if (response?.isSuccessful == true) {
                     if (response.body() != null) {
@@ -290,9 +298,18 @@ class DeviceActivity : AppCompatActivity() {
         loadUsers()
     }
 
-    private fun setEditView() {
-        loadSpinnerValues()
+    private fun setCreateView() {
+        setEditView()
+        device_edit_qr_code.visibility = View.VISIBLE
+        device_read_qr_code.visibility = View.GONE
+        device_edit_btn.visibility = View.GONE
+        device_edit_add_date.setText(SimpleDateFormat(DateParser.datePattern, Locale.getDefault()).format(calendar.time))
+        val barcode = intent.getStringExtra("barcode")
+        deviceBinding?.device = Device(id = 0, barcodeNumber = barcode, calibration = DeviceCalibration(0),
+                revision = DeviceElectricRevision(0), inventoryRecord = InventoryRecord(0))
+    }
 
+    private fun setEditView() {
         device_save_btn.setOnClickListener {
             //todo validation?
             val device = deviceBinding?.device as Device
@@ -307,21 +324,42 @@ class DeviceActivity : AppCompatActivity() {
             val holder = device_edit_holder.selectedItem as LoginUserScd
             device.holder = if (holder.isEmptyUser() == true) null else holder
 
-            deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
-                override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                    snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
-                }
-                override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                    if (response?.isSuccessful == true) {
-                        intent.putExtra("device", Gson().toJson(response.body()))
-                        snackbarNotifier?.show(getString(R.string.able_to_save_changes))
-                        setResult(Activity.RESULT_OK, intent)
-                        finish()
-                    } else {
+            if (deviceIntent == DeviceIntent.EDIT) {
+                deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
+                    override fun onFailure(call: Call<Device>?, t: Throwable?) {
                         snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
                     }
-                }
-            })
+
+                    override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                        if (response?.isSuccessful == true) {
+                            intent.putExtra("device", Gson().toJson(response.body()))
+                            snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        } else {
+                            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                        }
+                    }
+                })
+            } else if (deviceIntent == DeviceIntent.CREATE) {
+                deviceApi.createDevice(device).enqueue(object : Callback<Device> {
+                    override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                        snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                    }
+
+                    override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                        if (response?.isSuccessful == true) {
+                            intent.putExtra("result", Gson().toJson(response.body()))
+                            intent.putExtra("intent", DeviceIntent.CREATE.toString())
+                            snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                            setResult(Activity.RESULT_OK, intent)
+                            finish()
+                        } else {
+                            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                        }
+                    }
+                })
+            }
         }
         device_edit_btn.visibility = View.GONE
         device_read_qr_code.visibility = View.VISIBLE
@@ -341,6 +379,9 @@ class DeviceActivity : AppCompatActivity() {
         device_layout_nst.visibility = View.VISIBLE
         device_edit_nst.visibility = View.VISIBLE
 
+        device_edit_add_date.visibility = View.VISIBLE
+        device_edit_add_date.setOnClickListener { view -> newDateListener(view) }
+
         device_layout_status.visibility = View.VISIBLE
         device_edit_status.visibility = View.VISIBLE
 
@@ -355,6 +396,7 @@ class DeviceActivity : AppCompatActivity() {
 
         //layouts
         device_layout_department.visibility = View.GONE
+        device_layout_add_date.visibility = View.GONE
         device_layout_nst.visibility = View.VISIBLE
         device_layout_inventory_number.visibility = View.VISIBLE
         device_layout_inventory_comment.visibility = View.VISIBLE
@@ -379,6 +421,7 @@ class DeviceActivity : AppCompatActivity() {
         device?.inventoryRecord?.inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
 
         intent.putExtra(resultParameterName, Gson().toJson(device))
+        intent.putExtra("intent", DeviceIntent.INVENTORY.toString())
         setResult(RESULT_OK, intent)
         finish()
     }
@@ -425,9 +468,9 @@ class DeviceActivity : AppCompatActivity() {
         device_layout_inventory_number.visibility = View.VISIBLE
         //electric revision
         device_layout_last_el_revision_date.visibility = View.VISIBLE
-            device_read_last_el_revision_date.visibility = View.VISIBLE
+        device_read_last_el_revision_date.visibility = View.VISIBLE
         device_layout_electric_revision_period.visibility = View.VISIBLE
-            device_edit_electric_revision_period.visibility = View.VISIBLE
+        device_edit_electric_revision_period.visibility = View.VISIBLE
         // new rev date
         device_layout_electric_revision_new_date.visibility = View.VISIBLE
         device_edit_electric_revision_new_date.visibility = View.VISIBLE
@@ -463,17 +506,17 @@ class DeviceActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == EDIT_DEVICE_ACTIVITY_REQUEST_CODE && Activity.RESULT_OK == resultCode) {
+        if (requestCode == EDIT_DEVICE_ACTIVITY_REQUEST_CODE && Activity.RESULT_OK == resultCode) {
             intent.putExtra("device", data?.getStringExtra("device"))
             recreate()
         }
     }
 
-    private fun isBorrowedByCurrentUser() : Boolean {
+    private fun isBorrowedByCurrentUser(): Boolean {
         return device?.holder?.id == AppData.loginUserScd?.id
     }
 
-    private fun isBorrowedByNoOne() : Boolean {
+    private fun isBorrowedByNoOne(): Boolean {
         return device?.holder?.id == null
     }
 
@@ -484,12 +527,13 @@ class DeviceActivity : AppCompatActivity() {
     private fun handleIntent() {
         deviceIntent = DeviceIntent.valueOf(intent.getStringExtra("intent"))
 
-        when(deviceIntent) {
+        when (deviceIntent) {
             DeviceIntent.BORROW -> { setBorrowView() }
             DeviceIntent.CALIBRATION -> { setCalibrationView() }
             DeviceIntent.EL_REVISION -> { setElRevisionView() }
             DeviceIntent.INVENTORY -> { setInventoryView() }
             DeviceIntent.EDIT -> { setEditView() }
+            DeviceIntent.CREATE -> { setCreateView() }
             else -> { }
         }
         device_close_btn.setOnClickListener { finish() }

@@ -78,6 +78,7 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                         //todo finish how to handle other responses like 404 Not found
                         intent.putExtra(parameterName, "")
                     }
+                    intent.putExtra("barcode", deviceBarcodeId)
                     setResult(RESULT_OK, intent)
                     finish()
                 }

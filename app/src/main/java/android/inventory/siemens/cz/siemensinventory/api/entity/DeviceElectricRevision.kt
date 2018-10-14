@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit
 //todo refactor with calibration entity
 class DeviceElectricRevision(
         var id: Long,
-        var revisionInterval: Int?,
-        var lastRevisionDateString: String
+        var revisionInterval: Int? = 0,
+        var lastRevisionDateString: String = ""
 ) {
 
     fun getDaysLeft() : Int? {

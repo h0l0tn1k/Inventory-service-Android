@@ -5,20 +5,25 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.InventoryRecordsServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.LoginUsersScdApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
 import android.os.Bundle
-import android.support.v7.app.AlertDialog
+import android.support.v7.app.AlertDialog.*
 import android.support.v7.app.AppCompatActivity
 import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
+import kotlinx.android.synthetic.main.activity_device_create.*
 import kotlinx.android.synthetic.main.activity_inventory.*
+import kotlinx.android.synthetic.main.dashboard_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -97,6 +102,14 @@ class InventoryActivity : AppCompatActivity(),
         hideProgressBar()
     }
 
+    private fun startCreateNewDeviceActivity(barcode: String) {
+        val deviceActivity = Intent(this, DeviceActivity::class.java)
+        deviceActivity.putExtra("barcode", barcode)
+        deviceActivity.putExtra("intent", DeviceIntent.CREATE.toString())
+        startActivityForResult(deviceActivity, DEVICE_ACTIVITY_REQUEST_CODE)
+        hideProgressBar()
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -108,26 +121,35 @@ class InventoryActivity : AppCompatActivity(),
 
     private fun handleDeviceActivityResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
+            val deviceIntent = DeviceIntent.valueOf(data.getStringExtra("intent"))
             val device = Gson().fromJson(data.getStringExtra("result"), Device::class.java)
-            deviceApi?.updateDevice(device.id, device)?.enqueue(object: Callback<Device> {
-                override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                    if (response?.isSuccessful == true) {
-                        loadData()
+            if (deviceIntent == DeviceIntent.CREATE) {
+                inventory_search_box.setQuery(device.serialNumber, true)
+            } else if (deviceIntent == DeviceIntent.INVENTORY) {
+                deviceApi?.updateDevice(device.id, device)?.enqueue(object : Callback<Device> {
+                    override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
+                        if (response?.isSuccessful == true) {
+                            loadData()
+                        }
                     }
-                }
-                override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                            this@InventoryActivity.onFailure()
-                }
-            })
+                    override fun onFailure(call: Call<Device>?, t: Throwable?) {
+                        this@InventoryActivity.onFailure()
+                    }
+                })
+            }
         }
     }
 
     private fun handleScanActivityResult(resultCode: Int, data: Intent?) {
         if (resultCode == Activity.RESULT_OK && data != null) {
             try {
+                val barcode = data.getStringExtra("barcode")
                 val device = Gson().fromJson(data.getStringExtra(scanParameterName), Device::class.java)
-                //todo device might not exist -> create
-                startDeviceActivity(device)
+                if (device == null) {
+                    showDeviceNotFound(barcode)
+                } else {
+                    startDeviceActivity(device)
+                }
             } catch (ex: JsonSyntaxException) {
                 Toast.makeText(this, "Device not found", Toast.LENGTH_LONG).show()
             }
@@ -140,6 +162,7 @@ class InventoryActivity : AppCompatActivity(),
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 this@InventoryActivity.updateData(response)
             }
+
             override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
                 this@InventoryActivity.onFailure()
             }
@@ -172,15 +195,15 @@ class InventoryActivity : AppCompatActivity(),
     }
 
     private fun showDeviceNotFound(barcodeNum: String) {
-        AlertDialog.Builder(this)
-                .setTitle("Device not found")
-                .setMessage("Device with barcode $barcodeNum not found. Would you like to create new device?")
+        Builder(this)
+                .setTitle(getString(R.string.device_doesnt_exist))
+                .setMessage(getString(R.string.do_you_want_to_create_new_device, barcodeNum))
                 .setIcon(resources.getDrawable(android.R.drawable.ic_dialog_alert, theme))
-                .setPositiveButton(android.R.string.yes) { dialog, whichButton
-                    ->
-                    Toast.makeText(this@InventoryActivity, "Yaay", Toast.LENGTH_SHORT).show()
+                .setNegativeButton(getString(R.string.no), null)
+                .setPositiveButton(getString(R.string.yes)) { _, _ ->
+                    startCreateNewDeviceActivity(barcodeNum)
                 }
-                .setNegativeButton(android.R.string.no, null).show()
+                .show()
     }
 
     private fun isSerialNumberValid(query: String?): Boolean {

@@ -32,6 +32,9 @@ interface DeviceServiceApi {
     @PUT("devices/{deviceId}")
     fun updateDevice(@Path("deviceId") deviceId: Long?, @Body device: Device?) : Call<Device>
 
+    @POST("devices/")
+    fun createDevice(@Body device: Device?) : Call<Device>
+
     object Factory {
         fun create(context : Context): DeviceServiceApi {
             //val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()

@@ -31,21 +31,23 @@ class ElectricRevisionListAdapter(
         }
 
         val revisionStateIv = view?.findViewById(R.id.el_revision_item_state_iv) as ImageView
-        revisionStateIv.setImageDrawable(device.revision.getDaysLeftIcon(context))
+        revisionStateIv.setImageDrawable(device.revision?.getDaysLeftIcon(context))
 
         val deviceNameTv = view.findViewById(R.id.el_revision_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType.getDeviceTypeAndVersion()} (${device.serialNumber})"
+        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (${device.serialNumber})"
 
         val daysLeftTv = view.findViewById(R.id.el_revision_item_days_left_tv) as TextView
-        val daysLeft = device.revision.getDaysLeft()
-        daysLeftTv.text = if (daysLeft == null) "" else daysLeft.toString()
-        daysLeftTv.setTextColor(device.revision.getDaysLeftColor(context))
-
+        val daysLeft = device.revision?.getDaysLeft()
+        daysLeftTv.text = daysLeft?.toString() ?: ""
+        val daysLeftColor = device.revision?.getDaysLeftColor(context)
+        if(daysLeftColor != null) {
+            daysLeftTv.setTextColor(daysLeftColor)
+        }
         val lastRevisionDateTv = view.findViewById(R.id.el_revision_last_revision_date_tv) as TextView
-        lastRevisionDateTv.text = device.revision.lastRevisionDateString
+        lastRevisionDateTv.text = device.revision?.lastRevisionDateString
 
         val revisionPeriodTv = view.findViewById(R.id.el_revision_item_period_tv) as TextView
-        revisionPeriodTv.text = device.revision.getPeriodString()
+        revisionPeriodTv.text = device.revision?.getPeriodString()
 
         return view
     }

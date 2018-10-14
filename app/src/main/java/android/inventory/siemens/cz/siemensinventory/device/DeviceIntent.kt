@@ -6,5 +6,6 @@ enum class DeviceIntent {
     DISPLAY,
     INVENTORY,
     EDIT,
-    BORROW
+    BORROW,
+    CREATE
 }

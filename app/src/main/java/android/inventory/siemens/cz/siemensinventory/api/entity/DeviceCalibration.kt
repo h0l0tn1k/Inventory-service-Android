@@ -11,8 +11,8 @@ import java.util.concurrent.TimeUnit
 
 class DeviceCalibration(
         var id: Long,
-        var calibrationInterval: Int?,
-        var lastCalibrationDateString: String
+        var calibrationInterval: Int? = 0,
+        var lastCalibrationDateString: String = ""
 ) {
 
     fun getDaysLeft() : Int? {
