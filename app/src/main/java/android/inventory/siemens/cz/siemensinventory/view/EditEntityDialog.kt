@@ -3,17 +3,9 @@ package android.inventory.siemens.cz.siemensinventory.view
 import android.app.Activity
 import android.content.DialogInterface
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.device.DevActivity
-import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.support.v7.app.AlertDialog
 import android.view.View
 import android.widget.EditText
-import android.widget.TextView
-import com.shawnlin.numberpicker.NumberPicker
-import java.text.SimpleDateFormat
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
-import java.util.*
 
 /**
  * Created by Stefan Matta on 24.03.2018.
@@ -21,7 +13,7 @@ import java.util.*
 
 class EditEntityDialog {
 
-    private var dialogContentView : View? = null
+    private var dialogContentView: View? = null
 
     fun showDialog(context: Activity, entity: ViewEntity) {
         dialogContentView = context.layoutInflater.inflate(R.layout.dialog_edit_entity, null)
@@ -39,7 +31,7 @@ class EditEntityDialog {
         dialog.show()
     }
 
-    private fun getNameEditText() : EditText {
+    private fun getNameEditText(): EditText {
         return dialogContentView?.findViewById(R.id.dialog_edit_entity_name) as EditText
     }
 

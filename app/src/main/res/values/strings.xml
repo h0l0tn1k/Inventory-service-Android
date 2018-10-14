@@ -118,6 +118,7 @@
     <string name="default_location">Default Location</string>
     <string name="qr_code_value">QR Code Value</string>
     <string name="device_type">Device type</string>
+    <string name="select_device_type">Select device type</string>
     <string name="owner">Owner</string>
     <string name="inventory_number">Inventory Number</string>
     <string name="company_owner">Company Owner</string>

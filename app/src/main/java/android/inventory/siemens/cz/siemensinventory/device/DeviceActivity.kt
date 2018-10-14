@@ -324,13 +324,16 @@ class DeviceActivity : AppCompatActivity() {
             })
         }
         device_edit_btn.visibility = View.GONE
-        device_read_qr_code.visibility = View.VISIBLE
+        device_edit_serial_number.visibility = View.VISIBLE
+        device_edit_qr_code.visibility = View.VISIBLE
         device_edit_device_type.visibility = View.VISIBLE
         device_edit_serial_number.visibility = View.VISIBLE
         device_edit_owner.visibility = View.VISIBLE
-        device_edit_holder.visibility = View.VISIBLE
         device_edit_default_location.visibility = View.VISIBLE
         device_edit_department.visibility = View.VISIBLE
+
+        device_layout_holder.visibility = View.GONE
+        device_layout_electric_revision_new_date.visibility = View.GONE
 
         device_layout_company_owner.visibility = View.VISIBLE
         device_edit_company_owner.visibility = View.VISIBLE
@@ -340,6 +343,9 @@ class DeviceActivity : AppCompatActivity() {
 
         device_layout_nst.visibility = View.VISIBLE
         device_edit_nst.visibility = View.VISIBLE
+
+        device_edit_add_date.visibility = View.VISIBLE
+        device_edit_add_date.setOnClickListener { view -> newDateListener(view) }
 
         device_layout_status.visibility = View.VISIBLE
         device_edit_status.visibility = View.VISIBLE
