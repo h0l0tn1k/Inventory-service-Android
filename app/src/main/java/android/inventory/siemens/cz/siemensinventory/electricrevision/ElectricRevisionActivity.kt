@@ -10,7 +10,7 @@ import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceElectricRe
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -31,7 +31,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     private val scanParameterName = "device"
     private var deviceApi: DeviceServiceApi? = null
     private var revisionApi: ElectricRevisionServiceApi? = null
-    private var snackBarNotifier: SnackbarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
     private var adapter: ElectricRevisionListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,7 +40,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
         initLayoutElements()
 
-        snackBarNotifier = SnackbarNotifier(electric_revision_layout, this)
+        snackBarNotifier = SnackBarNotifier(electric_revision_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
         revisionApi = ElectricRevisionServiceApi.Factory.create(this)
 
@@ -99,7 +99,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         val queryIsEmpty = query?.isEmpty() == true
 
         if (isSerialNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
+            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
             showProgressBar()
             queue?.enqueue(object : Callback<List<Device>> {
                 override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
@@ -142,7 +142,8 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
             try {
                 val device = Gson().fromJson(data.getStringExtra(scanParameterName), Device::class.java)
                 if (device == null) {
-                    snackBarNotifier?.show(getString(R.string.device_doesnt_exist))
+                    val barcode = data.getStringExtra("barcode")
+                    snackBarNotifier?.show(getString(R.string.device_with_barcode_not_found, barcode))
                 } else {
                     startDeviceActivity(device)
                 }

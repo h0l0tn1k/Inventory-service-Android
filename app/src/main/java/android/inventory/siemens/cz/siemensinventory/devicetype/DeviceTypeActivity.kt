@@ -6,13 +6,11 @@ import android.inventory.siemens.cz.siemensinventory.api.DeviceTypeServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
-import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceType2Binding
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewMode
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import android.view.View
 import android.widget.ArrayAdapter
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_device_type2.*
@@ -26,7 +24,7 @@ class DeviceTypeActivity : AppCompatActivity() {
     private var deviceTypeApi: DeviceTypeServiceApi? = null
     private var supplierApi: SupplierServiceApi? = null
     private val suppliers = arrayListOf<Supplier>()
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackbarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,7 +35,7 @@ class DeviceTypeActivity : AppCompatActivity() {
         deviceTypeBinding?.viewMode = ViewMode(isEditMode())
         deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
         supplierApi = SupplierServiceApi.Factory.create(this)
-        snackbarNotifier = SnackbarNotifier(activity_device_type_layout, this)
+        snackbarNotifier = SnackBarNotifier(activity_device_type_layout, this)
 
         loadSuppliers()
         initListeners()

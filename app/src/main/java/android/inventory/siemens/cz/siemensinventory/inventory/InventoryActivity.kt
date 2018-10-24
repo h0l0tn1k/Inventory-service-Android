@@ -9,7 +9,7 @@ import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v7.app.AlertDialog.Builder
 import android.support.v7.app.AppCompatActivity
@@ -29,7 +29,7 @@ class InventoryActivity : AppCompatActivity(),
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val scanParameterName = "device"
     private var deviceApi: DeviceServiceApi? = null
-    private var snackBarNotifier: SnackbarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
     private var inventoryApi: InventoryRecordsServiceApi? = null
     private var listAdapter: InventoryListAdapter? = null
 
@@ -37,7 +37,7 @@ class InventoryActivity : AppCompatActivity(),
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_inventory)
 
-        snackBarNotifier = SnackbarNotifier(inventory_layout, this)
+        snackBarNotifier = SnackBarNotifier(inventory_layout, this)
         inventoryApi = InventoryRecordsServiceApi.Factory.create(this)
         deviceApi = DeviceServiceApi.Factory.create(this)
 
@@ -60,10 +60,8 @@ class InventoryActivity : AppCompatActivity(),
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        val queryIsEmpty = query?.isEmpty() == true
-
-        if (isSerialNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
+        if (isSerialOrBarcodeNumberValid(query)) {
+            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
             showProgressBar()
             queue?.enqueue(object : Callback<List<Device>> {
                 override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
@@ -215,7 +213,7 @@ class InventoryActivity : AppCompatActivity(),
                 .show()
     }
 
-    private fun isSerialNumberValid(query: String?): Boolean {
+    private fun isSerialOrBarcodeNumberValid(query: String?): Boolean {
         return query?.isNotEmpty() == true
     }
 }

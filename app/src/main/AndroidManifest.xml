@@ -34,7 +34,8 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".activities.ScanActivity" />
+        <activity android:name=".activities.ScanActivity"
+            android:theme="@style/AppTheme.NoActionBar"  />
         <activity
             android:name=".electricrevision.ElectricRevisionActivity"
             android:label="@string/electric_revision"
@@ -64,7 +65,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".devicetype.DeviceTypesListActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:label="@string/device_types"/>
         <activity
             android:name=".devicetype.DeviceTypeActivity"
             android:theme="@style/AppTheme.NoActionBar" />

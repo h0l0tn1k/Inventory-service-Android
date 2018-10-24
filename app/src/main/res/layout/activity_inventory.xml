@@ -18,7 +18,7 @@
             android:layout_height="60dp"
             android:background="#FFF"
             android:iconifiedByDefault="false"
-            android:queryHint="@string/enter_serial_number" />
+            android:queryHint="@string/enter_serial_or_barcode_number" />
 
         <ProgressBar
             android:id="@+id/inventory_progress_bar"

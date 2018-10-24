@@ -26,6 +26,9 @@ interface DeviceServiceApi {
     @GET("devices/serialNumber/like/{serialNo}")
     fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
 
+    @GET("devices/serialOrBarcodeNumber/like/{serialOrBarcodeNo}")
+    fun getDevicesWithSerialOrBarcodeNumberLike(@Path("serialOrBarcodeNo") serialNo: String) : Call<List<Device>>
+
     @GET("devices/borrowed-by/{scdId}")
     fun getBorrowedDevicesByUserId(@Path("scdId") scdId: Long?) : Call<List<Device>>
 

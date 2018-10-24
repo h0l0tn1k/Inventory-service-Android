@@ -1,29 +1,24 @@
 package android.inventory.siemens.cz.siemensinventory.activities
 
 import android.annotation.TargetApi
-import android.app.Activity
 import android.content.Intent
 import android.content.SharedPreferences
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Build
 import android.os.Bundle
-import android.os.Parcel
-import android.os.Parcelable
 import android.preference.Preference
 import android.preference.PreferenceFragment
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 class SettingsActivity : AppCompatActivity() {
 
-    private var snackbarNotifier : SnackbarNotifier? = null
+    private var snackbarNotifier : SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +34,7 @@ class SettingsActivity : AppCompatActivity() {
     class GeneralPreferenceFragment : PreferenceFragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
         private var serviceSettings : ServiceSettings? = null
-        private var snackbarNotifier : SnackbarNotifier? = null
+        private var snackbarNotifier : SnackBarNotifier? = null
 
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
@@ -47,7 +42,7 @@ class SettingsActivity : AppCompatActivity() {
             setHasOptionsMenu(true)
 
             serviceSettings = ServiceSettings(this.context)
-            snackbarNotifier = SnackbarNotifier(activity.findViewById(android.R.id.content), this.activity)
+            snackbarNotifier = SnackBarNotifier(activity.findViewById(android.R.id.content), this.activity)
 
             initPreferences()
             setListeners()

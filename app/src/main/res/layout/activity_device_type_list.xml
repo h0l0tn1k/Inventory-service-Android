@@ -19,7 +19,7 @@
             android:layout_height="60dp"
             android:background="#FFF"
             android:iconifiedByDefault="false"
-            android:queryHint="TODO TODO!" />
+            android:queryHint="@string/enter_device_type_name" />
 
         <ProgressBar
             android:id="@+id/device_type_progress_bar"

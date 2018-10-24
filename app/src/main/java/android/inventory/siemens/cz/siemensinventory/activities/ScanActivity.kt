@@ -6,17 +6,15 @@ import android.content.pm.PackageManager
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.entity.enums.ScanIntent
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import com.google.gson.Gson
 import com.google.zxing.Result
-import kotlinx.android.synthetic.main.activity_borrow.*
-import kotlinx.android.synthetic.main.activity_scan.*
 import me.dm7.barcodescanner.zxing.ZXingScannerView
 import retrofit2.Call
 import retrofit2.Callback
@@ -29,7 +27,8 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
     private var deviceApi : DeviceServiceApi = DeviceServiceApi.Factory.create(this)
     private val MY_CAMERA_REQUEST_CODE = 100
     private var parameterName: String? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var scanIntent = ScanIntent.Device
+    private var snackBarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +38,8 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), MY_CAMERA_REQUEST_CODE)
         }
 
-        parameterName = intent.getStringExtra("parameterName")
+        parameterName = getParameterName()
+        scanIntent = getScanIntent()
         if (parameterName.isNullOrEmpty()) {
             throw IllegalArgumentException("Variable 'parameterName' is not specified.")
         }
@@ -68,6 +68,10 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     override fun handleResult(rawResult: Result) {
         val deviceBarcodeId = rawResult.text
+        if(scanIntent == ScanIntent.Barcode) {
+            finishWithValue(deviceBarcodeId)
+        }
+
         if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
             val queue = deviceApi.getDeviceByBarcodeId(deviceBarcodeId)
             queue.enqueue(object : Callback<Device> {
@@ -83,18 +87,38 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
                     finish()
                 }
                 override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                    intent.putExtra(parameterName, "")
-                    setResult(RESULT_OK, intent)
-                    finish()
+                    finishWithValue("")
                 }
             })
         } else {
-            snackbarNotifier?.show(getString(R.string.unable_to_scan))
+            snackBarNotifier?.show(getString(R.string.unable_to_scan))
         }
+    }
+
+    private fun finishWithValue(value: String) {
+        intent.putExtra(parameterName, value)
+        setResult(Activity.RESULT_OK, intent)
+        finish()
     }
 
     override fun onBackPressed() {
         setResult(Activity.RESULT_CANCELED)
         finish()
+    }
+
+    private fun getParameterName() : String {
+        val parameterName = intent.getStringExtra("parameterName")
+        if (parameterName.isNullOrEmpty()) {
+            throw IllegalArgumentException("Variable 'parameterName' is not specified.")
+        }
+        return parameterName
+    }
+
+    private fun getScanIntent(): ScanIntent {
+        val intentString = intent.getStringExtra("intent")
+        if (intentString == null) {
+            return ScanIntent.Device
+        }
+        return ScanIntent.valueOf(intentString) ?: ScanIntent.Device
     }
 }

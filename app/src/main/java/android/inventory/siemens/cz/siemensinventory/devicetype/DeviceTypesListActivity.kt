@@ -3,13 +3,9 @@ package android.inventory.siemens.cz.siemensinventory.devicetype
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.api.DeviceTypeServiceApi
-import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
-import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.data.AppData
-import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -17,7 +13,6 @@ import android.widget.AdapterView
 import android.widget.SearchView
 import com.google.gson.Gson
 import kotlinx.android.synthetic.main.activity_device_type_list.*
-import kotlinx.android.synthetic.main.activity_electric_revision.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -25,7 +20,7 @@ import retrofit2.Response
 class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private var deviceTypeApi : DeviceTypeServiceApi? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
     private var adapter : DeviceTypeListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +29,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
 
         initLayoutElements()
 
-        snackbarNotifier = SnackbarNotifier(device_type_list_layout, this)
+        snackBarNotifier = SnackBarNotifier(device_type_list_layout, this)
         deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
     }
 
@@ -89,9 +84,12 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        val queue = deviceTypeApi?.getDeviceTypes()
+        if(query.toString().isBlank()) {
+            return false
+        }
+        val queue = deviceTypeApi?.getDeviceTypesByName(query.toString())
         showProgressBar()
-        queue?.enqueue( object : Callback<List<DeviceType>> {
+        queue?.enqueue(object : Callback<List<DeviceType>> {
             override fun onResponse(call: Call<List<DeviceType>>?, response: Response<List<DeviceType>>?) {
                 if(response?.isSuccessful == true) {
                     val deviceTypes = response.body() as List<DeviceType>
@@ -102,7 +100,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
                 this@DeviceTypesListActivity.onFailure()
                 hideProgressBar()
             }
-        } )
+        })
 
         return false
     }
@@ -123,7 +121,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
     }
 
     private fun onFailure() {
-        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+        snackBarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
         hideProgressBar()
     }
 }

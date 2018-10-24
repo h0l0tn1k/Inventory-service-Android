@@ -79,6 +79,8 @@
 
     <string name="enter_manually">Enter manually</string>
     <string name="enter_serial_number">Enter serial number</string>
+    <string name="enter_serial_or_barcode_number">Enter serial or barcode number</string>
+    <string name="enter_device_type_name">Enter device type name</string>
     <string name="serial_number_empty">Serial number cannot be empty.</string>
     <string name="results">Results</string>
     <string name="no_results_found">No Results Found</string>
@@ -104,7 +106,8 @@
     <string name="inventory_device_present">Device present?</string>
 
     <string name="device_doesnt_exist">Device doesn\'t exist</string>
-    <string name="do_you_want_to_create_new_device">Device with barcode \'%1$s\' not found. Would you like to create new device?</string>
+    <string name="device_with_barcode_not_found">Device with barcode %1$s not found</string>
+    <string name="do_you_want_to_create_new_device">Device with barcode %1$s not found. Would you like to create new device?</string>
     <string name="name_cannot_be_empty">Entity name cannot be empty</string>
     <string name="entity_already_exists">Entity \'%1$s\' already exists.</string>
 
@@ -124,6 +127,7 @@
     <string name="inventory_number">Inventory Number</string>
     <string name="company_owner">Company Owner</string>
     <string name="add_date">Add date</string>
+    <string name="wrong_date">Date cannot be in the future</string>
     <string name="nst">NST</string>
     <string name="comment">Comment</string>
     <string name="status">Status</string>
@@ -135,6 +139,7 @@
     <string name="false_string">False</string>
     <string name="inventory_result">Inventory result</string>
     <string name="inventory_comment">Inventory comment</string>
+    <string name="inventory_comment_cannot_be_empty">Inventory comment cannot be empty</string>
     <string name="last_revision_date">Last Revision Date</string>
     <string name="new_revision_date">New Revision Date</string>
     <string name="revision_period">Revision Period</string>

@@ -2,10 +2,9 @@ package android.inventory.siemens.cz.siemensinventory.view
 
 import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.api.entity.GenericNameEntity
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityCreateEditNewEntityBinding
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -16,7 +15,7 @@ class CreateEditNewEntityActivity : AppCompatActivity() {
 
     private var entityBinding: ActivityCreateEditNewEntityBinding? = null
     private var viewType: ViewType? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackbarNotifier: SnackBarNotifier? = null
     private var dataProvider: EditEntityDataProvider? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,7 +25,7 @@ class CreateEditNewEntityActivity : AppCompatActivity() {
         dataProvider = EditEntityDataProvider(this, getViewType())
         entityBinding = DataBindingUtil.setContentView(this, R.layout.activity_create_edit_new_entity) as ActivityCreateEditNewEntityBinding
         entityBinding?.viewMode = ViewMode(isEditMode())
-        snackbarNotifier = SnackbarNotifier(activity_create_edit_layout, this)
+        snackbarNotifier = SnackBarNotifier(activity_create_edit_layout, this)
 
         initView()
     }

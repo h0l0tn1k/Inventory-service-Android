@@ -7,7 +7,7 @@ import android.inventory.siemens.cz.siemensinventory.api.LoginServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -20,13 +20,13 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackbarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        snackbarNotifier = SnackbarNotifier(login_activity_layout, this)
+        snackbarNotifier = SnackBarNotifier(login_activity_layout, this)
 
         btn_login?.setOnClickListener { loginUser() }
         login_btn_connection?.setOnClickListener { launchSettings() }

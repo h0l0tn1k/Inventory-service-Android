@@ -15,6 +15,9 @@ interface DeviceTypeServiceApi {
     @GET("device-types/")
     fun getDeviceTypes() : Call<List<DeviceType>>
 
+    @GET("device-types/name/like/{name}")
+    fun getDeviceTypesByName(@Path("name") name: String) : Call<List<DeviceType>>
+
     @GET("device-types/{deviceTypeId}")
     fun getDeviceType(@Path("deviceTypeId") deviceTypeId: Long) : Call<DeviceType>
 

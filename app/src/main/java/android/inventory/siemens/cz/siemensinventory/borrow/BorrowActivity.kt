@@ -10,10 +10,9 @@ import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_borrow.*
@@ -29,7 +28,7 @@ class BorrowActivity : AppCompatActivity() {
     private var deviceApi = DeviceServiceApi.Factory.create(this)
     private var userScdApi = LoginUsersScdApi.Factory.create(this)
     private var adapter : BorrowedDevicesAdapter? = null
-    private var snackbarNotifier : SnackbarNotifier? = null
+    private var snackBarNotifier : SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,7 +39,7 @@ class BorrowActivity : AppCompatActivity() {
         borrow_borrowed_devices_lv.setOnItemClickListener { adapterView, _, position, _ ->
             startDeviceActivity(adapterView.getItemAtPosition(position) as Device)
         }
-        snackbarNotifier = SnackbarNotifier(borrow_device_swipe_refresh_layout, this)
+        snackBarNotifier = SnackBarNotifier(borrow_device_swipe_refresh_layout, this)
         borrow_scanBtn.setOnClickListener { startScan() }
 
         borrow_device_swipe_refresh_layout.setOnRefreshListener { loadBorrowedDevices() }
@@ -55,7 +54,8 @@ class BorrowActivity : AppCompatActivity() {
                 try {
                     val device = Gson().fromJson(data.getStringExtra(parameterName), Device::class.java)
                     if (device == null) {
-                        displayDeviceNotFound()
+                        val barcode = data.getStringExtra("barcode")
+                        snackBarNotifier?.show(getString(R.string.device_with_barcode_not_found, barcode))
                         return
                     }
                     startDeviceActivity(device)
@@ -69,7 +69,7 @@ class BorrowActivity : AppCompatActivity() {
     }
 
     private fun displayDeviceNotFound() {
-        snackbarNotifier?.show(getString(R.string.no_device_found))
+        snackBarNotifier?.show(getString(R.string.no_device_found))
     }
 
     private fun startDeviceActivity(device : Device) {
@@ -103,14 +103,14 @@ class BorrowActivity : AppCompatActivity() {
 
     private fun onFailure() {
         hideProgressBar()
-        snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+        snackBarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
     }
 
     private fun onResponse(response: Response<Device>?) {
         if (response?.isSuccessful == true) {
             startDeviceActivity(response)
         } else {
-            snackbarNotifier?.show(getResponseMessage(response))
+            snackBarNotifier?.show(getResponseMessage(response))
         }
     }
 
@@ -124,8 +124,8 @@ class BorrowActivity : AppCompatActivity() {
 
     private fun loadBorrowedDevices() {
         showProgressBar()
-        deviceApi?.getBorrowedDevicesByUserId(AppData.loginUserScd?.id)
-                ?.enqueue(object : Callback<List<Device>> {
+        deviceApi.getBorrowedDevicesByUserId(AppData.loginUserScd?.id)
+                .enqueue(object : Callback<List<Device>> {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 hideProgressBar()
                 if(response?.isSuccessful == true) {

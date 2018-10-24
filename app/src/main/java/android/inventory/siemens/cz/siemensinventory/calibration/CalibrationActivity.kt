@@ -10,7 +10,7 @@ import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceCalibratio
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -29,7 +29,7 @@ class CalibrationActivity : AppCompatActivity(),
 
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
-    private var snackBarNotifier: SnackbarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
     private val scanParameterName = "device"
     private var deviceApi: DeviceServiceApi? = null
     private var calibrationApi: CalibrationServiceApi? = null
@@ -41,7 +41,7 @@ class CalibrationActivity : AppCompatActivity(),
 
         initLayoutElements()
 
-        snackBarNotifier = SnackbarNotifier(calibration_layout, this)
+        snackBarNotifier = SnackBarNotifier(calibration_layout, this)
         deviceApi = DeviceServiceApi.Factory.create(this)
         calibrationApi = CalibrationServiceApi.Factory.create(this)
 
@@ -69,7 +69,7 @@ class CalibrationActivity : AppCompatActivity(),
         val queryIsEmpty = query?.isEmpty() == true
 
         if (isSerialNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialNoLike(query.toString().trim())
+            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
             showProgressBar()
             queue?.enqueue(object : Callback<List<Device>> {
                 override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
@@ -104,7 +104,8 @@ class CalibrationActivity : AppCompatActivity(),
             try {
                 val device = Gson().fromJson(data.getStringExtra(scanParameterName), Device::class.java)
                 if (device == null) {
-                    snackBarNotifier?.show(getString(R.string.device_doesnt_exist))
+                    val barcode = data.getStringExtra("barcode")
+                    snackBarNotifier?.show(getString(R.string.device_with_barcode_not_found, barcode))
                 } else {
                     startDeviceActivity(device)
                 }

@@ -26,7 +26,7 @@ class BorrowDialog(var context: Activity) {
 
         val view = context.layoutInflater.inflate(R.layout.dialog_borrow, null)
 
-        initViewFields(view, device, currHolder)
+        initViewFields(view, device, currHolder, borrow)
 
         dialog = AlertDialog.Builder(context)
                 .setTitle(title)
@@ -36,7 +36,7 @@ class BorrowDialog(var context: Activity) {
                 .create()
     }
 
-    private fun initViewFields(view: View, device: Device?, currHolder: String?) {
+    private fun initViewFields(view: View, device: Device?, currHolder: String?, borrow: Boolean) {
         val ownerTv = view.findViewById(R.id.dialog_borrow_owner) as TextView
         ownerTv.text = device?.getOwnerFullName()
 
@@ -47,9 +47,18 @@ class BorrowDialog(var context: Activity) {
         commentTv?.text = device?.comment
 
         deviceStateSpinner = view.findViewById(R.id.dialog_borrow_device_state) as Spinner
-        deviceStateSpinner?.adapter = ArrayAdapter(context.baseContext, android.R.layout.simple_spinner_dropdown_item, AppData.deviceStates)
+        deviceStateSpinner?.isEnabled = false
+        deviceStateSpinner?.adapter = ArrayAdapter(context.baseContext, android.R.layout.simple_spinner_dropdown_item,
+                getDeviceStateFromAppData(if(borrow) "Borrowed" else "OK"))
     }
 
+    private fun getDeviceStateFromAppData(stateName: String) : List<DeviceState> {
+        val states = AppData.deviceStates?.filter { x -> x.name == stateName }
+        if(states?.isNotEmpty() == true) {
+            return states
+        }
+        return emptyList()
+    }
     fun show() {
         dialog?.show()
     }

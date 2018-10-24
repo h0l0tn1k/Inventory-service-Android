@@ -12,7 +12,7 @@ import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.devicetype.DeviceTypesListActivity
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewEntityActivity
 import android.inventory.siemens.cz.siemensinventory.view.ViewType
 import android.os.Bundle
@@ -33,12 +33,12 @@ class MainActivity : AppCompatActivity() {
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
     private var deviceStateApi: DeviceStatesServiceApi? = null
     private var dashboardAdapter: DashboardAdapter? = null
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackbarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        snackbarNotifier = SnackbarNotifier(main_activity_layout, this)
+        snackbarNotifier = SnackBarNotifier(main_activity_layout, this)
 
         if (getUser() == null) {
             startLoginActivity()

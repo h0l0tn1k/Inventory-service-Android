@@ -9,7 +9,7 @@ import android.view.inputmethod.InputMethodManager
 /**
  * Created by Stefan Matta on 22.03.2018.
  */
-class SnackbarNotifier(
+class SnackBarNotifier(
         val layout : View,
         private val activity : Activity
 ) {

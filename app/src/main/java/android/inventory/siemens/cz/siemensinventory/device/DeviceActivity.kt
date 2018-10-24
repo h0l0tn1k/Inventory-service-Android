@@ -6,14 +6,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.*
 import android.inventory.siemens.cz.siemensinventory.api.entity.*
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowDialog
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
+import android.inventory.siemens.cz.siemensinventory.entity.enums.ScanIntent
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryRecord
 import android.inventory.siemens.cz.siemensinventory.tools.DateParser
-import android.inventory.siemens.cz.siemensinventory.tools.SnackbarNotifier
+import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -35,12 +37,14 @@ import java.util.*
 class DeviceActivity : AppCompatActivity() {
 
     private val EDIT_DEVICE_ACTIVITY_REQUEST_CODE = 0
+    private val SCAN_ACTIVITY_REQUEST_CODE = 1
+    private val barcode = "barcode"
     private var device: Device? = null
     private var deviceIntent: DeviceIntent? = null
     private val resultParameterName: String = "result"
     private var deviceBinding: ActivityDeviceCreateBinding? = null
     private val calendar = Calendar.getInstance()
-    private var snackbarNotifier: SnackbarNotifier? = null
+    private var snackbarNotifier: SnackBarNotifier? = null
 
     //apis
     private var deviceApi = DeviceServiceApi.Factory.create(this)
@@ -63,7 +67,7 @@ class DeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_create)
         deviceBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_create) as ActivityDeviceCreateBinding
-        snackbarNotifier = SnackbarNotifier(activity_device_layout, this)
+        snackbarNotifier = SnackBarNotifier(activity_device_layout, this)
 
         device = getDeviceFromIntent()
         deviceBinding?.device = device
@@ -361,7 +365,7 @@ class DeviceActivity : AppCompatActivity() {
             }
         }
         device_edit_btn.visibility = View.GONE
-        device_read_qr_code.visibility = View.VISIBLE
+        device_edit_qr_code.visibility = View.VISIBLE
         device_edit_device_type.visibility = View.VISIBLE
         device_edit_serial_number.visibility = View.VISIBLE
         device_edit_owner.visibility = View.VISIBLE
@@ -386,6 +390,12 @@ class DeviceActivity : AppCompatActivity() {
 
         device_layout_comment.visibility = View.VISIBLE
         device_edit_comment.visibility = View.VISIBLE
+
+        device_edit_scan_barcode_number.visibility = View.VISIBLE
+        device_edit_scan_barcode_number.setOnClickListener {
+            //todo scan
+            startScanQrCodeValue()
+        }
     }
 
     private fun setInventoryView() {
@@ -417,7 +427,14 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun saveInventoryState() {
         val checkedInventoryState = findViewById<RadioButton>(device_edit_inventory_result.checkedRadioButtonId)
-        device?.inventoryRecord?.inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
+        val inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
+        if(inventoryState != InventoryState.OK) {
+            if (device_edit_inventory_comment.text.isBlank()) {
+                snackbarNotifier?.show(getString(R.string.inventory_comment_cannot_be_empty))
+                return
+            }
+        }
+        device?.inventoryRecord?.inventoryState = inventoryState
         finishActivityWithResult(device)
     }
 
@@ -495,15 +512,21 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun newDateListener(it: View?) {
         val et = it as EditText
-        DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
+        val dialog = DatePickerDialog(this, DatePickerDialog.OnDateSetListener { _, year, month, day ->
             calendar.set(Calendar.YEAR, year)
             calendar.set(Calendar.MONTH, month)
             calendar.set(Calendar.DAY_OF_MONTH, day)
-            et.setText(SimpleDateFormat(DateParser.datePattern,
-                    Locale.getDefault()).format(calendar.time))
+
+            if (calendar.time.after(Date())) {
+                snackbarNotifier?.show(getString(R.string.wrong_date))
+            } else {
+                et.setText(SimpleDateFormat(DateParser.datePattern,
+                        Locale.getDefault()).format(calendar.time))
+            }
         }, calendar
                 .get(Calendar.YEAR), calendar.get(Calendar.MONTH),
-                calendar.get(Calendar.DAY_OF_MONTH)).show()
+                calendar.get(Calendar.DAY_OF_MONTH))
+        dialog.show()
     }
 
     private fun displayGenericConfirmationLayout() {
@@ -522,9 +545,23 @@ class DeviceActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if (requestCode == EDIT_DEVICE_ACTIVITY_REQUEST_CODE && Activity.RESULT_OK == resultCode) {
+        when (requestCode) {
+            SCAN_ACTIVITY_REQUEST_CODE -> handleScanActivityResult(resultCode, data)
+            EDIT_DEVICE_ACTIVITY_REQUEST_CODE -> handleEditDeviceActivityResult(resultCode, data)
+        }
+    }
+
+    private fun handleEditDeviceActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
             intent.putExtra("device", data?.getStringExtra("device"))
             recreate()
+        }
+    }
+
+    private fun handleScanActivityResult(resultCode: Int, data: Intent?) {
+        if (resultCode == Activity.RESULT_OK) {
+            val barcode = data?.getStringExtra(barcode)
+            device_edit_qr_code.setText(barcode)
         }
     }
 
@@ -569,5 +606,12 @@ class DeviceActivity : AppCompatActivity() {
         device_edit_btn.setOnClickListener {
             startDeviceEditActivity(true, getDeviceFromIntent())
         }
+    }
+
+    private fun startScanQrCodeValue() {
+        val scanIntent = Intent(this, ScanActivity::class.java)
+        scanIntent.putExtra("intent", ScanIntent.Barcode.toString())
+        scanIntent.putExtra("parameterName", barcode)
+        startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
     }
 }
