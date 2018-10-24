@@ -14,8 +14,23 @@ class DeviceCalibration(
         var lastCalibrationDateString: String = ""
 ) {
 
+    fun getNextCalibrationDateString(): String? {
+        if (lastCalibrationDateString.isEmpty() || !isCalibrationIntervalDefined()) {
+            return ""
+        } else {
+            val lastCalDate = DateParser.fromString(lastCalibrationDateString)
+            if (lastCalDate != null) {
+                val calendar = Calendar.getInstance()
+                calendar.time = lastCalDate
+                calendar.add(Calendar.YEAR, calibrationInterval!!)
+                return DateParser.toString(calendar.time)
+            }
+        }
+        return ""
+    }
+
     fun getDaysLeft(): Int? {
-        if (lastCalibrationDateString.isEmpty() || calibrationInterval == null) {
+        if (lastCalibrationDateString.isEmpty() || !isCalibrationIntervalDefined()) {
             return null
         } else {
             val lastCalDate = DateParser.fromString(lastCalibrationDateString)
@@ -40,6 +55,11 @@ class DeviceCalibration(
         }
     }
 
+    fun isCalibrationIntervalDefined() : Boolean {
+        val cI = calibrationInterval as Int? ?: return false
+        return cI > 0
+    }
+
     fun getDaysLeftIcon(context: Context): Drawable? {
         val daysLeft = getDaysLeft()
                 ?: return ContextCompat.getDrawable(context, R.drawable.ic_help_yellow_800_24dp)
@@ -51,7 +71,7 @@ class DeviceCalibration(
     }
 
     fun getPeriodString(): String {
-        return if (calibrationInterval == null) {
+        return if (!isCalibrationIntervalDefined()) {
             "Not Defined"
         } else {
             calibrationInterval.toString() + " year(s)"

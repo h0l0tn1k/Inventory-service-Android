@@ -67,4 +67,11 @@ class Device(
         }
         return project?.name.toString()
     }
+
+    fun getDeviceTypeName(): String {
+        if (deviceType == null) {
+            return ""
+        }
+        return deviceType?.getDeviceTypeAndVersion().toString()
+    }
 }

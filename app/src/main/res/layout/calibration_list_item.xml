@@ -69,4 +69,19 @@
             android:layout_height="wrap_content"
             android:text="13.03.1993"/>
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/next_calibration_date"/>
+        <TextView
+            android:id="@+id/calibration_item_next_calibration_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="13.03.1993"/>
+    </LinearLayout>
 </LinearLayout>

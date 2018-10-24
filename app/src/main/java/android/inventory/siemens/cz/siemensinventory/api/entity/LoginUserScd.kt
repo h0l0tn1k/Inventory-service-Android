@@ -32,7 +32,7 @@ class LoginUserScd (
         return "$superiorFirstName $superiorLastName"
     }
 
-    fun isEmptyUser() : Boolean {
+    fun isEmpty() : Boolean {
         return getFullName() == emptyUserFlag
     }
 

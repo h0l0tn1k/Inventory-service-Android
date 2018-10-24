@@ -15,8 +15,23 @@ class DeviceElectricRevision(
         var lastRevisionDateString: String = ""
 ) {
 
+    fun getNextRevisionDateString(): String? {
+        if (lastRevisionDateString.isEmpty() || !isRevisionIntervalDefined()) {
+            return ""
+        } else {
+            val lastCalDate = DateParser.fromString(lastRevisionDateString)
+            if (lastCalDate != null) {
+                val calendar = Calendar.getInstance()
+                calendar.time = lastCalDate
+                calendar.add(Calendar.YEAR, revisionInterval!!)
+                return DateParser.toString(calendar.time)
+            }
+        }
+        return ""
+    }
+
     fun getDaysLeft() : Int? {
-        if(lastRevisionDateString.isEmpty() || revisionInterval == null) {
+        if(lastRevisionDateString.isEmpty() || !isRevisionIntervalDefined()) {
             return null
         } else {
             val lastCalDate = DateParser.fromString(lastRevisionDateString)
@@ -49,8 +64,13 @@ class DeviceElectricRevision(
         }
     }
 
+    private fun isRevisionIntervalDefined() : Boolean {
+        val rI = revisionInterval as Int? ?: return false
+        return rI > 0
+    }
+
     fun getPeriodString() : String {
-        return if(revisionInterval == null) {
+        return if(!isRevisionIntervalDefined()) {
             "Not Defined"
         } else {
             revisionInterval.toString() + " year(s)"

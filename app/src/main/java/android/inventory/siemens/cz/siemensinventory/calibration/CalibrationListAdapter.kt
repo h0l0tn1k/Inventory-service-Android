@@ -35,7 +35,7 @@ class CalibrationListAdapter(
         calibrationStateIv.setImageDrawable(device.calibration?.getDaysLeftIcon(context))
 
         val deviceNameTv = view.findViewById(R.id.calibration_item_device_name) as TextView
-        deviceNameTv.text = "${device.deviceType?.getDeviceTypeAndVersion()} (SN: ${device.serialNumber})"
+        deviceNameTv.text = "${device.getDeviceTypeName()} (SN: ${device.serialNumber})"
 
         val daysLeftTv = view.findViewById(R.id.calibration_item_days_left_tv) as TextView
         val daysLeft = device.calibration?.getDaysLeft()
@@ -47,6 +47,9 @@ class CalibrationListAdapter(
 
         val lastCalibrationDateTv = view.findViewById(R.id.calibration_item_last_calibration_date_tv) as TextView
         lastCalibrationDateTv.text = device.calibration?.lastCalibrationDateString
+
+        val nextCalibrationDateTv = view.findViewById(R.id.calibration_item_next_calibration_date_tv) as TextView
+        nextCalibrationDateTv.text = device.calibration?.getNextCalibrationDateString()
 
         val calibrationPeriodTv = view.findViewById(R.id.calibration_item_period_tv) as TextView
         calibrationPeriodTv.text = device.calibration?.getPeriodString()

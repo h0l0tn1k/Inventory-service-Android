@@ -172,6 +172,7 @@ class DeviceActivity : AppCompatActivity() {
                     if (response.body() != null) {
                         deviceTypes.addAll(response.body() as List<DeviceType>)
                     }
+                    deviceTypes.add(0, DeviceType())
                     device_edit_device_type.adapter = ArrayAdapter<DeviceType>(this@DeviceActivity,
                             android.R.layout.simple_spinner_dropdown_item, deviceTypes)
                     device_edit_device_type.setSelection(deviceTypes.indexOf(deviceBinding?.device?.deviceType))
@@ -219,6 +220,7 @@ class DeviceActivity : AppCompatActivity() {
                     if (response.body() != null) {
                         departments.addAll(response.body() as List<Department>)
                     }
+                    departments.add(0, Department(-1L, ""))
                     device_edit_department.adapter = ArrayAdapter<Department>(this@DeviceActivity,
                             android.R.layout.simple_spinner_dropdown_item, departments)
                     device_edit_department.setSelection(departments.indexOf(deviceBinding?.device?.department))
@@ -240,6 +242,7 @@ class DeviceActivity : AppCompatActivity() {
                     if (response.body() != null) {
                         companyOwners.addAll(response.body() as List<CompanyOwner>)
                     }
+                    companyOwners.add(0, CompanyOwner(-1L, ""))
                     device_edit_company_owner.adapter = ArrayAdapter<CompanyOwner>(this@DeviceActivity,
                             android.R.layout.simple_spinner_dropdown_item, companyOwners)
                     device_edit_company_owner.setSelection(companyOwners.indexOf(deviceBinding?.device?.companyOwner))
@@ -261,6 +264,7 @@ class DeviceActivity : AppCompatActivity() {
                     if (response.body() != null) {
                         projects.addAll(response.body() as List<Project>)
                     }
+                    projects.add(0, Project(-1L, ""))
                     device_edit_project.adapter = ArrayAdapter<Project>(this@DeviceActivity,
                             android.R.layout.simple_spinner_dropdown_item, projects)
                     device_edit_project.setSelection(projects.indexOf(deviceBinding?.device?.project))
@@ -316,16 +320,26 @@ class DeviceActivity : AppCompatActivity() {
         device_save_btn.setOnClickListener {
             //todo validation?
             val device = deviceBinding?.device as Device
-            device.deviceType = device_edit_device_type.selectedItem as DeviceType
-            device.department = device_edit_department.selectedItem as Department?
-            device.companyOwner = device_edit_company_owner.selectedItem as CompanyOwner?
-            device.project = device_edit_project.selectedItem as Project?
-            device.deviceState = device_edit_status.selectedItem as DeviceState
+
+            val deviceType = device_edit_device_type.selectedItem as DeviceType
+            device.deviceType = if (deviceType.isEmpty()) null else deviceType
+
+            val department = device_edit_department.selectedItem as Department
+            device.department = if (department.isEmpty()) null else department
+
+            val companyOwner = device_edit_company_owner.selectedItem as CompanyOwner
+            device.companyOwner = if (companyOwner.isEmpty()) null else companyOwner
+
+            val project = device_edit_project.selectedItem as Project
+            device.project = if (project.isEmpty()) null else project
 
             val owner = device_edit_owner.selectedItem as LoginUserScd
-            device.owner = if (owner.isEmptyUser() == true) null else owner
+            device.owner = if (owner.isEmpty()) null else owner
+
             val holder = device_edit_holder.selectedItem as LoginUserScd
-            device.holder = if (holder.isEmptyUser() == true) null else holder
+            device.holder = if (holder.isEmpty()) null else holder
+
+            device.deviceState = device_edit_status.selectedItem as DeviceState
 
             if (deviceIntent == DeviceIntent.EDIT) {
                 deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
@@ -393,7 +407,6 @@ class DeviceActivity : AppCompatActivity() {
 
         device_edit_scan_barcode_number.visibility = View.VISIBLE
         device_edit_scan_barcode_number.setOnClickListener {
-            //todo scan
             startScanQrCodeValue()
         }
     }
@@ -428,7 +441,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun saveInventoryState() {
         val checkedInventoryState = findViewById<RadioButton>(device_edit_inventory_result.checkedRadioButtonId)
         val inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
-        if(inventoryState != InventoryState.OK) {
+        if (inventoryState != InventoryState.OK) {
             if (device_edit_inventory_comment.text.isBlank()) {
                 snackbarNotifier?.show(getString(R.string.inventory_comment_cannot_be_empty))
                 return
@@ -460,6 +473,7 @@ class DeviceActivity : AppCompatActivity() {
         device_edit_default_location.visibility = View.VISIBLE
         device_edit_nst.visibility = View.VISIBLE
         device_edit_inventory_number.visibility = View.VISIBLE
+        device_edit_calibration_new_date.setText(DateParser.toString(Date()))
         device_edit_calibration_new_date.setOnClickListener { view -> newDateListener(view) }
     }
 
@@ -494,6 +508,7 @@ class DeviceActivity : AppCompatActivity() {
         // new rev date
         device_layout_electric_revision_new_date.visibility = View.VISIBLE
         device_edit_electric_revision_new_date.visibility = View.VISIBLE
+        device_edit_electric_revision_new_date.setText(DateParser.toString(Date()))
         device_edit_electric_revision_new_date.setOnClickListener { view -> newDateListener(view) }
     }
 

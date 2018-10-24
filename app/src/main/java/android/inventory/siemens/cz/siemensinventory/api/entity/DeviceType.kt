@@ -13,7 +13,14 @@ class DeviceType(
 
     constructor() : this(null, "", "", "", "", "", null, 0.0)
 
+    fun isEmpty() : Boolean {
+        return objectTypeName.isEmpty() && version.isEmpty()
+    }
+
     fun getDeviceTypeAndVersion(): String {
+        if (isEmpty()) {
+            return "-"
+        }
         return "$objectTypeName, Version: $version"
     }
 

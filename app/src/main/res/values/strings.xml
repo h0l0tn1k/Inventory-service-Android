@@ -141,12 +141,14 @@
     <string name="inventory_comment">Inventory comment</string>
     <string name="inventory_comment_cannot_be_empty">Inventory comment cannot be empty</string>
     <string name="last_revision_date">Last Revision Date</string>
+    <string name="next_revision_date">Next Revision Date</string>
     <string name="new_revision_date">New Revision Date</string>
     <string name="revision_period">Revision Period</string>
     <string name="year_s">year(s)</string>
     <string name="edit_device">Edit Device</string>
     <string name="no_device_found">No Device Found</string>
     <string name="last_calibration_date">Last Calibration Date</string>
+    <string name="next_calibration_date">Next Calibration Date</string>
     <string name="calibration_period">Calibration Period</string>
     <string name="new_calibration_date">New Calibration Date</string>
     <string name="calibration_days_left">Calibration Days Left</string>

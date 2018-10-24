@@ -5,7 +5,14 @@ open class ViewEntity(
         var name: String
 ) {
     override fun toString(): String {
+        if(id == -1L) {
+            return "-"
+        }
         return name
+    }
+
+    fun isEmpty() : Boolean {
+        return id == -1L
     }
 
     override fun equals(other: Any?): Boolean {
