@@ -159,7 +159,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
             val device = Gson().fromJson(data.getStringExtra("result"), Device::class.java)
             if (deviceIntent == DeviceIntent.CREATE) {
                 inventory_search_box.setQuery(device.serialNumber, true)
-            } else if (deviceIntent == DeviceIntent.INVENTORY) {
+            } else if (deviceIntent == DeviceIntent.EL_REVISION) {
                 val revision = device.revision as DeviceElectricRevision
                 revisionApi?.updateRevision(revision.id, revision)?.enqueue(object : Callback<DeviceElectricRevision> {
                     override fun onFailure(call: Call<DeviceElectricRevision>?, t: Throwable?) {

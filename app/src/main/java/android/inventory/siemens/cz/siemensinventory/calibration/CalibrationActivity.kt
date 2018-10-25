@@ -121,7 +121,7 @@ class CalibrationActivity : AppCompatActivity(),
             val device = Gson().fromJson(data.getStringExtra("result"), Device::class.java)
             if (deviceIntent == DeviceIntent.CREATE) {
                 inventory_search_box.setQuery(device.serialNumber, true)
-            } else if (deviceIntent == DeviceIntent.INVENTORY) {
+            } else if (deviceIntent == DeviceIntent.CALIBRATION) {
                 val calibration = device.calibration as DeviceCalibration
                 calibrationApi?.updateCalibration(calibration.id, calibration)?.enqueue(object : Callback<DeviceCalibration> {
                     override fun onFailure(call: Call<DeviceCalibration>?, t: Throwable?) {

@@ -19,7 +19,7 @@ class DeviceType(
 
     fun getDeviceTypeAndVersion(): String {
         if (isEmpty()) {
-            return "-"
+            return ""
         }
         return "$objectTypeName, Version: $version"
     }

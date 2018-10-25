@@ -18,7 +18,7 @@ class LoginUserScd (
         var flagRevision: Boolean = false,
         var flagAdmin: Boolean = false) {
 
-    private val emptyUserFlag = "-"
+    private val emptyUserFlag = ""
 
     fun getFullName() : String {
         val fullName = "$firstName $lastName"

@@ -46,34 +46,36 @@
                         android:textSize="16sp" />
 
                     <LinearLayout
+                        android:id="@+id/device_layout_edit_qr_code"
                         android:orientation="horizontal"
                         android:layout_height="wrap_content"
                         android:layout_width="0dp"
-                        android:layout_weight="1">
+                        android:layout_weight="1"
+                        android:visibility="gone">
                         <EditText
                             android:id="@+id/device_edit_qr_code"
                             android:layout_height="wrap_content"
                             android:layout_width="0dp"
                             android:layout_weight="1"
                             android:layout_gravity="end"
-                            android:text="@{device.barcodeNumber}"
-                            android:visibility="gone"/>
+                            android:textSize="16sp"
+                            android:text="@={device.barcodeNumber}"/>
 
                         <ImageView
                             android:id="@+id/device_edit_scan_barcode_number"
                             android:layout_width="30dp"
                             android:layout_height="30dp"
                             android:layout_gravity="center"
-                            android:src="@drawable/ic_photo_camera_black_36dp"
-                            android:visibility="gone"/>
+                            android:src="@drawable/ic_photo_camera_black_36dp"/>
                     </LinearLayout>
 
                     <TextView
                         android:id="@+id/device_read_qr_code"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="end"
+                        android:layout_gravity="start"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.barcodeNumber}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -105,6 +107,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -114,6 +117,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.deviceType.getDeviceTypeAndVersion()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -144,6 +148,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.serialNumber}"
                         android:visibility="gone" />
 
@@ -153,6 +158,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.serialNumber}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -184,6 +190,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -193,6 +200,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getOwnerFullName()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -224,6 +232,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -233,6 +242,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getHolderFullName()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -263,6 +273,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.defaultLocation}"
                         android:visibility="gone" />
 
@@ -272,6 +283,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.defaultLocation}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -303,6 +315,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -312,6 +325,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getDepartmentName()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -344,6 +358,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -353,6 +368,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getCompanyOwnerName()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -385,6 +401,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
 
@@ -394,6 +411,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getProjectName()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -425,6 +443,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.nstValue}"
                         android:visibility="gone" />
 
@@ -434,6 +453,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.nstValue}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -463,6 +483,7 @@
                         android:layout_weight="1"
                         android:layout_gravity="end"
                         android:focusable="false"
+                        android:textSize="16sp"
                         android:text="@={device.addDateString}"
                         android:visibility="gone" />
 
@@ -472,6 +493,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.addDateString}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -504,6 +526,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:spinnerMode="dropdown"
+                        android:textSize="16sp"
                         android:visibility="gone" />
 
                     <TextView
@@ -512,6 +535,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.deviceState.name}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -543,6 +567,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.comment}"
                         android:visibility="gone" />
 
@@ -552,6 +577,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.comment}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -583,6 +609,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.inventoryNumber}"
                         android:visibility="gone" />
 
@@ -592,6 +619,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.getInventoryNumberString()}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -629,6 +657,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
                             android:checked="@{device.inventoryRecord.inventoryState.state.equals(`OK`)}"
+                            android:textSize="16sp"
                             android:text="@string/ok" />
 
                         <RadioButton
@@ -637,6 +666,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="10dp"
                             android:checked="@{device.inventoryRecord.inventoryState.state.equals(`False`)}"
+                            android:textSize="16sp"
                             android:text="@string/false_string" />
 
                         <RadioButton
@@ -644,6 +674,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:checked="@{device.inventoryRecord.inventoryState.state.equals(`Unclear`)}"
+                            android:textSize="16sp"
                             android:text="@string/unclear" />
                     </RadioGroup>
 
@@ -653,6 +684,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="" />
                 </LinearLayout>
 
@@ -683,6 +715,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@={device.inventoryRecord.comment}"
                         android:visibility="gone" />
 
@@ -692,6 +725,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.inventoryRecord.comment}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -726,6 +760,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.revision.lastRevisionDateString}"
                         android:visibility="gone" />
                 </LinearLayout>
@@ -758,6 +793,7 @@
                         android:layout_weight="1"
                         android:layout_marginStart="40dp"
                         android:entries="@array/revisionPeriods"
+                        android:textSize="16sp"
                         android:selectedItemPosition="@={device.revision.revisionInterval}"
                         android:spinnerMode="dialog" />
 
@@ -765,6 +801,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textSize="16sp"
                         android:text="@string/year_s" />
                 </LinearLayout>
 
@@ -796,6 +833,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:focusable="false"
+                        android:textSize="16sp"
                         android:text=""
                         android:visibility="gone" />
                 </LinearLayout>
@@ -828,6 +866,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
+                        android:textSize="16sp"
                         android:text="@{device.calibration.lastCalibrationDateString}"/>
                 </LinearLayout>
 
@@ -855,12 +894,14 @@
                         android:layout_height="match_parent"
                         android:layout_marginStart="40dp"
                         android:entries="@array/revisionPeriods"
+                        android:textSize="16sp"
                         android:selectedItemPosition="@={device.calibration.calibrationInterval}"
                         android:spinnerMode="dialog" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:textSize="16sp"
                         android:text="@string/year_s" />
                 </LinearLayout>
 
@@ -890,6 +931,7 @@
                         android:layout_gravity="end"
                         android:layout_weight="1"
                         android:focusable="false"
+                        android:textSize="16sp"
                         android:text=""/>
                 </LinearLayout>
             </LinearLayout>

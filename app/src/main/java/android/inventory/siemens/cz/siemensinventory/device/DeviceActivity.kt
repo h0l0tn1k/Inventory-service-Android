@@ -24,6 +24,7 @@ import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.Toast
 import com.google.gson.Gson
+import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_device_create.*
 import kotlinx.android.synthetic.main.device_borrow_section.*
 import kotlinx.android.synthetic.main.device_generic_confirmation.*
@@ -307,8 +308,7 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun setCreateView() {
         setEditView()
-        device_edit_qr_code.visibility = View.VISIBLE
-        device_read_qr_code.visibility = View.GONE
+        device_layout_edit_qr_code.visibility = View.VISIBLE
         device_edit_btn.visibility = View.GONE
         device_edit_add_date.setText(SimpleDateFormat(DateParser.datePattern, Locale.getDefault()).format(calendar.time))
         val barcode = intent.getStringExtra("barcode")
@@ -354,7 +354,7 @@ class DeviceActivity : AppCompatActivity() {
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         } else {
-                            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                            processUnsuccessfulResponse<Device>(response)
                         }
                     }
                 })
@@ -372,14 +372,14 @@ class DeviceActivity : AppCompatActivity() {
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         } else {
-                            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                            processUnsuccessfulResponse<Device>(response)
                         }
                     }
                 })
             }
         }
         device_edit_btn.visibility = View.GONE
-        device_edit_qr_code.visibility = View.VISIBLE
+        device_layout_edit_qr_code.visibility = View.VISIBLE
         device_edit_device_type.visibility = View.VISIBLE
         device_edit_serial_number.visibility = View.VISIBLE
         device_edit_owner.visibility = View.VISIBLE
@@ -423,6 +423,7 @@ class DeviceActivity : AppCompatActivity() {
         device_layout_inventory_number.visibility = View.VISIBLE
         device_layout_inventory_comment.visibility = View.VISIBLE
         device_layout_inventory_result.visibility = View.VISIBLE
+        device_layout_edit_qr_code.visibility = View.GONE
 
         //fields
         device_read_qr_code.visibility = View.VISIBLE
@@ -439,6 +440,9 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun saveInventoryState() {
+        if (device?.inventoryRecord == null) {
+            device?.inventoryRecord = InventoryRecord(device?.id!!)
+        }
         val checkedInventoryState = findViewById<RadioButton>(device_edit_inventory_result.checkedRadioButtonId)
         val inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
         if (inventoryState != InventoryState.OK) {
@@ -448,7 +452,7 @@ class DeviceActivity : AppCompatActivity() {
             }
         }
         device?.inventoryRecord?.inventoryState = inventoryState
-        finishActivityWithResult(device)
+        finishActivityWithResult(device, DeviceIntent.INVENTORY)
     }
 
     private fun setCalibrationView() {
@@ -463,6 +467,7 @@ class DeviceActivity : AppCompatActivity() {
         device_layout_last_calibration_date.visibility = View.VISIBLE
         device_layout_calibration_period.visibility = View.VISIBLE
         device_layout_calibration_new_date.visibility = View.VISIBLE
+        device_layout_edit_qr_code.visibility = View.GONE
 
         //fields
         device_read_qr_code.visibility = View.VISIBLE
@@ -478,9 +483,12 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun saveCalibration() {
+        if (device?.calibration == null) {
+            device?.calibration = DeviceCalibration(device?.id!!)
+        }
         device?.calibration?.calibrationInterval = device_edit_calibration_period.selectedItemPosition
         device?.calibration?.lastCalibrationDateString = device_edit_calibration_new_date.text.toString()
-        finishActivityWithResult(device)
+        finishActivityWithResult(device, DeviceIntent.CALIBRATION)
     }
 
     private fun setElRevisionView() {
@@ -497,6 +505,7 @@ class DeviceActivity : AppCompatActivity() {
         device_edit_nst.visibility = View.VISIBLE
         device_edit_inventory_number.visibility = View.VISIBLE
 
+        device_layout_edit_qr_code.visibility = View.GONE
         device_layout_department.visibility = View.GONE
         device_layout_nst.visibility = View.VISIBLE
         device_layout_inventory_number.visibility = View.VISIBLE
@@ -513,14 +522,17 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun saveRevisionState() {
+        if (device?.revision == null) {
+            device?.revision = DeviceElectricRevision(device?.id!!)
+        }
         device?.revision?.revisionInterval = device_edit_electric_revision_period.selectedItemPosition
         device?.revision?.lastRevisionDateString = device_edit_electric_revision_new_date.text.toString()
-        finishActivityWithResult(device)
+        finishActivityWithResult(device, DeviceIntent.EL_REVISION)
     }
 
-    private fun finishActivityWithResult(device: Device?) {
+    private fun finishActivityWithResult(device: Device?, viewIntent: DeviceIntent) {
         intent.putExtra(resultParameterName, Gson().toJson(device))
-        intent.putExtra("intent", DeviceIntent.INVENTORY.toString())
+        intent.putExtra("intent", viewIntent.toString())
         setResult(RESULT_OK, intent)
         finish()
     }
@@ -547,6 +559,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun displayGenericConfirmationLayout() {
         layoutInflater.inflate(R.layout.device_generic_confirmation, null)
         device_close_btn.setOnClickListener { finish() }
+        device_edit_btn.visibility = if (AppData.loginUserScd?.flagWrite == true) View.VISIBLE else View.GONE
     }
 
     private fun startDeviceEditActivity(editMode: Boolean, device: Device?) {
@@ -628,5 +641,15 @@ class DeviceActivity : AppCompatActivity() {
         scanIntent.putExtra("intent", ScanIntent.Barcode.toString())
         scanIntent.putExtra("parameterName", barcode)
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
+    }
+
+    private fun <T> processUnsuccessfulResponse(response : Response<T>?) {
+        try {
+            val error = Gson().fromJson(response?.errorBody()?.string(), ErrorBody::class.java)
+            snackbarNotifier?.show(error.message)
+        } catch(e: JsonSyntaxException) {
+            //not this type of error message
+            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+        }
     }
 }

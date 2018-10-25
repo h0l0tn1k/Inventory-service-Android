@@ -9,7 +9,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 
 class DeviceCalibration(
-        var id: Long,
+        var id: Long = 0,
         var calibrationInterval: Int? = 0,
         var lastCalibrationDateString: String = ""
 ) {

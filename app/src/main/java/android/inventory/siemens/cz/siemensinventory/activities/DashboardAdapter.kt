@@ -71,7 +71,6 @@ class DashboardAdapter(private val mContext: Context) : BaseAdapter() {
         val item = getItem(position)
 
         picture.setImageResource(item.icon)
-//        picture.setBackgroundColor(Color.parseColor("#64B5F6"))
         name.text = mContext.getString(item.stringId)
         name.setBackgroundResource(R.color.colorPrimary)
         return view

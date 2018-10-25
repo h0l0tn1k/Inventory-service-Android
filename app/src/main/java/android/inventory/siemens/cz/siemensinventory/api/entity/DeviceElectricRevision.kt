@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 //todo refactor with calibration entity
 class DeviceElectricRevision(
-        var id: Long,
+        var id: Long = 0,
         var revisionInterval: Int? = 0,
         var lastRevisionDateString: String = ""
 ) {

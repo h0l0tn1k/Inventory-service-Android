@@ -36,6 +36,9 @@ class InventoryListAdapter(
         val deviceNameTv = view.findViewById(R.id.inventory_item_device_name) as TextView
         deviceNameTv.text = "${device.getDeviceTypeName()} (SN: ${device.serialNumber})"
 
+        val barcodeTv = view.findViewById(R.id.device_item_barcode_tv) as TextView
+        barcodeTv.text = device.barcodeNumber
+
         val locationTv = view.findViewById(R.id.device_item_location_tv) as TextView
         locationTv.text = device.defaultLocation
 

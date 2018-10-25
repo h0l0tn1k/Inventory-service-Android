@@ -6,7 +6,7 @@ open class ViewEntity(
 ) {
     override fun toString(): String {
         if(id == -1L) {
-            return "-"
+            return ""
         }
         return name
     }

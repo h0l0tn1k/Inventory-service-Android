@@ -18,6 +18,7 @@ import android.widget.SearchView
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_inventory.*
+import kotlinx.android.synthetic.main.dashboard_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -126,6 +127,7 @@ class InventoryActivity : AppCompatActivity(),
                     override fun onResponse(call: Call<InventoryRecord>?, response: Response<InventoryRecord>?) {
                         if (response?.isSuccessful == true) {
                             snackBarNotifier?.show(getString(R.string.able_to_save_changes))
+                            onQueryTextChange(inventory_search_box.query.toString())
                         } else {
                             this@InventoryActivity.onFailure()
                         }

@@ -28,14 +28,14 @@ class Device(
 
     fun getHolderFullName(): String {
         if (holder == null) {
-            return "-"
+            return ""
         }
         return holder?.getFullName() as String
     }
 
     fun getOwnerFullName(): String {
         if (owner == null) {
-            return "-"
+            return ""
         }
         return owner?.getFullName() as String
     }
@@ -49,21 +49,21 @@ class Device(
 
     fun getDepartmentName(): String {
         if (department == null) {
-            return "-"
+            return ""
         }
         return department?.name.toString()
     }
 
     fun getCompanyOwnerName(): String {
         if (companyOwner == null) {
-            return "-"
+            return ""
         }
         return companyOwner?.name.toString()
     }
 
     fun getProjectName(): String {
         if (project == null) {
-            return "-"
+            return ""
         }
         return project?.name.toString()
     }
