@@ -26,14 +26,13 @@ class BorrowActivity : AppCompatActivity() {
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val parameterName = "device_barcode_id"
     private var deviceApi = DeviceServiceApi.Factory.create(this)
-    private var adapter : BorrowedDevicesAdapter? = null
+    private var adapter = BorrowedDevicesAdapter(this, emptyList())
     private var snackBarNotifier : SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_borrow)
 
-        adapter = BorrowedDevicesAdapter(this, emptyList())
         borrow_borrowed_devices_lv.adapter = adapter
         borrow_borrowed_devices_lv.setOnItemClickListener { adapterView, _, position, _ ->
             startDeviceActivity(adapterView.getItemAtPosition(position) as Device)
@@ -128,7 +127,7 @@ class BorrowActivity : AppCompatActivity() {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 hideProgressBar()
                 if(response?.isSuccessful == true) {
-                    adapter?.updateList(response.body() as List<Device>)
+                    adapter.updateList(response.body() as List<Device>)
                 }
             }
             override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {

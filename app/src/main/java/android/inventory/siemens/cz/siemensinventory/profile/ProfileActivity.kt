@@ -1,8 +1,7 @@
-package android.inventory.siemens.cz.siemensinventory.activities
+package android.inventory.siemens.cz.siemensinventory.profile
 
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.adapters.PermissionsAdapter
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.entity.Permission

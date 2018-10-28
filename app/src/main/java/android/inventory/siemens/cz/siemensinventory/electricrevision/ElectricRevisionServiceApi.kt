@@ -1,8 +1,7 @@
-package android.inventory.siemens.cz.siemensinventory.api
+package android.inventory.siemens.cz.siemensinventory.electricrevision
 
 import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.api.entity.CompanyOwner
-import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceCalibration
+import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceElectricRevision
 import retrofit2.Call
 import retrofit2.Retrofit

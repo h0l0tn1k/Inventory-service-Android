@@ -19,7 +19,7 @@
         android:theme="@style/AppTheme"
         tools:replace="android:icon">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".dashboard.MainActivity"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
@@ -29,7 +29,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activities.LoginActivity"
+            android:name=".login.LoginActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".activities.SettingsActivity"
@@ -45,7 +45,7 @@
             android:name=".device.DeviceActivity"
             android:label="@string/device" />
         <activity
-            android:name=".activities.ChangePasswordActivity"
+            android:name=".profile.ChangePasswordActivity"
             android:label="@string/change_password"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -59,7 +59,7 @@
             android:name=".borrow.BorrowActivity"
             android:label="@string/borrowed_devices" />
         <activity
-            android:name=".activities.ProfileActivity"
+            android:name=".profile.ProfileActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".devicetype.DeviceTypesListActivity"
@@ -70,8 +70,7 @@
         <activity
             android:name=".view.CreateEditNewEntityActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".device.DeviceListActivity"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".device.DeviceListActivity"/>
     </application>
 
 </manifest>

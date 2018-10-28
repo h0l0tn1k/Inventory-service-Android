@@ -1,4 +1,4 @@
-package android.inventory.siemens.cz.siemensinventory.adapters
+package android.inventory.siemens.cz.siemensinventory.profile
 
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.R

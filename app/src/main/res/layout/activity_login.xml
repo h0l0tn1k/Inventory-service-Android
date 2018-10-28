@@ -4,7 +4,7 @@
     android:id="@+id/login_activity_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.inventory.siemens.cz.siemensinventory.activities.LoginActivity"
+    tools:context="android.inventory.siemens.cz.siemensinventory.login.LoginActivity"
     android:fitsSystemWindows="true">
 
     <LinearLayout

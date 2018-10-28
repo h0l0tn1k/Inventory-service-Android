@@ -2,6 +2,7 @@ package android.inventory.siemens.cz.siemensinventory.activities;
 
 
 import android.inventory.siemens.cz.siemensinventory.R;
+import android.inventory.siemens.cz.siemensinventory.dashboard.MainActivity;
 import android.inventory.siemens.cz.siemensinventory.helpers.When;
 import android.inventory.siemens.cz.siemensinventory.scenarios.SetConnection;
 import android.support.test.rule.ActivityTestRule;

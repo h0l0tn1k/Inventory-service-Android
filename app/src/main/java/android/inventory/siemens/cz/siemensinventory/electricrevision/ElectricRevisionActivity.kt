@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
-import android.inventory.siemens.cz.siemensinventory.api.ElectricRevisionServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceElectricRevision
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
@@ -45,6 +44,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         revisionApi = ElectricRevisionServiceApi.Factory.create(this)
 
         el_revision_scanBtn.setOnClickListener { startScan() }
+        //loadDevices()
     }
 
     private fun initLayoutElements() {
@@ -68,17 +68,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
     override fun onQueryTextSubmit(p0: String?): Boolean = false
 
-    private fun updateResultsList(devices: List<Device>, queryEmpty: Boolean) {
-        if (queryEmpty) {
-            //el_revision_results_text.visibility = View.GONE
-            el_revision_search_results.visibility = View.GONE
-            el_revision_no_results_text.visibility = View.GONE
-            adapter?.updateList(emptyList())
-            return
-        }
-
-        //el_revision_results_text.visibility = View.VISIBLE
-
+    private fun updateResultsList(devices: List<Device>) {
         if (devices.isEmpty()) {
             el_revision_no_results_text.visibility = View.VISIBLE
             el_revision_search_results.visibility = View.GONE
@@ -92,27 +82,7 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        val queryIsEmpty = query?.isEmpty() == true
-//
-//        if (isSerialNumberValid(query)) {
-        val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
-        showProgressBar()
-        queue?.enqueue(object : Callback<List<Device>> {
-            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                if (response?.isSuccessful == true) {
-                    val devices = response.body() as List<Device>
-                    updateResultsList(devices, queryIsEmpty)
-                }
-            }
-
-            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
-                this@ElectricRevisionActivity.onFailure()
-                hideProgressBar()
-            }
-        })
-//        } else {
-//            updateResultsList(emptyList(), queryIsEmpty)
-//        }
+        loadDevices(query)
 
         return false
     }
@@ -130,6 +100,29 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
             SCAN_ACTIVITY_REQUEST_CODE -> handleScanActivityResult(resultCode, data)
             DEVICE_ACTIVITY_REQUEST_CODE -> handleDeviceActivityResult(resultCode, data)
         }
+    }
+
+    private fun loadDevices(query: String? = "") {
+        val queue = if (query?.trim()?.isEmpty() == true) {
+            deviceApi?.getDevices()
+        } else {
+            deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query?.trim().toString())
+        }
+
+        showProgressBar()
+        queue?.enqueue(object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                if (response?.isSuccessful == true) {
+                    val devices = response.body() as List<Device>
+                    updateResultsList(devices)
+                }
+            }
+
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                this@ElectricRevisionActivity.onFailure()
+                hideProgressBar()
+            }
+        })
     }
 
     private fun handleScanActivityResult(resultCode: Int, data: Intent?) {

@@ -1,12 +1,12 @@
-package android.inventory.siemens.cz.siemensinventory.api
+package android.inventory.siemens.cz.siemensinventory.calibration
 
 import android.content.Context
+import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceCalibration
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Body
-import retrofit2.http.POST
 import retrofit2.http.PUT
 import retrofit2.http.Path
 

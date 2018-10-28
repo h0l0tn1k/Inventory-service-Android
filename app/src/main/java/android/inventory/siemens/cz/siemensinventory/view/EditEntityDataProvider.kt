@@ -93,7 +93,7 @@ class EditEntityDataProvider(
         ProjectServiceApi.Factory.create(context).updateProject(project.id, project).enqueue(getCreateCallback())
     }
 
-    private fun getDeleteCallback(): Callback<Void>? {
+    private fun getDeleteCallback(): Callback<Void> {
         return object : Callback<Void> {
             override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                 if(response?.isSuccessful == true) {

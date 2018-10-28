@@ -1,9 +1,9 @@
-package android.inventory.siemens.cz.siemensinventory.activities
+package android.inventory.siemens.cz.siemensinventory.login
 
 import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.LoginServiceApi
+import android.inventory.siemens.cz.siemensinventory.activities.SettingsActivity
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.entity.ServiceSettings

@@ -1,7 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.helpers;
 
 import android.inventory.siemens.cz.siemensinventory.R;
-import android.inventory.siemens.cz.siemensinventory.activities.MainActivity;
+import android.inventory.siemens.cz.siemensinventory.dashboard.MainActivity;
 import android.inventory.siemens.cz.siemensinventory.scenarios.Login;
 import android.support.test.rule.ActivityTestRule;
 import android.support.v4.view.GravityCompat;

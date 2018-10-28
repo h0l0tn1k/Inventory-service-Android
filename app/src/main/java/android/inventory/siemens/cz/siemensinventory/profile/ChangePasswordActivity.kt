@@ -1,4 +1,4 @@
-package android.inventory.siemens.cz.siemensinventory.activities
+package android.inventory.siemens.cz.siemensinventory.profile
 
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.tools.TextViewHelper

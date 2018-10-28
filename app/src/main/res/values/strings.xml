@@ -117,6 +117,7 @@
     <string name="borrow_return_device_question">Do you want to return this device?</string>
     <string name="currently_borrowed_devices">Currently borrowed devices</string>
     <string name="borrowed_devices">Borrowed devices</string>
+    <string name="owner_borrowing">You cannot borrow devices you own</string>
     <string name="department">Department</string>
     <string name="project">Project</string>
     <string name="device_state">Device State</string>

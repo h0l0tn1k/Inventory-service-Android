@@ -2,7 +2,6 @@ package android.inventory.siemens.cz.siemensinventory.devicetype
 
 import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.api.DeviceTypeServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier

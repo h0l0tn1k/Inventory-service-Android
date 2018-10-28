@@ -10,8 +10,10 @@ import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.*
 import android.inventory.siemens.cz.siemensinventory.api.entity.*
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowDialog
+import android.inventory.siemens.cz.siemensinventory.borrow.BorrowServiceApi
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceCreateBinding
+import android.inventory.siemens.cz.siemensinventory.devicetype.DeviceTypeServiceApi
 import android.inventory.siemens.cz.siemensinventory.entity.enums.ScanIntent
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryRecord
 import android.inventory.siemens.cz.siemensinventory.tools.DateParser
@@ -45,16 +47,17 @@ class DeviceActivity : AppCompatActivity() {
     private val resultParameterName: String = "result"
     private var deviceBinding: ActivityDeviceCreateBinding? = null
     private val calendar = Calendar.getInstance()
-    private var snackbarNotifier: SnackBarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
 
     //apis
-    private var deviceApi = DeviceServiceApi.Factory.create(this)
-    private var deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
-    private var loginUserApi = LoginUsersScdApi.Factory.create(this)
-    private var departmentApi = DepartmentsServiceApi.Factory.create(this)
-    private var companyOwnerApi = CompanyOwnerServiceApi.Factory.create(this)
-    private var projectApi = ProjectServiceApi.Factory.create(this)
-    private var deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
+    private val borrowApi = BorrowServiceApi.Factory.create(this)
+    private val deviceApi = DeviceServiceApi.Factory.create(this)
+    private val deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
+    private val loginUserApi = LoginUsersScdApi.Factory.create(this)
+    private val departmentApi = DepartmentsServiceApi.Factory.create(this)
+    private val companyOwnerApi = CompanyOwnerServiceApi.Factory.create(this)
+    private val projectApi = ProjectServiceApi.Factory.create(this)
+    private val deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
 
     //arrays
     private val deviceTypes = arrayListOf<DeviceType>()
@@ -68,7 +71,7 @@ class DeviceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_create)
         deviceBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_create) as ActivityDeviceCreateBinding
-        snackbarNotifier = SnackBarNotifier(activity_device_layout, this)
+        snackBarNotifier = SnackBarNotifier(activity_device_layout, this)
 
         device = getDeviceFromIntent()
         deviceBinding?.device = device
@@ -90,6 +93,7 @@ class DeviceActivity : AppCompatActivity() {
         device_read_department.visibility = View.VISIBLE
         device_read_comment.visibility = View.VISIBLE
         device_read_status.visibility = View.VISIBLE
+        device_read_owner.visibility = View.VISIBLE
         device_read_holder.visibility = View.VISIBLE
 
         device_layout_comment.visibility = View.VISIBLE
@@ -103,69 +107,37 @@ class DeviceActivity : AppCompatActivity() {
                 device_return_btn.setOnClickListener {
                     val dialog = BorrowDialog(this)
                     dialog.buildDialog(device, false, DialogInterface.OnClickListener { _, _ ->
-                        device?.comment = dialog.getComment()
                         device?.deviceState = dialog.getDeviceState()
-                        returnDevice()
+                        saveBorrowResult(BorrowReturn(device, null, dialog.getComment()))
                     })
                     dialog.show()
                 }
             }
             isBorrowedByNoOne() -> {
-                device_borrow_btn.visibility = View.VISIBLE
-                device_borrow_btn.setOnClickListener {
-                    val dialog = BorrowDialog(this)
-                    dialog.buildDialog(device, true, DialogInterface.OnClickListener { _, _ ->
-                        device?.comment = dialog.getComment()
-                        device?.deviceState = dialog.getDeviceState()
-                        borrowDevice()
-                    })
-                    dialog.show()
+                if (AppData.loginUserScd?.id == device?.owner?.id) {
+                    snackBarNotifier?.show(getString(R.string.owner_borrowing))
+                } else {
+                    device_borrow_btn.visibility = View.VISIBLE
+                    device_borrow_btn.setOnClickListener {
+                        val dialog = BorrowDialog(this)
+                        dialog.buildDialog(device, true, DialogInterface.OnClickListener { _, _ ->
+                            device?.deviceState = dialog.getDeviceState()
+                            saveBorrowResult(BorrowReturn(device, AppData.loginUserScd, dialog.getComment()))
+                        })
+                        dialog.show()
+                    }
                 }
             }
             else -> {
-                //todo display borrowed by other user
                 Toast.makeText(this@DeviceActivity, getString(R.string.device_borrowed_by_other_user), Toast.LENGTH_SHORT).show()
             }
         }
     }
 
-    private fun setHolder(user: LoginUserScd?) {
-        device?.holder = user
-        deviceApi.updateDevice(device?.id, device).enqueue(object : Callback<Device> {
-            override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
-                if (response?.isSuccessful == true) {
-                    if (isBorrowedByCurrentUser()) {
-                        Toast.makeText(this@DeviceActivity, "Device borrowed", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(this@DeviceActivity, "Device returned", Toast.LENGTH_LONG).show()
-                    }
-                    val dev = response.body() as Device
-                    //todo refresh view
-                    setResult(RESULT_OK, intent)
-                    finish()
-                } else {
-                    Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-                }
-            }
-
-            override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                Toast.makeText(this@DeviceActivity, "Error", Toast.LENGTH_LONG).show()
-            }
-        })
-    }
-
-    private fun returnDevice() {
-        setHolder(null)
-    }
-
-    private fun borrowDevice() {
-        setHolder(AppData.loginUserScd)
-    }
-
     private fun loadDeviceTypes() {
         deviceTypeApi.getDeviceTypes().enqueue(object : Callback<List<DeviceType>> {
             override fun onFailure(call: Call<List<DeviceType>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<DeviceType>>?, response: Response<List<DeviceType>>?) {
@@ -178,7 +150,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, deviceTypes)
                     device_edit_device_type.setSelection(deviceTypes.indexOf(deviceBinding?.device?.deviceType))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -187,7 +159,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun loadUsers() {
         loginUserApi.getUsers().enqueue(object : Callback<List<LoginUserScd>> {
             override fun onFailure(call: Call<List<LoginUserScd>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<LoginUserScd>>?, response: Response<List<LoginUserScd>>?) {
@@ -204,7 +176,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, users)
                     device_edit_holder.setSelection(users.indexOf(deviceBinding?.device?.holder))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -213,7 +185,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun loadDepartments() {
         departmentApi.getDepartments().enqueue(object : Callback<List<Department>> {
             override fun onFailure(call: Call<List<Department>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<Department>>?, response: Response<List<Department>>?) {
@@ -226,7 +198,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, departments)
                     device_edit_department.setSelection(departments.indexOf(deviceBinding?.device?.department))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -235,7 +207,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun loadCompanyOwners() {
         companyOwnerApi.getCompanyOwners().enqueue(object : Callback<List<CompanyOwner>> {
             override fun onFailure(call: Call<List<CompanyOwner>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<CompanyOwner>>?, response: Response<List<CompanyOwner>>?) {
@@ -248,7 +220,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, companyOwners)
                     device_edit_company_owner.setSelection(companyOwners.indexOf(deviceBinding?.device?.companyOwner))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -257,7 +229,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun loadProjects() {
         projectApi.getProjects().enqueue(object : Callback<List<Project>> {
             override fun onFailure(call: Call<List<Project>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<Project>>?, response: Response<List<Project>>?) {
@@ -270,7 +242,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, projects)
                     device_edit_project.setSelection(projects.indexOf(deviceBinding?.device?.project))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -279,7 +251,7 @@ class DeviceActivity : AppCompatActivity() {
     private fun loadDeviceStates() {
         deviceStateApi.getDeviceStates().enqueue(object : Callback<List<DeviceState>> {
             override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
-                snackbarNotifier?.show(getString(R.string.error_loading_data))
+                snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
 
             override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
@@ -291,7 +263,7 @@ class DeviceActivity : AppCompatActivity() {
                             android.R.layout.simple_spinner_dropdown_item, deviceStates)
                     device_edit_status.setSelection(deviceStates.indexOf(deviceBinding?.device?.deviceState))
                 } else {
-                    snackbarNotifier?.show(getString(R.string.error_loading_data))
+                    snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
             }
         })
@@ -344,13 +316,13 @@ class DeviceActivity : AppCompatActivity() {
             if (deviceIntent == DeviceIntent.EDIT) {
                 deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
                     override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                        snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                        snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
                     }
 
                     override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                         if (response?.isSuccessful == true) {
                             intent.putExtra("device", Gson().toJson(response.body()))
-                            snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                            snackBarNotifier?.show(getString(R.string.able_to_save_changes))
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         } else {
@@ -361,14 +333,14 @@ class DeviceActivity : AppCompatActivity() {
             } else if (deviceIntent == DeviceIntent.CREATE) {
                 deviceApi.createDevice(device).enqueue(object : Callback<Device> {
                     override fun onFailure(call: Call<Device>?, t: Throwable?) {
-                        snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+                        snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
                     }
 
                     override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                         if (response?.isSuccessful == true) {
                             intent.putExtra("result", Gson().toJson(response.body()))
                             intent.putExtra("intent", DeviceIntent.CREATE.toString())
-                            snackbarNotifier?.show(getString(R.string.able_to_save_changes))
+                            snackBarNotifier?.show(getString(R.string.able_to_save_changes))
                             setResult(Activity.RESULT_OK, intent)
                             finish()
                         } else {
@@ -477,7 +449,7 @@ class DeviceActivity : AppCompatActivity() {
         val inventoryState = InventoryState.valueOf(checkedInventoryState.text.toString())
         if (inventoryState != InventoryState.OK) {
             if (device_edit_inventory_comment.text.isBlank()) {
-                snackbarNotifier?.show(getString(R.string.inventory_comment_cannot_be_empty))
+                snackBarNotifier?.show(getString(R.string.inventory_comment_cannot_be_empty))
                 return
             }
         }
@@ -560,6 +532,22 @@ class DeviceActivity : AppCompatActivity() {
         finishActivityWithResult(device, DeviceIntent.EL_REVISION)
     }
 
+    private fun saveBorrowResult(borrowReturn: BorrowReturn) {
+        borrowApi.createBorrowReturn(borrowReturn).enqueue(object : Callback<Void>{
+            override fun onFailure(call: Call<Void>?, t: Throwable?) {
+            }
+            override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
+                if (response?.isSuccessful == true) {
+                    snackBarNotifier?.show(getString(R.string.able_to_save_changes))
+                    setResult(RESULT_OK, intent)
+                    finish()
+                } else {
+                    this@DeviceActivity.processUnsuccessfulResponse(response)
+                }
+            }
+        })
+    }
+
     private fun finishActivityWithResult(device: Device?, viewIntent: DeviceIntent) {
         intent.putExtra(resultParameterName, Gson().toJson(device))
         intent.putExtra("intent", viewIntent.toString())
@@ -575,7 +563,7 @@ class DeviceActivity : AppCompatActivity() {
             calendar.set(Calendar.DAY_OF_MONTH, day)
 
             if (calendar.time.after(Date())) {
-                snackbarNotifier?.show(getString(R.string.wrong_date))
+                snackBarNotifier?.show(getString(R.string.wrong_date))
             } else {
                 et.setText(SimpleDateFormat(DateParser.datePattern,
                         Locale.getDefault()).format(calendar.time))
@@ -679,10 +667,10 @@ class DeviceActivity : AppCompatActivity() {
     private fun <T> processUnsuccessfulResponse(response : Response<T>?) {
         try {
             val error = Gson().fromJson(response?.errorBody()?.string(), ErrorBody::class.java)
-            snackbarNotifier?.show(error.message)
+            snackBarNotifier?.show(error.message)
         } catch(e: JsonSyntaxException) {
             //not this type of error message
-            snackbarNotifier?.show(getString(R.string.unable_to_save_changes))
+            snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
         }
     }
 }

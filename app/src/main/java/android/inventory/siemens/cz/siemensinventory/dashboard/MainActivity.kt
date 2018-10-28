@@ -1,10 +1,10 @@
-package android.inventory.siemens.cz.siemensinventory.activities
+package android.inventory.siemens.cz.siemensinventory.dashboard
 
 import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
-import android.inventory.siemens.cz.siemensinventory.adapters.DashboardAdapter
-import android.inventory.siemens.cz.siemensinventory.adapters.DashboardItem
+import android.inventory.siemens.cz.siemensinventory.profile.ProfileActivity
+import android.inventory.siemens.cz.siemensinventory.activities.SettingsActivity
 import android.inventory.siemens.cz.siemensinventory.api.DeviceStatesServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceState
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
@@ -15,6 +15,7 @@ import android.inventory.siemens.cz.siemensinventory.device.DeviceListActivity
 import android.inventory.siemens.cz.siemensinventory.devicetype.DeviceTypesListActivity
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
+import android.inventory.siemens.cz.siemensinventory.login.LoginActivity
 import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewEntityActivity
 import android.inventory.siemens.cz.siemensinventory.view.ViewType

@@ -1,6 +1,7 @@
-package android.inventory.siemens.cz.siemensinventory.api
+package android.inventory.siemens.cz.siemensinventory.login
 
 import android.content.Context
+import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import retrofit2.Call
 import retrofit2.Retrofit

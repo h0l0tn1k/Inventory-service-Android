@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.inventory.siemens.cz.siemensinventory.activities.MainActivity">
+    tools:context="android.inventory.siemens.cz.siemensinventory.dashboard.MainActivity">
 
 
 </android.support.design.widget.CoordinatorLayout>

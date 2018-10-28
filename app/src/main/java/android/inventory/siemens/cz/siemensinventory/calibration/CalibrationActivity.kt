@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
-import android.inventory.siemens.cz.siemensinventory.api.CalibrationServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceCalibration
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
@@ -31,8 +30,8 @@ class CalibrationActivity : AppCompatActivity(),
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private var snackBarNotifier: SnackBarNotifier? = null
     private val scanParameterName = "device"
-    private var deviceApi: DeviceServiceApi? = null
-    private var calibrationApi: CalibrationServiceApi? = null
+    private val deviceApi = DeviceServiceApi.Factory.create(this)
+    private val calibrationApi = CalibrationServiceApi.Factory.create(this)
     private var adapter: CalibrationListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +41,9 @@ class CalibrationActivity : AppCompatActivity(),
         initLayoutElements()
 
         snackBarNotifier = SnackBarNotifier(calibration_layout, this)
-        deviceApi = DeviceServiceApi.Factory.create(this)
-        calibrationApi = CalibrationServiceApi.Factory.create(this)
 
         calibration_scanBtn.setOnClickListener { startScan() }
+        //loadDevices()
     }
 
     private fun initLayoutElements() {
@@ -66,27 +64,7 @@ class CalibrationActivity : AppCompatActivity(),
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        val queryIsEmpty = query?.isEmpty() == true
-
-        if (isSerialNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
-            showProgressBar()
-            queue?.enqueue(object : Callback<List<Device>> {
-                override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                    if (response?.isSuccessful == true) {
-                        val devices = response.body() as List<Device>
-                        updateResultsList(devices, queryIsEmpty)
-                    }
-                }
-
-                override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
-                    this@CalibrationActivity.onFailure()
-                    hideProgressBar()
-                }
-            })
-        } else {
-            updateResultsList(emptyList(), queryIsEmpty)
-        }
+        loadDevices(query)
         return false
     }
 
@@ -150,17 +128,29 @@ class CalibrationActivity : AppCompatActivity(),
         }
     }
 
-    private fun updateResultsList(devices: List<Device>, queryEmpty: Boolean) {
-        if (queryEmpty) {
-            //calibration_results_text.visibility = View.GONE
-            calibration_search_results.visibility = View.GONE
-            calibration_no_results_text.visibility = View.GONE
-            adapter?.updateList(emptyList())
-            return
+    private fun loadDevices(query: String? = "") {
+        val queue = if (query?.trim()?.isEmpty() == true) {
+            deviceApi?.getDevices()
+        } else {
+            deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query?.trim().toString())
         }
+        showProgressBar()
+        queue?.enqueue(object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                if (response?.isSuccessful == true) {
+                    val devices = response.body() as List<Device>
+                    updateResultsList(devices)
+                }
+            }
 
-        //calibration_results_text.visibility = View.VISIBLE
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                this@CalibrationActivity.onFailure()
+                hideProgressBar()
+            }
+        })
+    }
 
+    private fun updateResultsList(devices: List<Device>) {
         if (devices.isEmpty()) {
             calibration_no_results_text.visibility = View.VISIBLE
             calibration_search_results.visibility = View.GONE
@@ -198,9 +188,5 @@ class CalibrationActivity : AppCompatActivity(),
         scanIntent.putExtra("parameterName", scanParameterName)
 
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
-    }
-
-    private fun isSerialNumberValid(query: String?): Boolean {
-        return query?.isNotEmpty() == true
     }
 }

@@ -1,8 +1,7 @@
-package android.inventory.siemens.cz.siemensinventory.api
+package android.inventory.siemens.cz.siemensinventory.devicetype
 
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import com.google.gson.GsonBuilder
 import retrofit2.Call

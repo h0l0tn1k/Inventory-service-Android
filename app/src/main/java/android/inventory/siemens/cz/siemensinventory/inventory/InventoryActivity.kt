@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
-import android.inventory.siemens.cz.siemensinventory.api.InventoryRecordsServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
@@ -18,7 +17,6 @@ import android.widget.SearchView
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import kotlinx.android.synthetic.main.activity_inventory.*
-import kotlinx.android.synthetic.main.dashboard_item.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -29,9 +27,9 @@ class InventoryActivity : AppCompatActivity(),
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val scanParameterName = "device"
-    private var deviceApi: DeviceServiceApi? = null
+    private val deviceApi = DeviceServiceApi.Factory.create(this)
+    private val inventoryApi = InventoryRecordsServiceApi.Factory.create(this)
     private var snackBarNotifier: SnackBarNotifier? = null
-    private var inventoryApi: InventoryRecordsServiceApi? = null
     private var listAdapter: InventoryListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,10 +37,9 @@ class InventoryActivity : AppCompatActivity(),
         setContentView(R.layout.activity_inventory)
 
         snackBarNotifier = SnackBarNotifier(inventory_layout, this)
-        inventoryApi = InventoryRecordsServiceApi.Factory.create(this)
-        deviceApi = DeviceServiceApi.Factory.create(this)
 
         initListeners()
+        //loadDevices()
     }
 
     private fun initListeners() {
@@ -61,23 +58,28 @@ class InventoryActivity : AppCompatActivity(),
     }
 
     override fun onQueryTextChange(query: String?): Boolean {
-        if (isSerialOrBarcodeNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
-            showProgressBar()
-            queue?.enqueue(object : Callback<List<Device>> {
-                override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                    updateData(response)
-                }
-
-                override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
-                    this@InventoryActivity.onFailure()
-                    hideProgressBar()
-                }
-            })
-        } else {
-            listAdapter?.updateList(emptyList())
-        }
+        loadDevices(query)
         return false
+    }
+
+    private fun loadDevices(query: String? = "") {
+        val queue = if (query?.trim()?.isEmpty() == true) {
+            deviceApi?.getDevices()
+        } else {
+            deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query?.trim().toString())
+        }
+
+        showProgressBar()
+        queue?.enqueue(object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                updateData(response)
+            }
+
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                this@InventoryActivity.onFailure()
+                hideProgressBar()
+            }
+        })
     }
 
     private fun startScanActivity() {

@@ -1,6 +1,7 @@
 package android.inventory.siemens.cz.siemensinventory.activities;
 
 
+import android.inventory.siemens.cz.siemensinventory.dashboard.MainActivity;
 import android.inventory.siemens.cz.siemensinventory.scenarios.SetConnection;
 import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
