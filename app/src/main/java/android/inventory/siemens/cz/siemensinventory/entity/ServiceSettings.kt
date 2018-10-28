@@ -53,7 +53,7 @@ class ServiceSettings(context: Context) {
         return Retrofit.Builder().baseUrl(getServiceUrlFormatted()).build().create(SiemensServiceApi::class.java).getServiceStatus()
     }
 
-    fun isUrlWellFormated(): Boolean {
+    fun isUrlWellFormatted(): Boolean {
         return Patterns.WEB_URL.matcher(getServiceUrlFormatted()).matches()
     }
 }

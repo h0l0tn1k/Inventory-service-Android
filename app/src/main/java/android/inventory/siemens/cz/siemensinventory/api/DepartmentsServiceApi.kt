@@ -15,8 +15,8 @@ interface DepartmentsServiceApi {
     @GET("departments/")
     fun getDepartments() : Call<List<Department>>
 
-    @GET("departments/{departmentId}")
-    fun getDepartment(@Path("departmentId") departmentId: Long) : Call<Department>
+//    @GET("departments/{departmentId}")
+//    fun getDepartment(@Path("departmentId") departmentId: Long) : Call<Department>
 
     @POST("departments/")
     fun createDepartment(@Body department: GenericNameEntity?): Call<Department>

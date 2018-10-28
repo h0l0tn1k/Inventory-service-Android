@@ -411,6 +411,36 @@ class DeviceActivity : AppCompatActivity() {
         }
     }
 
+    private fun setDisplayView() {
+        displayGenericConfirmationLayout()
+        device_save_btn.visibility = View.GONE
+
+        device_layout_department.visibility = View.VISIBLE
+        device_layout_add_date.visibility = View.VISIBLE
+        device_layout_nst.visibility = View.VISIBLE
+        device_layout_inventory_number.visibility = View.VISIBLE
+        device_layout_status.visibility = View.VISIBLE
+        device_layout_project.visibility = View.VISIBLE
+        device_layout_company_owner.visibility = View.VISIBLE
+        device_layout_comment.visibility = View.VISIBLE
+        device_layout_nst.visibility = View.VISIBLE
+
+        device_read_qr_code.visibility = View.VISIBLE
+        device_read_device_type.visibility = View.VISIBLE
+        device_read_serial_number.visibility = View.VISIBLE
+        device_read_inventory_number.visibility = View.VISIBLE
+        device_read_owner.visibility = View.VISIBLE
+        device_read_holder.visibility = View.VISIBLE
+        device_read_default_location.visibility = View.VISIBLE
+        device_read_status.visibility = View.VISIBLE
+        device_read_department.visibility = View.VISIBLE
+        device_read_project.visibility = View.VISIBLE
+        device_read_company_owner.visibility = View.VISIBLE
+        device_read_add_date.visibility = View.VISIBLE
+        device_read_comment.visibility = View.VISIBLE
+        device_read_nst.visibility = View.VISIBLE
+    }
+
     private fun setInventoryView() {
         displayGenericConfirmationLayout()
 
@@ -626,6 +656,9 @@ class DeviceActivity : AppCompatActivity() {
             }
             DeviceIntent.CREATE -> {
                 setCreateView()
+            }
+            DeviceIntent.DISPLAY -> {
+                setDisplayView()
             }
             else -> {
             }

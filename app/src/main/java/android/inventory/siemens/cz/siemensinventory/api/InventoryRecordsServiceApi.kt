@@ -13,15 +13,6 @@ import retrofit2.http.Path
 
 interface InventoryRecordsServiceApi {
 
-    @GET("inventory-records/checked")
-    fun getCheckedDevices() : Call<List<Device>>
-
-    @GET("inventory-records/unchecked")
-    fun getUnCheckedDevices() : Call<List<Device>>
-
-    @GET("inventory-records/{id}")
-    fun getInventoryRecord(@Path("id") inventoryRecordId: Long) : Call<InventoryRecord>
-
     @PUT("inventory-records/{id}")
     fun updateInventoryRecord(@Path("id") inventoryRecordId: Long, @Body inventoryRecord: InventoryRecord) : Call<InventoryRecord>
 

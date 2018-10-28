@@ -20,7 +20,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     private var mScannerView: ZXingScannerView? = null

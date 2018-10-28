@@ -26,7 +26,6 @@ class BorrowActivity : AppCompatActivity() {
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val parameterName = "device_barcode_id"
     private var deviceApi = DeviceServiceApi.Factory.create(this)
-    private var userScdApi = LoginUsersScdApi.Factory.create(this)
     private var adapter : BorrowedDevicesAdapter? = null
     private var snackBarNotifier : SnackBarNotifier? = null
 

@@ -16,8 +16,8 @@ interface CompanyOwnerServiceApi {
     @GET("company-owners/")
     fun getCompanyOwners() : Call<List<CompanyOwner>>
 
-    @GET("company-owners/{companyowner}")
-    fun getCompanyOwner(@Path("companyowner") companyOwnerId: Long) : Call<CompanyOwner>
+//    @GET("company-owners/{companyowner}")
+//    fun getCompanyOwner(@Path("companyowner") companyOwnerId: Long) : Call<CompanyOwner>
 
     @POST("company-owners/")
     fun createCompanyOwner(@Body companyOwner: GenericNameEntity?): Call<CompanyOwner>

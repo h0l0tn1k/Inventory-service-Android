@@ -89,7 +89,7 @@ class SettingsActivity : AppCompatActivity() {
         private fun setListeners() {
             findPreference("testConnectionToService").onPreferenceClickListener = Preference.OnPreferenceClickListener {
 
-                if(serviceSettings?.isUrlWellFormated() == true) {
+                if(serviceSettings?.isUrlWellFormatted() == true) {
                     serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                             if(response?.isSuccessful == true) {

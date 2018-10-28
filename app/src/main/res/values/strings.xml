@@ -90,6 +90,7 @@
 
     <string name="find">Find</string>
     <string name="device">Device</string>
+    <string name="devices">Devices</string>
     <string name="device_type_and_version">Device type &amp; version</string>
     <string name="profile">Profile</string>
     <string name="unable_to_scan">Unable to Scan Barcode / QR code. Try Manual Option.</string>

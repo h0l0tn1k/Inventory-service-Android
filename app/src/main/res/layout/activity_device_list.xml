@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/device_list_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".device.DeviceListActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <SearchView
+            android:id="@+id/device_search_box"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="#FFF"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/enter_serial_or_barcode_number" />
+
+        <ProgressBar
+            android:id="@+id/device_progress_bar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/device_no_results_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/no_results_found"
+            android:visibility="gone"/>
+
+        <ListView
+            android:id="@+id/device_search_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:headerDividersEnabled="true"
+            android:orientation="vertical"
+            android:visibility="visible"/>
+    </LinearLayout>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/device_scanBtn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginEnd="@dimen/fab_margin"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_menu_camera"
+        app:fabSize="normal" />
+
+</RelativeLayout>

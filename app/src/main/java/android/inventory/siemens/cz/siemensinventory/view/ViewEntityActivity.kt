@@ -17,7 +17,7 @@ class ViewEntityActivity : AppCompatActivity() {
     private var adapter: ViewEntityAdapter? = null
     private var viewType: ViewType? = null
     private var dataProvider: ViewEntityDataProvider? = null
-    private var snackbarNotifier: SnackBarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
     private val NEW_EDIT_ENTITY_ACTIVITY_REQUEST_CODE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class ViewEntityActivity : AppCompatActivity() {
 
     private fun initView() {
         setView()
-        snackbarNotifier = SnackBarNotifier(generic_entity_layout, this)
+        snackBarNotifier = SnackBarNotifier(generic_entity_layout, this)
         view_generic_addNew.visibility = if (AppData.loginUserScd?.flagWrite == true) View.VISIBLE else View.GONE
         view_generic_addNew.setOnClickListener {
             startCreateEditEntity()

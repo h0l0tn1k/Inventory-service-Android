@@ -2,7 +2,6 @@ package android.inventory.siemens.cz.siemensinventory.api
 
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.api.entity.GenericNameEntity
-import android.inventory.siemens.cz.siemensinventory.api.entity.Project
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
 import android.inventory.siemens.cz.siemensinventory.view.ViewEntity
 import retrofit2.Call
@@ -15,8 +14,8 @@ interface SupplierServiceApi {
     @GET("suppliers/")
     fun getSuppliers(): Call<List<Supplier>>
 
-    @GET("suppliers/{supplier}")
-    fun getSupplier(@Path("supplier") supplierId: Long): Call<Supplier>
+//    @GET("suppliers/{supplier}")
+//    fun getSupplier(@Path("supplier") supplierId: Long): Call<Supplier>
 
     @POST("suppliers/")
     fun createSupplier(@Body supplier: GenericNameEntity?): Call<Supplier>

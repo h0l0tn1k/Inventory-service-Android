@@ -14,8 +14,8 @@ interface ProjectServiceApi {
     @GET("projects/")
     fun getProjects() : Call<List<Project>>
 
-    @GET("projects/{project}")
-    fun getProject(@Path("project") projectId: Long) : Call<Project>
+//    @GET("projects/{project}")
+//    fun getProject(@Path("project") projectId: Long) : Call<Project>
 
     @POST("projects/")
     fun createProject(@Body project: GenericNameEntity?): Call<Project>

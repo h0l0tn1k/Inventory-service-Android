@@ -20,13 +20,13 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity() {
 
-    private var snackbarNotifier: SnackBarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        snackbarNotifier = SnackBarNotifier(login_activity_layout, this)
+        snackBarNotifier = SnackBarNotifier(login_activity_layout, this)
 
         btn_login?.setOnClickListener { loginUser() }
         login_btn_connection?.setOnClickListener { launchSettings() }
@@ -39,7 +39,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkConnectionToService() {
-        if (ServiceSettings(this).isUrlWellFormated()) {
+        if (ServiceSettings(this).isUrlWellFormatted()) {
             ServiceSettings(this).checkConnection().enqueue(object : Callback<Void> {
                 override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                     if (response?.isSuccessful != true) {
@@ -57,7 +57,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun showMessageAndShakeWithConnectionIcon(message: String) {
-        snackbarNotifier?.show(message)
+        snackBarNotifier?.show(message)
         login_btn_connection.startAnimation(AnimationUtils.loadAnimation(this, R.anim.shake))
     }
 
@@ -66,18 +66,19 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun loginUser() {
-        if (isUserInputValid() && ServiceSettings(this).isUrlWellFormated()) {
+        if (isUserInputValid() && ServiceSettings(this).isUrlWellFormatted()) {
             fireLoginUserRequest()
         }
     }
 
     private fun fireLoginUserRequest() {
+        //todo to be replaced with oauth
         val user = LoginServiceApi.Factory.create(this).login(login_email?.text.toString(), login_password?.text.toString())
 
         user.enqueue(object : Callback<LoginUserScd> {
             override fun onFailure(call: Call<LoginUserScd>?, t: Throwable?) {
                 AppData.loginUserScd = null
-                snackbarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
+                snackBarNotifier?.show(getString(R.string.error_cannot_connect_to_service))
                 setResult(Activity.RESULT_CANCELED, intent)
             }
 
@@ -94,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                         401 -> getString(R.string.invalid_credentials)
                         else -> getString(R.string.unknown_error)
                     }
-                    snackbarNotifier?.show(message)
+                    snackBarNotifier?.show(message)
                 }
             }
         })

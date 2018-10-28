@@ -3,12 +3,15 @@ package android.inventory.siemens.cz.siemensinventory.activities
 import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.adapters.DashboardAdapter
+import android.inventory.siemens.cz.siemensinventory.adapters.DashboardItem
 import android.inventory.siemens.cz.siemensinventory.api.DeviceStatesServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceState
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
 import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationActivity
 import android.inventory.siemens.cz.siemensinventory.data.AppData
+import android.inventory.siemens.cz.siemensinventory.device.DeviceListActivity
 import android.inventory.siemens.cz.siemensinventory.devicetype.DeviceTypesListActivity
 import android.inventory.siemens.cz.siemensinventory.electricrevision.ElectricRevisionActivity
 import android.inventory.siemens.cz.siemensinventory.inventory.InventoryActivity
@@ -27,18 +30,17 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-
 class MainActivity : AppCompatActivity() {
 
     private val LOGIN_ACTIVITY_REQUEST_CODE = 0
     private var deviceStateApi: DeviceStatesServiceApi? = null
     private var dashboardAdapter: DashboardAdapter? = null
-    private var snackbarNotifier: SnackBarNotifier? = null
+    private var snackBarNotifier: SnackBarNotifier? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        snackbarNotifier = SnackBarNotifier(main_activity_layout, this)
+        snackBarNotifier = SnackBarNotifier(main_activity_layout, this)
 
         if (getUser() == null) {
             startLoginActivity()
@@ -73,16 +75,16 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initView() {
-        val gridview: GridView = findViewById(R.id.main_dashboard)
+        val gridView: GridView = findViewById(R.id.main_dashboard)
         dashboardAdapter = DashboardAdapter(this)
-        gridview.adapter = dashboardAdapter
+        gridView.adapter = dashboardAdapter
 
-        gridview.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+        gridView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
             val dashboardItem = dashboardAdapter?.getItem(position) as DashboardItem
             if (dashboardItem.visible) {
                 startActivityBasedOnNavItem(dashboardItem.navId)
             } else {
-                snackbarNotifier?.show(getString(R.string.no_permission_to_access_this_resource))
+                snackBarNotifier?.show(getString(R.string.no_permission_to_access_this_resource))
             }
         }
 
@@ -97,9 +99,9 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_inventory -> Intent(this, InventoryActivity::class.java)
             R.id.nav_electric_revision -> Intent(this, ElectricRevisionActivity::class.java)
             R.id.nav_calibration -> Intent(this, CalibrationActivity::class.java)
-            //R.id.nav_user_permissions -> Intent(this, EditUserPermissionsActivity::class.java)
 
             //Views
+            R.id.nav_devices -> Intent(this, DeviceListActivity::class.java)
             R.id.nav_device_type -> Intent(this, DeviceTypesListActivity::class.java)
             R.id.nav_suppliers, R.id.nav_departments, R.id.nav_company_owners, R.id.nav_project -> {
                 getViewEntityActivityIntent(navItemId)
@@ -112,7 +114,6 @@ class MainActivity : AppCompatActivity() {
                 startLoginActivity()
                 null
             }
-            //TODO add About
             else -> null
         }
         if (intent != null) startActivity(intent)
@@ -121,16 +122,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.main, menu)
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
-        //todo finish permissions
-        menu?.findItem(R.id.nav_borrow_group)?.isVisible = getUser()?.flagBorrow == true
-        menu?.findItem(R.id.nav_inventory_group)?.isVisible = getUser()?.flagInventory == true
-        menu?.findItem(R.id.nav_electric_revision_group)?.isVisible = getUser()?.flagRevision == true
-        menu?.findItem(R.id.nav_calibration_group)?.isVisible = getUser()?.flagRevision == true
-        //menu?.findItem(R.id.nav_user_permissions_group)?.isVisible = getUser()?.flagAdmin == true
-        return super.onPrepareOptionsMenu(menu)
     }
 
     private fun startLoginActivity() {

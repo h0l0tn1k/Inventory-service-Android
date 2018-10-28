@@ -34,8 +34,9 @@
         <activity
             android:name=".activities.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".activities.ScanActivity"
-            android:theme="@style/AppTheme.NoActionBar"  />
+        <activity
+            android:name=".activities.ScanActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".electricrevision.ElectricRevisionActivity"
             android:label="@string/electric_revision"
@@ -51,9 +52,6 @@
             android:name=".calibration.CalibrationActivity"
             android:label="@string/calibration" />
         <activity
-            android:name=".activities.EditUserPermissionsActivity"
-            android:label="@string/user_permissions" />
-        <activity
             android:name=".inventory.InventoryActivity"
             android:label="@string/inventory" />
         <activity android:name=".view.ViewEntityActivity" />
@@ -65,12 +63,15 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".devicetype.DeviceTypesListActivity"
-            android:label="@string/device_types"/>
+            android:label="@string/device_types" />
         <activity
             android:name=".devicetype.DeviceTypeActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".view.CreateEditNewEntityActivity"
-            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".view.CreateEditNewEntityActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".device.DeviceListActivity"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

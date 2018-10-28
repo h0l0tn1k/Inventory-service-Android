@@ -64,13 +64,9 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         el_revision_progress_bar.visibility = View.GONE
     }
 
-    override fun onQueryTextSubmit(p0: String?): Boolean {
-        return false
-    }
+    override fun onClose(): Boolean = false
 
-    override fun onClose(): Boolean {
-        return false
-    }
+    override fun onQueryTextSubmit(p0: String?): Boolean = false
 
     private fun updateResultsList(devices: List<Device>, queryEmpty: Boolean) {
         if (queryEmpty) {
@@ -97,26 +93,26 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
 
     override fun onQueryTextChange(query: String?): Boolean {
         val queryIsEmpty = query?.isEmpty() == true
-
-        if (isSerialNumberValid(query)) {
-            val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
-            showProgressBar()
-            queue?.enqueue(object : Callback<List<Device>> {
-                override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
-                    if (response?.isSuccessful == true) {
-                        val devices = response.body() as List<Device>
-                        updateResultsList(devices, queryIsEmpty)
-                    }
+//
+//        if (isSerialNumberValid(query)) {
+        val queue = deviceApi?.getDevicesWithSerialOrBarcodeNumberLike(query.toString().trim())
+        showProgressBar()
+        queue?.enqueue(object : Callback<List<Device>> {
+            override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
+                if (response?.isSuccessful == true) {
+                    val devices = response.body() as List<Device>
+                    updateResultsList(devices, queryIsEmpty)
                 }
+            }
 
-                override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
-                    this@ElectricRevisionActivity.onFailure()
-                    hideProgressBar()
-                }
-            })
-        } else {
-            updateResultsList(emptyList(), queryIsEmpty)
-        }
+            override fun onFailure(call: Call<List<Device>>?, t: Throwable?) {
+                this@ElectricRevisionActivity.onFailure()
+                hideProgressBar()
+            }
+        })
+//        } else {
+//            updateResultsList(emptyList(), queryIsEmpty)
+//        }
 
         return false
     }
@@ -124,7 +120,6 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
     private fun startScan() {
         val scanIntent = Intent(this, ScanActivity::class.java)
         scanIntent.putExtra("parameterName", scanParameterName)
-
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
     }
 

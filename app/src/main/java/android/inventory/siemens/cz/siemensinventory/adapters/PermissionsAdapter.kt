@@ -30,12 +30,12 @@ class PermissionsAdapter(
         val permissionNameView = view?.findViewById(R.id.permissionName) as TextView
         permissionNameView.text = permission.name
 
-        val permissionValueView = view?.findViewById(R.id.permissionValue) as ImageView
+        val permissionValueView = view.findViewById(R.id.permissionValue) as ImageView
 
-        var imageResource = if (permission?.value == null
-                                || permission.value == false)
-                                    R.drawable.ic_close_red_800_24dp
-                                    else R.drawable.ic_check_green_a700_24dp
+        val imageResource = if (permission.value == null
+                || permission.value == false)
+            R.drawable.ic_close_red_800_24dp
+        else R.drawable.ic_check_green_a700_24dp
 
         permissionValueView.setImageResource(imageResource)
 

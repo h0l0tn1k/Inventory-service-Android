@@ -14,20 +14,11 @@ interface DeviceServiceApi {
     @GET("devices/")
     fun getDevices() : Call<List<Device>>
 
-    @GET("devices/{deviceId}")
-    fun getDevice(@Path("deviceId") deviceId: Long) : Call<Device>
-
     @GET("devices/barcodeNumber/{barcodeId}")
     fun getDeviceByBarcodeId(@Path("barcodeId") barcodeId: String) : Call<Device>
 
-    @GET("devices/serialNumber/{serialNo}")
-    fun getDeviceBySerialNo(@Path("serialNo") serialNo: String) : Call<Device>
-
-    @GET("devices/serialNumber/like/{serialNo}")
-    fun getDevicesWithSerialNoLike(@Path("serialNo") serialNo: String) : Call<List<Device>>
-
     @GET("devices/serialOrBarcodeNumber/like/{serialOrBarcodeNo}")
-    fun getDevicesWithSerialOrBarcodeNumberLike(@Path("serialOrBarcodeNo") serialNo: String) : Call<List<Device>>
+    fun getDevicesWithSerialOrBarcodeNumberLike(@Path("serialOrBarcodeNo") serialBarcodeNo: String) : Call<List<Device>>
 
     @GET("devices/borrowed-by/{scdId}")
     fun getBorrowedDevicesByUserId(@Path("scdId") scdId: Long?) : Call<List<Device>>
@@ -40,7 +31,6 @@ interface DeviceServiceApi {
 
     object Factory {
         fun create(context : Context): DeviceServiceApi {
-            //val gson = GsonBuilder().setDateFormat("yyyy-MM-dd").create()
             val gson = GsonBuilder().create()
 
             return Retrofit.Builder()
