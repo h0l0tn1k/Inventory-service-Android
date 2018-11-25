@@ -28,16 +28,4 @@ interface DeviceServiceApi {
 
     @POST("devices/")
     fun createDevice(@Body device: Device?) : Call<Device>
-
-    object Factory {
-        fun create(context : Context): DeviceServiceApi {
-            val gson = GsonBuilder().create()
-
-            return Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create(gson))
-                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
-                    .build()
-                    .create<DeviceServiceApi>(DeviceServiceApi::class.java)
-        }
-    }
 }

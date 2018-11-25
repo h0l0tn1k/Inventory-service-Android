@@ -31,6 +31,22 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:title="OAuth parameters">
+
+        <EditTextPreference
+            android:key="clientId"
+            android:inputType="textPassword"
+            android:title="@string/clientId"/>
+
+        <EditTextPreference
+            android:key="clientSecret"
+            android:inputType="textPassword"
+            android:title="@string/clientSecret"
+            android:summary=""/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
         android:title="@string/testConnection">
                 <Preference
                     android:key="serviceUrl"

@@ -5,6 +5,7 @@ import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
 import android.inventory.siemens.cz.siemensinventory.api.LoginUsersScdApi
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
@@ -25,7 +26,7 @@ class BorrowActivity : AppCompatActivity() {
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val parameterName = "device_barcode_id"
-    private var deviceApi = DeviceServiceApi.Factory.create(this)
+    private var deviceApi: DeviceServiceApi? = null
     private var adapter = BorrowedDevicesAdapter(this, emptyList())
     private var snackBarNotifier : SnackBarNotifier? = null
 
@@ -39,6 +40,8 @@ class BorrowActivity : AppCompatActivity() {
         }
         snackBarNotifier = SnackBarNotifier(borrow_device_swipe_refresh_layout, this)
         borrow_scanBtn.setOnClickListener { startScan() }
+
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
 
         borrow_device_swipe_refresh_layout.setOnRefreshListener { loadBorrowedDevices() }
         loadBorrowedDevices()
@@ -122,8 +125,8 @@ class BorrowActivity : AppCompatActivity() {
 
     private fun loadBorrowedDevices() {
         showProgressBar()
-        deviceApi.getBorrowedDevicesByUserId(AppData.loginUserScd?.id)
-                .enqueue(object : Callback<List<Device>> {
+        deviceApi?.getBorrowedDevicesByUserId(AppData.loginUserScd?.id)
+                ?.enqueue(object : Callback<List<Device>> {
             override fun onResponse(call: Call<List<Device>>?, response: Response<List<Device>>?) {
                 hideProgressBar()
                 if(response?.isSuccessful == true) {

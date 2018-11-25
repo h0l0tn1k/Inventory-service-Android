@@ -4,8 +4,10 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceCalibration
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
@@ -30,8 +32,8 @@ class CalibrationActivity : AppCompatActivity(),
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private var snackBarNotifier: SnackBarNotifier? = null
     private val scanParameterName = "device"
-    private val deviceApi = DeviceServiceApi.Factory.create(this)
-    private val calibrationApi = CalibrationServiceApi.Factory.create(this)
+    private var deviceApi: DeviceServiceApi? = null
+    private var calibrationApi: CalibrationServiceApi? = null
     private var adapter: CalibrationListAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,7 +45,8 @@ class CalibrationActivity : AppCompatActivity(),
         snackBarNotifier = SnackBarNotifier(calibration_layout, this)
 
         calibration_scanBtn.setOnClickListener { startScan() }
-        //loadDevices()
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
+        calibrationApi = ServiceApiGenerator.Factory.createService(CalibrationServiceApi::class.java, AppData.accessToken, this)
     }
 
     private fun initLayoutElements() {

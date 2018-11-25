@@ -4,8 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceElectricRevision
+import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationServiceApi
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
@@ -40,8 +43,8 @@ class ElectricRevisionActivity : AppCompatActivity(), SearchView.OnQueryTextList
         initLayoutElements()
 
         snackBarNotifier = SnackBarNotifier(electric_revision_layout, this)
-        deviceApi = DeviceServiceApi.Factory.create(this)
-        revisionApi = ElectricRevisionServiceApi.Factory.create(this)
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
+        revisionApi = ServiceApiGenerator.Factory.createService(ElectricRevisionServiceApi::class.java, AppData.accessToken, this)
 
         el_revision_scanBtn.setOnClickListener { startScan() }
         //loadDevices()

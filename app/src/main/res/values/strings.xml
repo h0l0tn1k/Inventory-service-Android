@@ -164,4 +164,11 @@
     <string name="supplier">Supplier</string>
     <string name="price">Price</string>
     <string name="classification">Classification</string>
+    <string name="unauthorized_to_perform_this_action">You are unauthorized to perform this action</string>
+    <string name="access_denied">Access Denied</string>
+
+    <string name="clientId">Client Id</string>
+    <string name="clientSecret">Client Secret</string>
+    <string name="connection_successful">Connection is successful!</string>
+    <string name="connection_not_successful">Connection is not successful!</string>
 </resources>

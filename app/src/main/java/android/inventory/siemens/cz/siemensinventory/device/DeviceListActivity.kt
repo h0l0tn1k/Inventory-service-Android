@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -32,7 +34,7 @@ class DeviceListActivity : AppCompatActivity(), SearchView.OnQueryTextListener, 
         setContentView(R.layout.activity_device_list)
 
         snackBarNotifier = SnackBarNotifier(device_list_layout, this)
-        deviceApi = DeviceServiceApi.Factory.create(this)
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
         initLayoutElements()
 
         loadDevices()

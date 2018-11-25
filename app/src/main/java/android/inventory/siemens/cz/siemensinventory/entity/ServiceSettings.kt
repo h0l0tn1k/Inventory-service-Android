@@ -3,7 +3,9 @@ package android.inventory.siemens.cz.siemensinventory.entity
 import android.content.Context
 import android.content.SharedPreferences
 import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
+import android.inventory.siemens.cz.siemensinventory.login.LoginServiceApi
 import android.preference.PreferenceManager
+import android.util.Base64
 import android.util.Patterns
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -45,8 +47,29 @@ class ServiceSettings(context: Context) {
             preferenceEditor.putString("serviceUrl", getServiceUrlFormatted()).commit()
         }
 
+    var clientId: String
+        get() = preferenceManager.getString("clientId", "")
+        set(value) {
+            preferenceEditor.putString("clientId", value).commit()
+        }
+
+    var clientSecret: String
+        get() = preferenceManager.getString("clientSecret", "")
+        set(value) {
+            preferenceEditor.putString("clientSecret", value).commit()
+        }
+
+    fun getClientBaseAuthorization(): String {
+        val clientIdAndSecret = "$clientId:$clientSecret"
+        return "Basic " + Base64.encodeToString(clientIdAndSecret.toByteArray(), Base64.NO_WRAP)
+    }
+
     fun getServiceUrlFormatted() : String {
         return "$httpMethod://$baseUrl:$port$path/"
+    }
+
+    fun getServiceBaseAddress() : String {
+        return "$httpMethod://$baseUrl:$port"
     }
 
     fun checkConnection(): Call<Void> {

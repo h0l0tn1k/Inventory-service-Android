@@ -2,10 +2,14 @@ package android.inventory.siemens.cz.siemensinventory.devicetype
 
 import android.databinding.DataBindingUtil
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.api.entity.Supplier
+import android.inventory.siemens.cz.siemensinventory.calibration.CalibrationServiceApi
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.databinding.ActivityDeviceType2Binding
+import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
 import android.inventory.siemens.cz.siemensinventory.view.ViewMode
 import android.os.Bundle
@@ -32,8 +36,8 @@ class DeviceTypeActivity : AppCompatActivity() {
         deviceTypeBinding = DataBindingUtil.setContentView(this, R.layout.activity_device_type2) as ActivityDeviceType2Binding
         deviceTypeBinding?.deviceType = getDeviceTypeFromIntent()
         deviceTypeBinding?.viewMode = ViewMode(isEditMode())
-        deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
-        supplierApi = SupplierServiceApi.Factory.create(this)
+        deviceTypeApi = ServiceApiGenerator.Factory.createService(DeviceTypeServiceApi::class.java, AppData.accessToken, this)
+        supplierApi = ServiceApiGenerator.Factory.createService(SupplierServiceApi::class.java, AppData.accessToken, this)
         snackbarNotifier = SnackBarNotifier(activity_device_type_layout, this)
 
         loadSuppliers()

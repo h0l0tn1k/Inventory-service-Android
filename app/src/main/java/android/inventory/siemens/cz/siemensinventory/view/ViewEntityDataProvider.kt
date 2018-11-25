@@ -1,11 +1,9 @@
 package android.inventory.siemens.cz.siemensinventory.view
 
 import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.api.CompanyOwnerServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.DepartmentsServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.ProjectServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.SupplierServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.*
 import android.inventory.siemens.cz.siemensinventory.api.entity.*
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.widget.Toast
 import retrofit2.Call
 import retrofit2.Callback
@@ -27,19 +25,19 @@ class ViewEntityDataProvider(
     }
 
     private fun getDepartmentsData() {
-        DepartmentsServiceApi.Factory.create(context).getDepartments().enqueue(getCallback())
+        createService(DepartmentsServiceApi::class.java).getDepartments().enqueue(getCallback())
     }
 
     private fun getCompanyOwnersData() {
-        CompanyOwnerServiceApi.Factory.create(context).getCompanyOwners().enqueue(getCallback())
+        createService(CompanyOwnerServiceApi::class.java).getCompanyOwners().enqueue(getCallback())
     }
 
     private fun getProjectsData() {
-        ProjectServiceApi.Factory.create(context).getProjects().enqueue(getCallback())
+        createService(ProjectServiceApi::class.java).getProjects().enqueue(getCallback())
     }
 
     private fun getSuppliersData() {
-        SupplierServiceApi.Factory.create(context).getSuppliers().enqueue(getCallback())
+        createService(SupplierServiceApi::class.java).getSuppliers().enqueue(getCallback())
     }
 
     private fun <T : ViewEntity> getCallback() : Callback<List<T>> {
@@ -61,5 +59,9 @@ class ViewEntityDataProvider(
         if(response.isSuccessful) {
             adapter.updateList(response.body() as List<ViewEntity>)
         }
+    }
+
+    private fun <T> createService(classType: Class<T>): T {
+        return ServiceApiGenerator.Factory.createService(classType, AppData.accessToken, context)
     }
 }

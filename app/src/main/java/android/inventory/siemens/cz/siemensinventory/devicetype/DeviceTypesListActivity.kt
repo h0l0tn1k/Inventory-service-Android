@@ -2,6 +2,7 @@ package android.inventory.siemens.cz.siemensinventory.devicetype
 
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceType
 import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
@@ -29,7 +30,7 @@ class DeviceTypesListActivity : AppCompatActivity(), SearchView.OnQueryTextListe
         initLayoutElements()
 
         snackBarNotifier = SnackBarNotifier(device_type_list_layout, this)
-        deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
+        deviceTypeApi = ServiceApiGenerator.Factory.createService(DeviceTypeServiceApi::class.java, AppData.accessToken, this)
     }
 
     private fun initLayoutElements() {

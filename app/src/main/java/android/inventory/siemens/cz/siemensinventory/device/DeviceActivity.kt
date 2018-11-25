@@ -50,14 +50,14 @@ class DeviceActivity : AppCompatActivity() {
     private var snackBarNotifier: SnackBarNotifier? = null
 
     //apis
-    private val borrowApi = BorrowServiceApi.Factory.create(this)
-    private val deviceApi = DeviceServiceApi.Factory.create(this)
-    private val deviceTypeApi = DeviceTypeServiceApi.Factory.create(this)
-    private val loginUserApi = LoginUsersScdApi.Factory.create(this)
-    private val departmentApi = DepartmentsServiceApi.Factory.create(this)
-    private val companyOwnerApi = CompanyOwnerServiceApi.Factory.create(this)
-    private val projectApi = ProjectServiceApi.Factory.create(this)
-    private val deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
+    private var borrowApi: BorrowServiceApi? = null
+    private var deviceApi: DeviceServiceApi? = null
+    private var deviceTypeApi: DeviceTypeServiceApi? = null
+    private var loginUserApi: LoginUsersScdApi? = null
+    private var departmentApi: DepartmentsServiceApi? = null
+    private var companyOwnerApi: CompanyOwnerServiceApi? = null
+    private var projectApi: ProjectServiceApi? = null
+    private var deviceStateApi: DeviceStatesServiceApi? = null
 
     //arrays
     private val deviceTypes = arrayListOf<DeviceType>()
@@ -74,9 +74,21 @@ class DeviceActivity : AppCompatActivity() {
         snackBarNotifier = SnackBarNotifier(activity_device_layout, this)
 
         device = getDeviceFromIntent()
+        borrowApi = createService(BorrowServiceApi::class.java)
+        deviceApi = createService(DeviceServiceApi::class.java)
+        deviceTypeApi = createService(DeviceTypeServiceApi::class.java)
+        loginUserApi = createService(LoginUsersScdApi::class.java)
+        departmentApi = createService(DepartmentsServiceApi::class.java)
+        companyOwnerApi =createService(CompanyOwnerServiceApi::class.java)
+        projectApi = createService(ProjectServiceApi::class.java)
+        deviceStateApi = createService(DeviceStatesServiceApi::class.java)
         deviceBinding?.device = device
         handleIntent()
         loadSpinnerValues()
+    }
+
+    private fun <T> createService(classType: Class<T>): T {
+        return ServiceApiGenerator.Factory.createService(classType, AppData.accessToken, this)
     }
 
     private fun setBorrowView() {
@@ -135,7 +147,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadDeviceTypes() {
-        deviceTypeApi.getDeviceTypes().enqueue(object : Callback<List<DeviceType>> {
+        deviceTypeApi?.getDeviceTypes()?.enqueue(object : Callback<List<DeviceType>> {
             override fun onFailure(call: Call<List<DeviceType>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -157,7 +169,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadUsers() {
-        loginUserApi.getUsers().enqueue(object : Callback<List<LoginUserScd>> {
+        loginUserApi?.getUsers()?.enqueue(object : Callback<List<LoginUserScd>> {
             override fun onFailure(call: Call<List<LoginUserScd>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -183,7 +195,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadDepartments() {
-        departmentApi.getDepartments().enqueue(object : Callback<List<Department>> {
+        departmentApi?.getDepartments()?.enqueue(object : Callback<List<Department>> {
             override fun onFailure(call: Call<List<Department>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -205,7 +217,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadCompanyOwners() {
-        companyOwnerApi.getCompanyOwners().enqueue(object : Callback<List<CompanyOwner>> {
+        companyOwnerApi?.getCompanyOwners()?.enqueue(object : Callback<List<CompanyOwner>> {
             override fun onFailure(call: Call<List<CompanyOwner>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -227,7 +239,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadProjects() {
-        projectApi.getProjects().enqueue(object : Callback<List<Project>> {
+        projectApi?.getProjects()?.enqueue(object : Callback<List<Project>> {
             override fun onFailure(call: Call<List<Project>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -249,7 +261,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun loadDeviceStates() {
-        deviceStateApi.getDeviceStates().enqueue(object : Callback<List<DeviceState>> {
+        deviceStateApi?.getDeviceStates()?.enqueue(object : Callback<List<DeviceState>> {
             override fun onFailure(call: Call<List<DeviceState>>?, t: Throwable?) {
                 snackBarNotifier?.show(getString(R.string.error_loading_data))
             }
@@ -314,7 +326,7 @@ class DeviceActivity : AppCompatActivity() {
             device.deviceState = device_edit_status.selectedItem as DeviceState
 
             if (deviceIntent == DeviceIntent.EDIT) {
-                deviceApi.updateDevice(device.id, device).enqueue(object : Callback<Device> {
+                deviceApi?.updateDevice(device.id, device)?.enqueue(object : Callback<Device> {
                     override fun onFailure(call: Call<Device>?, t: Throwable?) {
                         snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
                     }
@@ -331,7 +343,7 @@ class DeviceActivity : AppCompatActivity() {
                     }
                 })
             } else if (deviceIntent == DeviceIntent.CREATE) {
-                deviceApi.createDevice(device).enqueue(object : Callback<Device> {
+                deviceApi?.createDevice(device)?.enqueue(object : Callback<Device> {
                     override fun onFailure(call: Call<Device>?, t: Throwable?) {
                         snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
                     }
@@ -533,7 +545,7 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun saveBorrowResult(borrowReturn: BorrowReturn) {
-        borrowApi.createBorrowReturn(borrowReturn).enqueue(object : Callback<Void>{
+        borrowApi?.createBorrowReturn(borrowReturn)?.enqueue(object : Callback<Void>{
             override fun onFailure(call: Call<Void>?, t: Throwable?) {
             }
             override fun onResponse(call: Call<Void>?, response: Response<Void>?) {

@@ -18,8 +18,6 @@ import retrofit2.Response
 
 class SettingsActivity : AppCompatActivity() {
 
-    private var snackbarNotifier : SnackBarNotifier? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -75,6 +73,24 @@ class SettingsActivity : AppCompatActivity() {
             findPreference("path").setDefaultValue(serviceSettings?.path)
             findPreference("serviceUrl").summary = serviceSettings?.getServiceUrlFormatted()
             findPreference("serviceUrl").setDefaultValue(serviceSettings?.getServiceUrlFormatted())
+
+            val clientId = serviceSettings?.clientId
+            val clientIdPreference = findPreference("clientId")
+            if(clientId == null || clientId.toString().isBlank()) {
+                clientIdPreference.icon = context.getDrawable(R.drawable.ic_close_red_800_24dp)
+            } else {
+                clientIdPreference.icon = context.getDrawable(R.drawable.ic_check_green_a700_24dp)
+            }
+            clientIdPreference.setDefaultValue(serviceSettings?.clientId)
+
+            val clientSecret = serviceSettings?.clientSecret
+            val clientSecretPreference = findPreference("clientSecret")
+            if(clientSecret == null || clientSecret.toString().isBlank()) {
+                clientSecretPreference.icon = context.getDrawable(R.drawable.ic_close_red_800_24dp)
+            } else {
+                clientSecretPreference.icon = context.getDrawable(R.drawable.ic_check_green_a700_24dp)
+            }
+            clientSecretPreference.setDefaultValue(serviceSettings?.clientSecret)
         }
 
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -93,13 +109,13 @@ class SettingsActivity : AppCompatActivity() {
                     serviceSettings?.checkConnection()?.enqueue(object : Callback<Void> {
                         override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                             if(response?.isSuccessful == true) {
-                                snackbarNotifier?.show("Connection is successful!")
+                                snackbarNotifier?.show(context.getString(R.string.connection_successful))
                             } else {
-                                snackbarNotifier?.show("Connection is not successful!")
+                                snackbarNotifier?.show(context.getString(R.string.connection_not_successful))
                             }
                         }
                         override fun onFailure(call: Call<Void>?, t: Throwable?) {
-                            snackbarNotifier?.show("Connection is not successful!")
+                            snackbarNotifier?.show(context.getString(R.string.connection_not_successful))
                         }
                     })
                 } else {

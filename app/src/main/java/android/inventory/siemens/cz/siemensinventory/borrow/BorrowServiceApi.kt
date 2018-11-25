@@ -15,14 +15,4 @@ interface BorrowServiceApi {
 
     @POST("borrow/")
     fun createBorrowReturn(@Body borrowReturn: BorrowReturn): Call<Void>
-
-    object Factory {
-        fun create(context: Context): BorrowServiceApi {
-            return Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
-                    .build()
-                    .create<BorrowServiceApi>(BorrowServiceApi::class.java)
-        }
-    }
 }

@@ -14,9 +14,6 @@ interface SupplierServiceApi {
     @GET("suppliers/")
     fun getSuppliers(): Call<List<Supplier>>
 
-//    @GET("suppliers/{supplier}")
-//    fun getSupplier(@Path("supplier") supplierId: Long): Call<Supplier>
-
     @POST("suppliers/")
     fun createSupplier(@Body supplier: GenericNameEntity?): Call<Supplier>
 
@@ -25,14 +22,4 @@ interface SupplierServiceApi {
 
     @DELETE("suppliers/{supplierId}")
     fun deleteSupplier(@Path("supplierId") supplierId: Long) : Call<Void>
-
-    object Factory {
-        fun create(context: Context): SupplierServiceApi {
-            return Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
-                    .build()
-                    .create<SupplierServiceApi>(SupplierServiceApi::class.java)
-        }
-    }
 }

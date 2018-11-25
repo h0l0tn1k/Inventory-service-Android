@@ -4,7 +4,9 @@ import android.app.Activity
 import android.content.Intent
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.activities.ScanActivity
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceActivity
 import android.inventory.siemens.cz.siemensinventory.device.DeviceIntent
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
@@ -27,8 +29,8 @@ class InventoryActivity : AppCompatActivity(),
     private val SCAN_ACTIVITY_REQUEST_CODE = 0
     private val DEVICE_ACTIVITY_REQUEST_CODE = 1
     private val scanParameterName = "device"
-    private val deviceApi = DeviceServiceApi.Factory.create(this)
-    private val inventoryApi = InventoryRecordsServiceApi.Factory.create(this)
+    private var deviceApi: DeviceServiceApi? = null
+    private var inventoryApi: InventoryRecordsServiceApi? = null
     private var snackBarNotifier: SnackBarNotifier? = null
     private var listAdapter: InventoryListAdapter? = null
 
@@ -39,7 +41,8 @@ class InventoryActivity : AppCompatActivity(),
         snackBarNotifier = SnackBarNotifier(inventory_layout, this)
 
         initListeners()
-        //loadDevices()
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
+        inventoryApi = ServiceApiGenerator.Factory.createService(InventoryRecordsServiceApi::class.java, AppData.accessToken, this)
     }
 
     private fun initListeners() {

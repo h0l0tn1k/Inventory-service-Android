@@ -19,7 +19,23 @@ interface SiemensServiceApi {
                 settings = ServiceSettings(context)
             }
 
+            return settings?.getServiceBaseAddress().toString()
+        }
+
+        fun getServiceUrl(context: Context): String {
+            if(settings == null) {
+                settings = ServiceSettings(context)
+            }
+
             return settings?.getServiceUrlFormatted().toString()
+        }
+
+        fun getClientBaseAuthorization(context: Context): String {
+            if(settings == null) {
+                settings = ServiceSettings(context)
+            }
+
+            return settings?.getClientBaseAuthorization().toString()
         }
     }
 }

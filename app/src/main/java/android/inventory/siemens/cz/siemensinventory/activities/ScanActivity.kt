@@ -4,7 +4,9 @@ import android.Manifest
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.inventory.siemens.cz.siemensinventory.R
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.Device
+import android.inventory.siemens.cz.siemensinventory.data.AppData
 import android.inventory.siemens.cz.siemensinventory.device.DeviceServiceApi
 import android.inventory.siemens.cz.siemensinventory.entity.enums.ScanIntent
 import android.inventory.siemens.cz.siemensinventory.tools.SnackBarNotifier
@@ -23,7 +25,7 @@ import retrofit2.Response
 class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
 
     private var mScannerView: ZXingScannerView? = null
-    private var deviceApi : DeviceServiceApi = DeviceServiceApi.Factory.create(this)
+    private var deviceApi: DeviceServiceApi? = null
     private val MY_CAMERA_REQUEST_CODE = 100
     private var parameterName: String? = null
     private var scanIntent = ScanIntent.Device
@@ -36,7 +38,7 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.CAMERA), MY_CAMERA_REQUEST_CODE)
         }
-
+        deviceApi = ServiceApiGenerator.Factory.createService(DeviceServiceApi::class.java, AppData.accessToken, this)
         parameterName = getParameterName()
         scanIntent = getScanIntent()
         if (parameterName.isNullOrEmpty()) {
@@ -72,13 +74,12 @@ class ScanActivity : AppCompatActivity(), ZXingScannerView.ResultHandler {
         }
 
         if(deviceBarcodeId != null && deviceBarcodeId.isNotEmpty()) {
-            val queue = deviceApi.getDeviceByBarcodeId(deviceBarcodeId)
-            queue.enqueue(object : Callback<Device> {
+            val queue = deviceApi?.getDeviceByBarcodeId(deviceBarcodeId)
+            queue?.enqueue(object : Callback<Device> {
                 override fun onResponse(call: Call<Device>?, response: Response<Device>?) {
                     if(response?.isSuccessful == true) {
                         intent.putExtra(parameterName, Gson().toJson(response.body()))
                     } else {
-                        //todo finish how to handle other responses like 404 Not found
                         intent.putExtra(parameterName, "")
                     }
                     intent.putExtra("barcode", deviceBarcodeId)

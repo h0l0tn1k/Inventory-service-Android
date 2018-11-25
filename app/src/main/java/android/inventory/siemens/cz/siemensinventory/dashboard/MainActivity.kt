@@ -6,6 +6,7 @@ import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.profile.ProfileActivity
 import android.inventory.siemens.cz.siemensinventory.activities.SettingsActivity
 import android.inventory.siemens.cz.siemensinventory.api.DeviceStatesServiceApi
+import android.inventory.siemens.cz.siemensinventory.api.ServiceApiGenerator
 import android.inventory.siemens.cz.siemensinventory.api.entity.DeviceState
 import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
 import android.inventory.siemens.cz.siemensinventory.borrow.BorrowActivity
@@ -51,7 +52,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initStaticData() {
-        deviceStateApi = DeviceStatesServiceApi.Factory.create(this)
+        deviceStateApi = ServiceApiGenerator.Factory.createService(DeviceStatesServiceApi::class.java, AppData.accessToken, this)
         deviceStateApi?.getDeviceStates()?.enqueue(object : Callback<List<DeviceState>> {
             override fun onResponse(call: Call<List<DeviceState>>?, response: Response<List<DeviceState>>?) {
                 if (response?.isSuccessful == true) {
@@ -112,6 +113,7 @@ class MainActivity : AppCompatActivity() {
             R.id.nav_settings -> Intent(this, SettingsActivity::class.java)
             R.id.nav_logout -> {
                 AppData.loginUserScd = null
+                AppData.accessToken = null
                 startLoginActivity()
                 null
             }

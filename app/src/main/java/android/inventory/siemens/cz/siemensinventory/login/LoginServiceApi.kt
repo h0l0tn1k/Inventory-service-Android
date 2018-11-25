@@ -1,28 +1,19 @@
 package android.inventory.siemens.cz.siemensinventory.login
 
-import android.content.Context
-import android.inventory.siemens.cz.siemensinventory.api.SiemensServiceApi
-import android.inventory.siemens.cz.siemensinventory.api.entity.LoginUserScd
+import android.util.Base64
 import retrofit2.Call
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Field
+import retrofit2.http.FormUrlEncoded
+import retrofit2.http.Header
+import retrofit2.http.POST
 
 interface LoginServiceApi {
 
-    //TODO: CHANGE!!
-
-    @GET("login/{email}/{password}")
-    fun login(@Path("email") email: String,@Path("password") password: String) : Call<LoginUserScd>
-
-    object Factory {
-        fun create(context : Context): LoginServiceApi {
-            return Retrofit.Builder()
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .baseUrl(SiemensServiceApi.getBaseUrl(context))
-                    .build()
-                    .create<LoginServiceApi>(LoginServiceApi::class.java)
-        }
-    }
+    @FormUrlEncoded
+    @POST("/oauth/token")
+    fun getNewAccessToken(@Header("authorization") auth: String,
+                          @Field("username") username: String,
+                          @Field("password") password: String,
+                          @Field("grant_type") grantType: String = "password",
+                          @Field("scope") scope: String = ""): Call<AccessToken>
 }
