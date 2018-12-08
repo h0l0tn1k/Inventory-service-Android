@@ -1,6 +1,5 @@
 package android.inventory.siemens.cz.siemensinventory.login
 
-import android.util.Base64
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded

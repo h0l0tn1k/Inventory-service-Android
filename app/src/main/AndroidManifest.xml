@@ -70,7 +70,8 @@
         <activity
             android:name=".view.CreateEditNewEntityActivity"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".device.DeviceListActivity"/>
+        <activity android:name=".device.DeviceListActivity"
+            android:label="@string/devices"/>
     </application>
 
 </manifest>
