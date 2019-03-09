@@ -1,8 +1,10 @@
 package android.inventory.siemens.cz.siemensinventory.api
 
+import android.app.Activity
 import android.content.Context
 import android.inventory.siemens.cz.siemensinventory.R
 import android.inventory.siemens.cz.siemensinventory.login.AccessToken
+import android.support.v7.app.AppCompatActivity
 import android.widget.Toast
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -35,15 +37,17 @@ class ServiceApiGenerator {
                             .method(originalRequest.method(), originalRequest.body())
 
                     val response = chain.proceed(requestBuilder.build())
-                    if (!response.isSuccessful) {
-                        val message = when (response.code()) {
-                            401 -> context.getString(R.string.unauthorized_to_perform_this_action)
-                            403 -> context.getString(R.string.access_denied)
-                            else -> {
-                                context.getString(R.string.unknown_error)
+                    (context as Activity).runOnUiThread {
+                        if (!response.isSuccessful) {
+                            val message = when (response.code()) {
+                                401 -> context.getString(R.string.unauthorized_to_perform_this_action)
+                                403 -> context.getString(R.string.access_denied)
+                                else -> {
+                                    context.getString(R.string.unknown_error)
+                                }
                             }
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                         }
-                        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
                     }
                     response
                 }

@@ -32,7 +32,7 @@ class BorrowDialog(var context: Activity) {
                 .setTitle(title)
                 .setView(view)
                 .setPositiveButton(context.getText(R.string.save), onSaveListener)
-                .setNegativeButton(context.getText(R.string.close)) { _, _ -> dialog?.dismiss() }
+                .setNegativeButton(context.getText(R.string.cancel)) { _, _ -> dialog?.dismiss() }
                 .create()
     }
 

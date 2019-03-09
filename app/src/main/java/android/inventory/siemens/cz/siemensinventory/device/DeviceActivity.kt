@@ -590,6 +590,7 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun displayGenericConfirmationLayout() {
         layoutInflater.inflate(R.layout.device_generic_confirmation, null)
+        device_save_btn.text = getString(R.string.submit)
         device_close_btn.setOnClickListener { finish() }
         device_edit_btn.visibility = if (AppData.loginUserScd?.flagWrite == true) View.VISIBLE else View.GONE
     }

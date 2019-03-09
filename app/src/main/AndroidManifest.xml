@@ -43,7 +43,8 @@
             android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".device.DeviceActivity"
-            android:label="@string/device" />
+            android:label="@string/device"
+            android:windowSoftInputMode="stateHidden" />
         <activity
             android:name=".profile.ChangePasswordActivity"
             android:label="@string/change_password"

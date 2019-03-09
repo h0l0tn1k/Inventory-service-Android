@@ -81,8 +81,6 @@ class LoginActivity : AppCompatActivity() {
         val username = login_email?.text.toString().trim()
         val password = login_password?.text.toString().trim()
         val prefs = this.getSharedPreferences(BuildConfig.APPLICATION_ID, Context.MODE_PRIVATE)
-
-
         val client = ServiceApiGenerator.Factory.createService(LoginServiceApi::class.java, this)
         val accessTokenCall = client.getNewAccessToken(SiemensServiceApi.getClientBaseAuthorization(this), username, password)
 
@@ -97,7 +95,7 @@ class LoginActivity : AppCompatActivity() {
                     getCurrentUser(token)
                 } else {
                     val message = when (response.code()) {
-                        401 -> getString(R.string.invalid_credentials)
+                        400, 401 -> getString(R.string.invalid_credentials)
                         else -> getString(R.string.unknown_error)
                     }
                     snackBarNotifier?.show(message)
