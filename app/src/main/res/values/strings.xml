@@ -5,7 +5,7 @@
 
     <!-- Activities -->
     <string name="activities">Activities</string>
-    <string name="borrow_device">Borrow Device</string>
+    <string name="borrow_device">My Borrowed Devices</string>
     <string name="return_device">Return Device</string>
     <string name="electric_revision">Electric Revision</string>
     <string name="inventory">Inventory</string>
@@ -58,7 +58,10 @@
     <string name="new_text">New</string>
     <string name="edit">Edit</string>
     <string name="delete">Delete</string>
-    <string name="entity_was_deleted">Entity was removed</string>
+    <string name="company_owner_was_removed">Company Owner was removed</string>
+    <string name="project_was_removed">Project was removed</string>
+    <string name="supplier_was_removed">Supplier was removed</string>
+    <string name="department_was_removed">Department was removed</string>
 
     <string name="settings">Settings</string>
     <string name="title_activity_settings">Settings</string>

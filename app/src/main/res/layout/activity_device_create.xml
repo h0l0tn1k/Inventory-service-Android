@@ -183,16 +183,16 @@
                         android:textColor="@color/lightBlack"
                         android:textSize="16sp" />
 
-                    <Spinner
+                    <AutoCompleteTextView
                         android:id="@+id/device_edit_owner"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        android:spinnerMode="dropdown"
                         android:textSize="16sp"
                         android:text=""
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/device_read_owner"
@@ -225,16 +225,16 @@
                         android:textColor="@color/lightBlack"
                         android:textSize="16sp" />
 
-                    <Spinner
+                    <AutoCompleteTextView
                         android:id="@+id/device_edit_holder"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="end"
                         android:layout_weight="1"
-                        android:spinnerMode="dropdown"
                         android:textSize="16sp"
                         android:text=""
-                        android:visibility="gone" />
+                        android:visibility="gone"
+                        />
 
                     <TextView
                         android:id="@+id/device_read_holder"

@@ -79,7 +79,7 @@ class DeviceActivity : AppCompatActivity() {
         deviceTypeApi = createService(DeviceTypeServiceApi::class.java)
         loginUserApi = createService(LoginUsersScdApi::class.java)
         departmentApi = createService(DepartmentsServiceApi::class.java)
-        companyOwnerApi =createService(CompanyOwnerServiceApi::class.java)
+        companyOwnerApi = createService(CompanyOwnerServiceApi::class.java)
         projectApi = createService(ProjectServiceApi::class.java)
         deviceStateApi = createService(DeviceStatesServiceApi::class.java)
         deviceBinding?.device = device
@@ -181,12 +181,13 @@ class DeviceActivity : AppCompatActivity() {
                     }
                     //add empty user option
                     users.add(0, LoginUserScd(0, 0))
-                    device_edit_owner.adapter = ArrayAdapter<LoginUserScd>(this@DeviceActivity,
-                            android.R.layout.simple_spinner_dropdown_item, users)
-                    device_edit_owner.setSelection(users.indexOf(deviceBinding?.device?.owner))
-                    device_edit_holder.adapter = ArrayAdapter<LoginUserScd>(this@DeviceActivity,
-                            android.R.layout.simple_spinner_dropdown_item, users)
-                    device_edit_holder.setSelection(users.indexOf(deviceBinding?.device?.holder))
+                    device_edit_owner.setAdapter(ArrayAdapter<LoginUserScd>(this@DeviceActivity,
+                            android.R.layout.simple_list_item_1, users))
+                    device_edit_owner.listSelection = users.indexOf(deviceBinding?.device?.owner)
+
+                    device_edit_holder.setAdapter(ArrayAdapter<LoginUserScd>(this@DeviceActivity,
+                            android.R.layout.simple_list_item_1, users))
+                    device_edit_holder.listSelection = users.indexOf(deviceBinding?.device?.holder)
                 } else {
                     snackBarNotifier?.show(getString(R.string.error_loading_data))
                 }
@@ -316,12 +317,12 @@ class DeviceActivity : AppCompatActivity() {
 
             val project = device_edit_project.selectedItem as Project
             device.project = if (project.isEmpty()) null else project
-
-            val owner = device_edit_owner.selectedItem as LoginUserScd
-            device.owner = if (owner.isEmpty()) null else owner
-
-            val holder = device_edit_holder.selectedItem as LoginUserScd
-            device.holder = if (holder.isEmpty()) null else holder
+// todo
+//            val owner = device_edit_owner.adapter.getItem(device_edit_owner.selecte) as LoginUserScd
+//            device.owner = if (owner.isEmpty()) null else owner
+//
+//            val holder = device_edit_holder.selectedItem as LoginUserScd
+//            device.holder = if (holder.isEmpty()) null else holder
 
             device.deviceState = device_edit_status.selectedItem as DeviceState
 
@@ -545,9 +546,10 @@ class DeviceActivity : AppCompatActivity() {
     }
 
     private fun saveBorrowResult(borrowReturn: BorrowReturn) {
-        borrowApi?.createBorrowReturn(borrowReturn)?.enqueue(object : Callback<Void>{
+        borrowApi?.createBorrowReturn(borrowReturn)?.enqueue(object : Callback<Void> {
             override fun onFailure(call: Call<Void>?, t: Throwable?) {
             }
+
             override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                 if (response?.isSuccessful == true) {
                     snackBarNotifier?.show(getString(R.string.able_to_save_changes))
@@ -676,11 +678,11 @@ class DeviceActivity : AppCompatActivity() {
         startActivityForResult(scanIntent, SCAN_ACTIVITY_REQUEST_CODE)
     }
 
-    private fun <T> processUnsuccessfulResponse(response : Response<T>?) {
+    private fun <T> processUnsuccessfulResponse(response: Response<T>?) {
         try {
             val error = Gson().fromJson(response?.errorBody()?.string(), ErrorBody::class.java)
             snackBarNotifier?.show(error.message)
-        } catch(e: JsonSyntaxException) {
+        } catch (e: JsonSyntaxException) {
             //not this type of error message
             snackBarNotifier?.show(getString(R.string.unable_to_save_changes))
         }

@@ -14,285 +14,292 @@
         android:orientation="vertical"
         tools:context=".devicetype.DeviceTypeActivity">
 
-        <LinearLayout
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@id/device_type_generic_result_section"
             android:layout_alignParentTop="true"
             android:orientation="vertical">
 
-            <!-- DEVICE TYPE -->
             <LinearLayout
-                android:id="@+id/device_type_layout_device_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="0dp"
+                <!-- DEVICE TYPE -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_device_type"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/device_type"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
 
-                <EditText
-                    android:id="@+id/device_type_edit_device_type"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@={deviceType.objectTypeName}"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}" />
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/device_type"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
 
-                <TextView
-                    android:id="@+id/device_type_read_device_type"
-                    android:layout_width="0dp"
+                    <EditText
+                        android:id="@+id/device_type_edit_device_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@={deviceType.objectTypeName}"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}" />
+
+                    <TextView
+                        android:id="@+id/device_type_read_device_type"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.objectTypeName}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp"  />
+                </LinearLayout>
+
+                <!-- VERSION -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_version"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.objectTypeName}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp"  />
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/version"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/device_type_edit_version"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@={deviceType.version}"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}" />
+
+                    <TextView
+                        android:id="@+id/device_type_read_version"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.version}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- Classification -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_classification"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/classification"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/device_type_edit_classification"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@={deviceType.classification}"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}" />
+                    <TextView
+                        android:id="@+id/device_type_read_classification"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.classification}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- manufacturer -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_manufacturer"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/manufacturer"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/device_type_edit_manufacturer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@={deviceType.manufacturer}"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}" />
+                    <TextView
+                        android:id="@+id/device_type_read_manufacturer"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.manufacturer}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp"  />
+                </LinearLayout>
+
+                <!-- Order number -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_order_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/order_number"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/device_type_edit_order_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@={deviceType.orderNumber}"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}" />
+                    <TextView
+                        android:id="@+id/device_type_read_order_number"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.orderNumber}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- Supplier -->
+
+                <LinearLayout
+                    android:id="@+id/device_layout_supplier"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/supplier"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <Spinner
+                        android:id="@+id/device_type_edit_supplier"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:spinnerMode="dropdown"
+                        android:text=""
+                        android:visibility="@{viewMode.getVisibilityForEdit()}"/>
+
+                    <TextView
+                        android:id="@+id/device_read_supplier"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.supplier.name}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
+                <!-- price -->
+                <LinearLayout
+                    android:id="@+id/device_type_layout_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="start|center_vertical"
+                        android:layout_weight="1"
+                        android:gravity="start|center_horizontal"
+                        android:shadowRadius="2"
+                        android:text="@string/price"
+                        android:textColor="@color/lightBlack"
+                        android:textSize="18sp" />
+
+                    <EditText
+                        android:id="@+id/device_type_edit_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.getPriceString()}"
+                        android:inputType="numberDecimal"
+                        android:visibility="@{viewMode.getVisibilityForEdit()}"/>
+                    <TextView
+                        android:id="@+id/device_type_read_price"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end"
+                        android:layout_weight="1"
+                        android:text="@{deviceType.getPriceString()}"
+                        android:visibility="@{viewMode.getVisibilityForRead()}"
+                        android:textSize="18sp" />
+                </LinearLayout>
+
             </LinearLayout>
-
-            <!-- VERSION -->
-            <LinearLayout
-                android:id="@+id/device_type_layout_version"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/version"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/device_type_edit_version"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@={deviceType.version}"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}" />
-
-                <TextView
-                    android:id="@+id/device_type_read_version"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.version}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- Classification -->
-            <LinearLayout
-                android:id="@+id/device_type_layout_classification"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/classification"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/device_type_edit_classification"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@={deviceType.classification}"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}" />
-                <TextView
-                    android:id="@+id/device_type_read_classification"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.classification}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- manufacturer -->
-            <LinearLayout
-                android:id="@+id/device_type_layout_manufacturer"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/manufacturer"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/device_type_edit_manufacturer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@={deviceType.manufacturer}"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}" />
-                <TextView
-                    android:id="@+id/device_type_read_manufacturer"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.manufacturer}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp"  />
-            </LinearLayout>
-
-            <!-- Order number -->
-            <LinearLayout
-                android:id="@+id/device_type_layout_order_number"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/order_number"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/device_type_edit_order_number"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@={deviceType.orderNumber}"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}" />
-                <TextView
-                    android:id="@+id/device_type_read_order_number"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.orderNumber}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- Supplier -->
-
-            <LinearLayout
-                android:id="@+id/device_layout_supplier"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/supplier"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <Spinner
-                    android:id="@+id/device_type_edit_supplier"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:spinnerMode="dropdown"
-                    android:text=""
-                    android:visibility="@{viewMode.getVisibilityForEdit()}"/>
-
-                <TextView
-                    android:id="@+id/device_read_supplier"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.supplier.name}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp" />
-            </LinearLayout>
-
-            <!-- price -->
-            <LinearLayout
-                android:id="@+id/device_type_layout_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start|center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="start|center_horizontal"
-                    android:shadowRadius="2"
-                    android:text="@string/price"
-                    android:textColor="@color/lightBlack"
-                    android:textSize="18sp" />
-
-                <EditText
-                    android:id="@+id/device_type_edit_price"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.getPriceString()}"
-                    android:inputType="numberDecimal"
-                    android:visibility="@{viewMode.getVisibilityForEdit()}"/>
-                <TextView
-                    android:id="@+id/device_type_read_price"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="end"
-                    android:layout_weight="1"
-                    android:text="@{deviceType.getPriceString()}"
-                    android:visibility="@{viewMode.getVisibilityForRead()}"
-                    android:textSize="18sp" />
-            </LinearLayout>
-        </LinearLayout>
+        </ScrollView>
 
         <LinearLayout
             android:id="@+id/device_type_generic_result_section"

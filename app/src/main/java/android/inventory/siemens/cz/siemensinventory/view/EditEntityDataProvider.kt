@@ -44,19 +44,19 @@ class EditEntityDataProvider(
     }
 
     private fun deleteDepartmentData(id: Long) {
-        createService(DepartmentsServiceApi::class.java).deleteDepartment(id).enqueue(getDeleteCallback())
+        createService(DepartmentsServiceApi::class.java).deleteDepartment(id).enqueue(getDeleteCallback(R.string.department_was_removed))
     }
 
     private fun deleteCompanyOwnerData(id: Long) {
-        createService(CompanyOwnerServiceApi::class.java).deleteCompanyOwner(id).enqueue(getDeleteCallback())
+        createService(CompanyOwnerServiceApi::class.java).deleteCompanyOwner(id).enqueue(getDeleteCallback(R.string.company_owner_was_removed))
     }
 
     private fun deleteSupplierData(id: Long) {
-        createService(SupplierServiceApi::class.java).deleteSupplier(id).enqueue(getDeleteCallback())
+        createService(SupplierServiceApi::class.java).deleteSupplier(id).enqueue(getDeleteCallback(R.string.supplier_was_removed))
     }
 
     private fun deleteProjectData(id: Long) {
-        createService(ProjectServiceApi::class.java).deleteProject(id).enqueue(getDeleteCallback())
+        createService(ProjectServiceApi::class.java).deleteProject(id).enqueue(getDeleteCallback(R.string.project_was_removed))
     }
 
     private fun createDepartmentData(department: GenericNameEntity) {
@@ -91,11 +91,11 @@ class EditEntityDataProvider(
         createService(ProjectServiceApi::class.java).updateProject(project.id, project).enqueue(getCreateCallback())
     }
 
-    private fun getDeleteCallback(): Callback<Void> {
+    private fun getDeleteCallback(stringId: Int): Callback<Void> {
         return object : Callback<Void> {
             override fun onResponse(call: Call<Void>?, response: Response<Void>?) {
                 if(response?.isSuccessful == true) {
-                    Toast.makeText(context, context.getString(R.string.entity_was_deleted), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, context.getString(stringId), Toast.LENGTH_SHORT).show()
                     ((context) as Activity).finish()
                 } else {
                     Toast.makeText(context, context.getString(R.string.unknown_error), Toast.LENGTH_SHORT).show()
