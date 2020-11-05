@@ -1,0 +1,23 @@
+{
+  "riskFrameworkApp": {
+    "analysisValues": {
+      "home": {
+        "title": "AnalysisValues",
+        "createLabel": "Créer un nouveau Analysis Values",
+        "createOrEditLabel": "Créer ou éditer un Analysis Values",
+        "notFound": "Aucun Analysis Values trouvé"
+      },
+      "created": "Un nouveau Analysis Values a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Analysis Values avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Analysis Values avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Analysis Values {{ id }} ?"
+      },
+      "detail": {
+        "title": "Analysis Values"
+      },
+      "value": "Value",
+      "riskAssessment": "Risk Assessment"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "riskFrameworkApp": {
+    "riskTemplate": {
+      "home": {
+        "title": "RiskTemplates",
+        "createLabel": "Créer un nouveau Risk Template",
+        "createOrEditLabel": "Créer ou éditer un Risk Template",
+        "notFound": "Aucun Risk Template trouvé"
+      },
+      "created": "Un nouveau Risk Template a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Risk Template avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Risk Template avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Risk Template {{ id }} ?"
+      },
+      "detail": {
+        "title": "Risk Template"
+      },
+      "name": "Name",
+      "description": "Description",
+      "riskDescription": "Risk Description",
+      "assessmentDescription": "Assessment Description"
+    }
+  }
+}

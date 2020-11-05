@@ -1,0 +1,22 @@
+{
+  "riskFrameworkApp": {
+    "statusCode": {
+      "home": {
+        "title": "StatusCodes",
+        "createLabel": "Créer un nouveau Status Code",
+        "createOrEditLabel": "Créer ou éditer un Status Code",
+        "notFound": "Aucun Status Code trouvé"
+      },
+      "created": "Un nouveau Status Code a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Status Code avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Status Code avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Status Code {{ id }} ?"
+      },
+      "detail": {
+        "title": "Status Code"
+      },
+      "code": "Code"
+    }
+  }
+}

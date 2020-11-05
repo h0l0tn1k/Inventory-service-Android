@@ -1,0 +1,28 @@
+{
+  "riskFrameworkApp": {
+    "riskAssessment": {
+      "home": {
+        "title": "RiskAssessments",
+        "createLabel": "Créer un nouveau Risk Assessment",
+        "createOrEditLabel": "Créer ou éditer un Risk Assessment",
+        "notFound": "Aucun Risk Assessment trouvé"
+      },
+      "created": "Un nouveau Risk Assessment a été créé avec l'identifiant {{ param }}",
+      "updated": "Le Risk Assessment avec l'identifiant {{ param }} a été mis à jour",
+      "deleted": "Le Risk Assessment avec l'identifiant {{ param }} a été supprimé",
+      "delete": {
+        "question": "Etes-vous certain de vouloir supprimer le Risk Assessment {{ id }} ?"
+      },
+      "detail": {
+        "title": "Risk Assessment"
+      },
+      "name": "Name",
+      "version": "Version",
+      "description": "Description",
+      "validFrom": "Valid From",
+      "validTo": "Valid To",
+      "riskId": "Risk Id",
+      "analysisValues": "Analysis Values"
+    }
+  }
+}

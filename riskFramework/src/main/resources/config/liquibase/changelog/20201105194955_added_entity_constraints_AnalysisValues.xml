@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.9.xsd">
+    <!--
+        Added the constraints for entity AnalysisValues.
+    -->
+    <changeSet id="20201105194955-2" author="jhipster">
+        
+        <addForeignKeyConstraint baseColumnNames="risk_assessment_id"
+                                 baseTableName="analysis_values"
+                                 constraintName="fk_analysis_values_risk_assessment_id"
+                                 referencedColumnNames="id"
+                                 referencedTableName="risk_assessment"/>
+
+    </changeSet>
+</databaseChangeLog>

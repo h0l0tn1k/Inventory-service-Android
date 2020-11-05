@@ -1,0 +1,29 @@
+{
+  "name": "AnalysisValues",
+  "fields": [
+    {
+      "fieldName": "value",
+      "fieldType": "String"
+    }
+  ],
+  "relationships": [
+    {
+      "relationshipType": "many-to-one",
+      "otherEntityName": "riskAssessment",
+      "otherEntityRelationshipName": "analysisValues",
+      "relationshipName": "riskAssessment",
+      "otherEntityField": "id"
+    }
+  ],
+  "changelogDate": "20201105194955",
+  "entityTableName": "analysis_values",
+  "dto": "no",
+  "pagination": "no",
+  "service": "no",
+  "jpaMetamodelFiltering": false,
+  "fluentMethods": true,
+  "readOnly": false,
+  "embedded": false,
+  "clientRootFolder": "",
+  "applications": ["riskFramework", "assessment"]
+}
