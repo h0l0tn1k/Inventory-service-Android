@@ -1,0 +1,87 @@
+
+application {
+  config {
+    baseName riskFramework,
+    applicationType gateway,
+    packageName com.sap.grc.riskframework,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+    clientFramework react
+  }
+  entities *
+}
+
+application {
+  config {
+    baseName risk,
+    applicationType microservice,
+    packageName com.sap.grc.risk,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+  }
+  entities Risk
+}
+
+application {
+  config {
+    baseName riskTemplate,
+    applicationType microservice,
+    packageName com.sap.grc.risk.template,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+  }
+  entities RiskTemplate
+}
+
+application {
+  config {
+    baseName assessment,
+    applicationType microservice,
+    packageName com.sap.grc.risk.assessment,
+    authenticationType jwt,
+    prodDatabaseType postgresql,
+  }
+  entities RiskAssessment, AnalysisValues
+}
+
+entity StatusCode {
+	code String required unique
+}
+
+entity Risk {
+	ID UUID required unique
+    name String required
+    version Integer required min(1)
+    description String required
+    validFrom LocalDate required
+    validTo LocalDate required
+}
+
+entity RiskAssessment {
+	ID UUID required unique
+    name String required
+    version Integer required min(1)
+    description String required
+    validFrom LocalDate required
+    validTo LocalDate required
+    
+    riskId UUID required
+}
+
+entity AnalysisValues {
+	ID UUID required unique
+    value String
+}
+
+entity RiskTemplate {
+	ID UUID required unique
+    name String required
+    description String
+    riskDescription String
+    assessmentDescription String
+}
+
+relationship OneToMany {
+  RiskAssessment to AnalysisValues
+}
+    
